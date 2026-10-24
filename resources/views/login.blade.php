@@ -1,23 +1,18 @@
 {{--
-    Split-panel login (admin + portal) inspired by the Sign In / Sign Up
-    dual-tab auth design. Self-contained Blade: full HTML, no layout extend.
-
-    Mode handling (passed from controller / route):
-      $mode = 'admin'  → POST to route('login') / route('register')
-      $mode = 'portal' → POST to route('user.login') / route('user.register')
-
-    Auto-opens the Sign Up tab when the user was redirected back with
-    register-field errors (e.g. ?tab=signup, or old('invitation_code'),
-    or old('ic_no') present) so they land back in the right tab.
+    Modern split login (admin + portal).
+    Mode handling:
+      $mode = 'admin'  -> POST route('login') / route('register')
+      $mode = 'portal' -> POST route('user.login') / route('user.register')
 --}}
 @php
     $mode = $mode ?? 'admin';
+    $isPortal = $mode === 'portal';
 
-    $loginAction   = $mode === 'portal' ? route('user.login')  : route('login');
-    $registerAction = $mode === 'portal' ? route('user.register') : route('register');
-    $forgotUrl     = $mode === 'portal' ? route('user.password.request') : route('password.request');
-    $homeUrl       = $mode === 'portal' ? route('user.dashboard') : route('dashboard');
-    $otherLoginUrl = $mode === 'portal' ? route('login') : route('user.login');
+    $loginAction    = $isPortal ? route('user.login') : route('login');
+    $registerAction = $isPortal ? route('user.register') : route('register');
+    $forgotUrl      = $isPortal ? route('user.password.request') : route('password.request');
+    $otherLoginUrl  = $isPortal ? route('login') : route('user.login');
+    $otherLoginText = $isPortal ? 'Log masuk pentadbir' : 'Log masuk pemohon';
 
     $states = [
         'Johor','Kedah','Kelantan','Melaka','Negeri Sembilan','Pahang',
@@ -31,330 +26,507 @@
         || old('invitation_code') || old('ic_no')) ? 'signup' : 'signin';
 
     $tabTitle = $initialTab === 'signup'
-        ? ($mode === 'portal' ? 'Daftar Pemohon' : 'Daftar Pentadbir')
-        : ($mode === 'portal' ? 'Log Masuk Pemohon' : 'Log Masuk');
+        ? ($isPortal ? 'Daftar Pemohon' : 'Daftar Pentadbir')
+        : ($isPortal ? 'Log Masuk Pemohon' : 'Log Masuk');
+
+    $roleLabel = $isPortal ? 'Portal Pemohon' : 'Portal Pentadbir';
+    $signinTitle = 'Selamat kembali';
+    $signinSubtitle = $isPortal
+        ? 'Log masuk untuk menyemak permohonan dan status bantuan anda.'
+        : 'Log masuk untuk meneruskan pengurusan asnaf dan permohonan.';
+    $signupTitle = $isPortal ? 'Daftar akaun pemohon' : 'Daftar akaun pentadbir';
+    $signupSubtitle = $isPortal
+        ? 'Lengkapkan maklumat anda untuk memohon bantuan zakat.'
+        : 'Gunakan kod undangan yang diberikan oleh pentadbir sistem.';
+    $displayTitle = $initialTab === 'signup' ? $signupTitle : $signinTitle;
+    $displaySubtitle = $initialTab === 'signup' ? $signupSubtitle : $signinSubtitle;
 @endphp
 <!DOCTYPE html>
 <html lang="ms" class="h-full dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#2d3849">
-    <meta name="description" content="J-ZAKAT AI — {{ $tabTitle }} · Majlis Agama Islam Johor">
+    <meta name="theme-color" content="#070D1A">
+    <meta name="description" content="J-ZAKAT AI — {{ $tabTitle }} Majlis Agama Islam Johor">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $tabTitle }} — J-ZAKAT AI</title>
     <style>[x-cloak] { display: none !important; }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full antialiased">
-<div class="split-auth"
+<body class="auth-page">
+<div class="auth-shell"
      x-data="{
         tab: '{{ $initialTab }}',
-        googleMsg: '',
-        openSignup() { this.tab = 'signup'; this.googleMsg = ''; },
-        openSignin() { this.tab = 'signin'; this.googleMsg = ''; },
-        google() {
-            this.googleMsg = 'Log masuk dengan Google belum dikonfigurasi buat masa ini.';
-            setTimeout(() => { this.googleMsg = ''; }, 4500);
-        }
+        showPassword: false,
+        showRegPassword: false,
+        showRegPasswordConfirmation: false,
+        submittingSignIn: false,
+        submittingSignUp: false
      }">
 
-    {{-- LEFT: photo panel (hidden on mobile) --}}
-    <aside class="split-auth__left" aria-hidden="true">
-        <div class="split-auth__left-caption">
-            <strong>MAIJ · J-ZAKAT AI</strong>
-            Majlis Agama Islam Johor
-        </div>
-    </aside>
+    @include('auth._split-aside', ['context' => $mode])
 
-    {{-- RIGHT: form panel --}}
-    <main class="split-auth__right">
+    <main class="auth-panel">
+        @include('auth._auth-topbar')
 
-        @include('auth._split-brand')
-
-        {{-- Tabs --}}
-        <div class="split-auth__tabs" role="tablist" aria-label="Authentication mode">
-            <button type="button"
-                    role="tab"
-                    :aria-selected="tab === 'signin'"
-                    @click="openSignin()"
-                    class="split-auth__tab {{ $initialTab === 'signin' ? 'is-active' : '' }}"
-                    :class="{ 'is-active': tab === 'signin' }">
-                Sign In
-            </button>
-            <button type="button"
-                    role="tab"
-                    :aria-selected="tab === 'signup'"
-                    @click="openSignup()"
-                    class="split-auth__tab {{ $initialTab === 'signup' ? 'is-active' : '' }}"
-                    :class="{ 'is-active': tab === 'signup' }">
-                Sign Up
-            </button>
-        </div>
-
-        {{-- Forms (scrollable) --}}
-        <div class="split-auth__forms">
-
-            {{-- ============================================================ --}}
-            {{-- SIGN IN --}}
-            {{-- ============================================================ --}}
-            <form method="POST" action="{{ $loginAction }}"
-                  class="split-auth__form {{ $initialTab === 'signup' ? 'is-hidden' : '' }}"
-                  :class="{ 'is-hidden': tab === 'signup' }"
-                  novalidate>
-
-                @csrf
-                <input type="hidden" name="_form" value="signin">
-
-                <div class="sa-field">
-                    <label for="signin-email" class="sa-label">Your email</label>
-                    <input id="signin-email" type="email" name="email" required
-                           autocomplete="email" placeholder="name@maij.gov.my"
-                           value="{{ old('email') }}"
-                           @class(['sa-input', 'is-invalid' => $errors->has('email') && ! $hasRegisterOld])>
-                    @if($errors->has('email') && ! $hasRegisterOld)
-                        <p class="sa-error">{{ $errors->first('email') }}</p>
-                    @endif
+        <div class="auth-panel__content">
+            <div class="auth-card">
+                <div class="auth-card__head">
+                    <span class="auth-badge">
+                        <x-icon name="shield-check" :size="12" />
+                        {{ $roleLabel }}
+                    </span>
+                    <h1 class="auth-title"
+                        x-text="tab === 'signin' ? '{{ $signinTitle }}' : '{{ $signupTitle }}'">
+                        {{ $displayTitle }}
+                    </h1>
+                    <p class="auth-subtitle"
+                       x-text="tab === 'signin' ? '{{ $signinSubtitle }}' : '{{ $signupSubtitle }}'">
+                        {{ $displaySubtitle }}
+                    </p>
                 </div>
 
-                <div class="sa-field">
-                    <label for="signin-password" class="sa-label">Your password</label>
-                    <input id="signin-password" type="password" name="password" required
-                           placeholder="••••••••"
-                           autocomplete="current-password"
-                           @class(['sa-input', 'is-invalid' => $errors->has('password') && ! $hasRegisterOld])>
-                    @if($errors->has('password') && ! $hasRegisterOld)
-                        <p class="sa-error">{{ $errors->first('password') }}</p>
-                    @endif
+                <div class="auth-tabs" role="tablist" aria-label="Pilih log masuk atau pendaftaran">
+                    <button type="button"
+                            role="tab"
+                            :aria-selected="tab === 'signin'"
+                            @click="tab = 'signin'"
+                            class="auth-tab {{ $initialTab === 'signin' ? 'is-active' : '' }}"
+                            :class="{ 'is-active': tab === 'signin' }">
+                        Log Masuk
+                    </button>
+                    <button type="button"
+                            role="tab"
+                            :aria-selected="tab === 'signup'"
+                            @click="tab = 'signup'"
+                            class="auth-tab {{ $initialTab === 'signup' ? 'is-active' : '' }}"
+                            :class="{ 'is-active': tab === 'signup' }">
+                        Daftar
+                    </button>
                 </div>
 
-                <div class="sa-row">
-                    <label class="sa-check">
-                        <input type="checkbox" name="remember" value="1" {{ old('remember') ? 'checked' : '' }}>
-                        <span>Keep me logged in</span>
-                    </label>
-                    <a href="{{ $forgotUrl }}" class="sa-link">Forgot password?</a>
+                <div class="auth-forms">
+                    {{-- ============================================================ --}}
+                    {{-- LOG MASUK --}}
+                    {{-- ============================================================ --}}
+                    <form method="POST" action="{{ $loginAction }}"
+                          class="auth-form {{ $initialTab === 'signup' ? 'is-hidden' : '' }}"
+                          :class="{ 'is-hidden': tab === 'signup' }"
+                          novalidate
+                          @submit="submittingSignIn = true">
+
+                        @csrf
+                        <input type="hidden" name="_form" value="signin">
+
+                        <div class="auth-field">
+                            <label for="signin-email" class="auth-label">Emel</label>
+                            <div class="auth-input-wrap">
+                                <x-icon name="mail" :size="18" class="auth-input-icon" />
+                                <input id="signin-email" type="email" name="email" required
+                                       autocomplete="email" placeholder="nama@maij.gov.my"
+                                       value="{{ old('email') }}"
+                                       {{ $initialTab === 'signin' ? 'autofocus' : '' }}
+                                       @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('email') && ! $hasRegisterOld])>
+                            </div>
+                            @if($errors->has('email') && ! $hasRegisterOld)
+                                <p class="auth-error" role="alert">
+                                    <x-icon name="circle-alert" :size="13" />
+                                    {{ $errors->first('email') }}
+                                </p>
+                            @endif
+                        </div>
+
+                        <div class="auth-field">
+                            <label for="signin-password" class="auth-label">Kata laluan</label>
+                            <div class="auth-input-wrap">
+                                <x-icon name="lock" :size="18" class="auth-input-icon" />
+                                <input id="signin-password" type="password" name="password" required
+                                       placeholder="Masukkan kata laluan"
+                                       autocomplete="current-password"
+                                       x-bind:type="showPassword ? 'text' : 'password'"
+                                       @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password') && ! $hasRegisterOld])>
+                                <button type="button" class="auth-eye"
+                                        @click="showPassword = !showPassword"
+                                        :aria-label="showPassword ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                    <span x-show="!showPassword"><x-icon name="eye" :size="18" /></span>
+                                    <span x-show="showPassword" x-cloak><x-icon name="eye-off" :size="18" /></span>
+                                </button>
+                            </div>
+                            @if($errors->has('password') && ! $hasRegisterOld)
+                                <p class="auth-error" role="alert">
+                                    <x-icon name="circle-alert" :size="13" />
+                                    {{ $errors->first('password') }}
+                                </p>
+                            @endif
+                        </div>
+
+                        <div class="auth-row">
+                            <label class="auth-check">
+                                <input type="checkbox" name="remember" value="1" {{ old('remember') ? 'checked' : '' }}>
+                                <span>Kekal log masuk</span>
+                            </label>
+                            <a href="{{ $forgotUrl }}" class="auth-link">Lupa kata laluan?</a>
+                        </div>
+
+                        <button type="submit" class="auth-submit" :disabled="submittingSignIn">
+                            <span x-show="!submittingSignIn">Log Masuk</span>
+                            <span x-show="submittingSignIn" x-cloak class="inline-flex items-center gap-2">
+                                <span class="auth-spinner"></span>
+                                Memproses...
+                            </span>
+                            <x-icon name="arrow-right" :size="17" x-show="!submittingSignIn" />
+                        </button>
+
+                        <p class="auth-switch">
+                            {{ $isPortal ? 'Pentadbir MAIJ?' : 'Pemohon bantuan?' }}
+                            <a href="{{ $otherLoginUrl }}">{{ $otherLoginText }}</a>
+                        </p>
+                    </form>
+
+                    {{-- ============================================================ --}}
+                    {{-- DAFTAR --}}
+                    {{-- ============================================================ --}}
+                    <form method="POST" action="{{ $registerAction }}"
+                          class="auth-form {{ $initialTab === 'signup' ? '' : 'is-hidden' }}"
+                          :class="{ 'is-hidden': tab !== 'signup' }"
+                          novalidate
+                          @submit="submittingSignUp = true">
+
+                        @csrf
+                        <input type="hidden" name="_form" value="signup">
+
+                        @if($mode === 'admin')
+                            <div class="auth-field">
+                                <label for="reg-name" class="auth-label">Nama penuh</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="user" :size="18" class="auth-input-icon" />
+                                    <input id="reg-name" type="text" name="name" required maxlength="255"
+                                           autocomplete="name" placeholder="Nama seperti dalam kad pengenalan"
+                                           value="{{ old('name') }}"
+                                           @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('name')])>
+                                </div>
+                                @if($errors->has('name'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('name') }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-email" class="auth-label">Emel</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="mail" :size="18" class="auth-input-icon" />
+                                    <input id="reg-email" type="email" name="email" required maxlength="255"
+                                           autocomplete="email" placeholder="nama@maij.gov.my"
+                                           value="{{ old('email') }}"
+                                           @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('email')])>
+                                </div>
+                                @if($errors->has('email'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('email') }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-invitation" class="auth-label">Kod undangan pentadbir</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="key" :size="18" class="auth-input-icon" />
+                                    <input id="reg-invitation" type="text" name="invitation_code" required maxlength="64"
+                                           placeholder="MAIJ-XXXX-XXXX-XXXX-XXXX"
+                                           value="{{ old('invitation_code') }}"
+                                           @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('invitation_code')])>
+                                </div>
+                                @if($errors->has('invitation_code'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('invitation_code') }}
+                                    </p>
+                                @else
+                                    <p class="auth-hint">
+                                        <x-icon name="lock" :size="12" />
+                                        Kod undangan diberikan oleh pentadbir sistem.
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-password" class="auth-label">Kata laluan</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="lock" :size="18" class="auth-input-icon" />
+                                    <input id="reg-password" type="password" name="password" required minlength="8"
+                                           placeholder="Minimum 8 aksara" autocomplete="new-password"
+                                           x-bind:type="showRegPassword ? 'text' : 'password'"
+                                           @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password')])>
+                                    <button type="button" class="auth-eye"
+                                            @click="showRegPassword = !showRegPassword"
+                                            :aria-label="showRegPassword ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                        <span x-show="!showRegPassword"><x-icon name="eye" :size="18" /></span>
+                                        <span x-show="showRegPassword" x-cloak><x-icon name="eye-off" :size="18" /></span>
+                                    </button>
+                                </div>
+                                @if($errors->has('password'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('password') }}
+                                    </p>
+                                @else
+                                    <p class="auth-hint">Minimum 8 aksara. Gunakan gabungan huruf dan nombor.</p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-password-confirmation" class="auth-label">Sahkan kata laluan</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="lock" :size="18" class="auth-input-icon" />
+                                    <input id="reg-password-confirmation" type="password" name="password_confirmation" required minlength="8"
+                                           placeholder="Ulang kata laluan" autocomplete="new-password"
+                                           x-bind:type="showRegPasswordConfirmation ? 'text' : 'password'"
+                                           @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password_confirmation')])>
+                                    <button type="button" class="auth-eye"
+                                            @click="showRegPasswordConfirmation = !showRegPasswordConfirmation"
+                                            :aria-label="showRegPasswordConfirmation ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                        <span x-show="!showRegPasswordConfirmation"><x-icon name="eye" :size="18" /></span>
+                                        <span x-show="showRegPasswordConfirmation" x-cloak><x-icon name="eye-off" :size="18" /></span>
+                                    </button>
+                                </div>
+                                @if($errors->has('password_confirmation'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('password_confirmation') }}
+                                    </p>
+                                @endif
+                            </div>
+                        @else
+                            <div class="auth-field">
+                                <label for="reg-name" class="auth-label">Nama penuh</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="user" :size="18" class="auth-input-icon" />
+                                    <input id="reg-name" type="text" name="name" required maxlength="255"
+                                           autocomplete="name" placeholder="Nama seperti dalam kad pengenalan"
+                                           value="{{ old('name') }}"
+                                           @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('name')])>
+                                </div>
+                                @if($errors->has('name'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('name') }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-ic" class="auth-label">No Kad Pengenalan</label>
+                                <input id="reg-ic" type="text" name="ic_no" required maxlength="12" inputmode="numeric"
+                                       pattern="\d{12}" placeholder="12 digit tanpa sengkang"
+                                       value="{{ old('ic_no') }}"
+                                       @class(['auth-input', 'is-invalid' => $errors->has('ic_no')])>
+                                @if($errors->has('ic_no'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('ic_no') }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-grid">
+                                <div class="auth-field">
+                                    <label for="reg-dob" class="auth-label">Tarikh lahir</label>
+                                    <input id="reg-dob" type="date" name="date_of_birth" required
+                                           autocomplete="bday" value="{{ old('date_of_birth') }}"
+                                           @class(['auth-input', 'is-invalid' => $errors->has('date_of_birth')])>
+                                    @if($errors->has('date_of_birth'))
+                                        <p class="auth-error" role="alert">
+                                            <x-icon name="circle-alert" :size="13" />
+                                            {{ $errors->first('date_of_birth') }}
+                                        </p>
+                                    @endif
+                                </div>
+                                <div class="auth-field">
+                                    <label for="reg-gender" class="auth-label">Jantina</label>
+                                    <select id="reg-gender" name="gender" required
+                                            @class(['auth-select', 'is-invalid' => $errors->has('gender')])>
+                                        <option value="">Pilih</option>
+                                        <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>Lelaki</option>
+                                        <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>Perempuan</option>
+                                    </select>
+                                    @if($errors->has('gender'))
+                                        <p class="auth-error" role="alert">
+                                            <x-icon name="circle-alert" :size="13" />
+                                            {{ $errors->first('gender') }}
+                                        </p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-phone" class="auth-label">No telefon</label>
+                                <input id="reg-phone" type="tel" name="phone" required maxlength="15"
+                                       autocomplete="tel" placeholder="0123456789"
+                                       value="{{ old('phone') }}"
+                                       @class(['auth-input', 'is-invalid' => $errors->has('phone')])>
+                                @if($errors->has('phone'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('phone') }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-email" class="auth-label">Emel</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="mail" :size="18" class="auth-input-icon" />
+                                    <input id="reg-email" type="email" name="email" required maxlength="255"
+                                           autocomplete="email" placeholder="nama@contoh.com"
+                                           value="{{ old('email') }}"
+                                           @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('email')])>
+                                </div>
+                                @if($errors->has('email'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('email') }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-address" class="auth-label">Alamat</label>
+                                <input id="reg-address" type="text" name="address" required maxlength="500"
+                                       autocomplete="street-address" placeholder="Alamat lengkap"
+                                       value="{{ old('address') }}"
+                                       @class(['auth-input', 'is-invalid' => $errors->has('address')])>
+                                @if($errors->has('address'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('address') }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-grid">
+                                <div class="auth-field">
+                                    <label for="reg-district" class="auth-label">Daerah</label>
+                                    <input id="reg-district" type="text" name="district" required maxlength="100"
+                                           autocomplete="address-level2" placeholder="Daerah"
+                                           value="{{ old('district') }}"
+                                           @class(['auth-input', 'is-invalid' => $errors->has('district')])>
+                                    @if($errors->has('district'))
+                                        <p class="auth-error" role="alert">
+                                            <x-icon name="circle-alert" :size="13" />
+                                            {{ $errors->first('district') }}
+                                        </p>
+                                    @endif
+                                </div>
+                                <div class="auth-field">
+                                    <label for="reg-state" class="auth-label">Negeri</label>
+                                    <select id="reg-state" name="state" required
+                                            @class(['auth-select', 'is-invalid' => $errors->has('state')])>
+                                        <option value="">Pilih</option>
+                                        @foreach($states as $state)
+                                            <option value="{{ $state }}" {{ old('state') === $state ? 'selected' : '' }}>{{ $state }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('state'))
+                                        <p class="auth-error" role="alert">
+                                            <x-icon name="circle-alert" :size="13" />
+                                            {{ $errors->first('state') }}
+                                        </p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-postcode" class="auth-label">Poskod</label>
+                                <input id="reg-postcode" type="text" name="postcode" required maxlength="5" inputmode="numeric"
+                                       pattern="\d{5}" autocomplete="postal-code" placeholder="5 digit"
+                                       value="{{ old('postcode') }}"
+                                       @class(['auth-input', 'is-invalid' => $errors->has('postcode')])>
+                                @if($errors->has('postcode'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('postcode') }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-password" class="auth-label">Kata laluan</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="lock" :size="18" class="auth-input-icon" />
+                                    <input id="reg-password" type="password" name="password" required minlength="8"
+                                           placeholder="Minimum 8 aksara" autocomplete="new-password"
+                                           x-bind:type="showRegPassword ? 'text' : 'password'"
+                                           @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password')])>
+                                    <button type="button" class="auth-eye"
+                                            @click="showRegPassword = !showRegPassword"
+                                            :aria-label="showRegPassword ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                        <span x-show="!showRegPassword"><x-icon name="eye" :size="18" /></span>
+                                        <span x-show="showRegPassword" x-cloak><x-icon name="eye-off" :size="18" /></span>
+                                    </button>
+                                </div>
+                                @if($errors->has('password'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('password') }}
+                                    </p>
+                                @else
+                                    <p class="auth-hint">Minimum 8 aksara. Gunakan gabungan huruf dan nombor.</p>
+                                @endif
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="reg-password-confirmation" class="auth-label">Sahkan kata laluan</label>
+                                <div class="auth-input-wrap">
+                                    <x-icon name="lock" :size="18" class="auth-input-icon" />
+                                    <input id="reg-password-confirmation" type="password" name="password_confirmation" required minlength="8"
+                                           placeholder="Ulang kata laluan" autocomplete="new-password"
+                                           x-bind:type="showRegPasswordConfirmation ? 'text' : 'password'"
+                                           @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password_confirmation')])>
+                                    <button type="button" class="auth-eye"
+                                            @click="showRegPasswordConfirmation = !showRegPasswordConfirmation"
+                                            :aria-label="showRegPasswordConfirmation ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                        <span x-show="!showRegPasswordConfirmation"><x-icon name="eye" :size="18" /></span>
+                                        <span x-show="showRegPasswordConfirmation" x-cloak><x-icon name="eye-off" :size="18" /></span>
+                                    </button>
+                                </div>
+                                @if($errors->has('password_confirmation'))
+                                    <p class="auth-error" role="alert">
+                                        <x-icon name="circle-alert" :size="13" />
+                                        {{ $errors->first('password_confirmation') }}
+                                    </p>
+                                @endif
+                            </div>
+                        @endif
+
+                        <label class="auth-check auth-check--top">
+                            <input type="checkbox" required>
+                            <span>
+                                Saya bersetuju dengan Terma &amp; Syarat serta Notis Privasi J-ZAKAT AI.
+                            </span>
+                        </label>
+
+                        <button type="submit" class="auth-submit" :disabled="submittingSignUp">
+                            <span x-show="!submittingSignUp">Daftar Akaun</span>
+                            <span x-show="submittingSignUp" x-cloak class="inline-flex items-center gap-2">
+                                <span class="auth-spinner"></span>
+                                Memproses...
+                            </span>
+                            <x-icon name="arrow-right" :size="17" x-show="!submittingSignUp" />
+                        </button>
+
+                        <p class="auth-switch">
+                            Sudah mempunyai akaun?
+                            <a href="#" @click.prevent="tab = 'signin'">Log masuk di sini</a>
+                        </p>
+                    </form>
                 </div>
-
-                @if($errors->has('email') && ! $hasRegisterOld)
-                    <div class="sa-alert">{{ $errors->first('email') }}</div>
-                @endif
-
-                <button type="submit" class="btn btn-lg btn-gradient w-full">Sign In</button>
-
-                <div class="sa-divider"><span>or</span></div>
-
-                <button type="button" class="btn btn-lg btn-glass w-full" @click.prevent="google()">
-                    <svg class="sa-google-g" viewBox="0 0 48 48" aria-hidden="true">
-                        <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
-                        <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
-                        <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
-                        <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571.001-.001.002-.001.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
-                    </svg>
-                    Sign In with Google
-                </button>
-
-                <p class="sa-info" x-show="googleMsg" x-text="googleMsg" x-transition x-cloak></p>
-
-                <p class="sa-back-to-home">
-                    <a href="{{ url('/') }}">← Kembali ke halaman utama</a>
-                </p>
-            </form>
-
-            {{-- ============================================================ --}}
-            {{-- SIGN UP --}}
-            {{-- ============================================================ --}}
-            <form method="POST" action="{{ $registerAction }}"
-                  class="split-auth__form {{ $initialTab === 'signup' ? '' : 'is-hidden' }}"
-                  :class="{ 'is-hidden': tab !== 'signup' }"
-                  novalidate>
-
-                @csrf
-                <input type="hidden" name="_form" value="signup">
-
-                @if($mode === 'admin')
-                    {{-- Admin register: name + email + invitation_code + password --}}
-                    <div class="sa-field">
-                        <label for="reg-name" class="sa-label">Nama penuh</label>
-                        <input id="reg-name" type="text" name="name" required maxlength="255"
-                               value="{{ old('name') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('name')])>
-                        @if($errors->has('name'))<p class="sa-error">{{ $errors->first('name') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-email" class="sa-label">Your email</label>
-                        <input id="reg-email" type="email" name="email" required maxlength="255"
-                               value="{{ old('email') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('email')])>
-                        @if($errors->has('email'))<p class="sa-error">{{ $errors->first('email') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-invitation" class="sa-label">Kod undangan pentadbir</label>
-                        <input id="reg-invitation" type="text" name="invitation_code" required maxlength="64"
-                               placeholder="MAIJ-XXXX-XXXX-XXXX-XXXX"
-                               value="{{ old('invitation_code') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('invitation_code')])>
-                        @if($errors->has('invitation_code'))<p class="sa-error">{{ $errors->first('invitation_code') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-password" class="sa-label">Password</label>
-                        <input id="reg-password" type="password" name="password" required minlength="8"
-                               placeholder="Minimum 8 aksara"
-                               @class(['sa-input', 'is-invalid' => $errors->has('password')])>
-                        @if($errors->has('password'))<p class="sa-error">{{ $errors->first('password') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-password-confirmation" class="sa-label">Sahkan password</label>
-                        <input id="reg-password-confirmation" type="password" name="password_confirmation" required minlength="8"
-                               @class(['sa-input', 'is-invalid' => $errors->has('password_confirmation')])>
-                        @if($errors->has('password_confirmation'))<p class="sa-error">{{ $errors->first('password_confirmation') }}</p>@endif
-                    </div>
-
-                @else
-                    {{-- Portal register: full applicant fields --}}
-                    <div class="sa-field">
-                        <label for="reg-name" class="sa-label">Nama penuh</label>
-                        <input id="reg-name" type="text" name="name" required maxlength="255"
-                               value="{{ old('name') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('name')])>
-                        @if($errors->has('name'))<p class="sa-error">{{ $errors->first('name') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-ic" class="sa-label">No Kad Pengenalan (12 digit)</label>
-                        <input id="reg-ic" type="text" name="ic_no" required maxlength="12" pattern="\d{12}"
-                               placeholder="800315015678"
-                               value="{{ old('ic_no') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('ic_no')])>
-                        @if($errors->has('ic_no'))<p class="sa-error">{{ $errors->first('ic_no') }}</p>@endif
-                    </div>
-
-                    <div class="sa-grid">
-                        <div class="sa-field">
-                            <label for="reg-dob" class="sa-label">Tarikh lahir</label>
-                            <input id="reg-dob" type="date" name="date_of_birth" required
-                                   value="{{ old('date_of_birth') }}"
-                                   @class(['sa-input', 'is-invalid' => $errors->has('date_of_birth')])>
-                            @if($errors->has('date_of_birth'))<p class="sa-error">{{ $errors->first('date_of_birth') }}</p>@endif
-                        </div>
-                        <div class="sa-field">
-                            <label for="reg-gender" class="sa-label">Jantina</label>
-                            <select id="reg-gender" name="gender" required
-                                    @class(['sa-select', 'is-invalid' => $errors->has('gender')])>
-                                <option value="">— Pilih —</option>
-                                <option value="male"   {{ old('gender') === 'male'   ? 'selected' : '' }}>Lelaki</option>
-                                <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>Perempuan</option>
-                            </select>
-                            @if($errors->has('gender'))<p class="sa-error">{{ $errors->first('gender') }}</p>@endif
-                        </div>
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-phone" class="sa-label">No Telefon</label>
-                        <input id="reg-phone" type="tel" name="phone" required maxlength="15"
-                               placeholder="0123456789"
-                               value="{{ old('phone') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('phone')])>
-                        @if($errors->has('phone'))<p class="sa-error">{{ $errors->first('phone') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-email" class="sa-label">Your email</label>
-                        <input id="reg-email" type="email" name="email" required maxlength="255"
-                               value="{{ old('email') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('email')])>
-                        @if($errors->has('email'))<p class="sa-error">{{ $errors->first('email') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-address" class="sa-label">Alamat</label>
-                        <input id="reg-address" type="text" name="address" required maxlength="500"
-                               value="{{ old('address') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('address')])>
-                        @if($errors->has('address'))<p class="sa-error">{{ $errors->first('address') }}</p>@endif
-                    </div>
-
-                    <div class="sa-grid">
-                        <div class="sa-field">
-                            <label for="reg-district" class="sa-label">Daerah</label>
-                            <input id="reg-district" type="text" name="district" required maxlength="100"
-                                   value="{{ old('district') }}"
-                                   @class(['sa-input', 'is-invalid' => $errors->has('district')])>
-                            @if($errors->has('district'))<p class="sa-error">{{ $errors->first('district') }}</p>@endif
-                        </div>
-                        <div class="sa-field">
-                            <label for="reg-state" class="sa-label">Negeri</label>
-                            <select id="reg-state" name="state" required
-                                    @class(['sa-select', 'is-invalid' => $errors->has('state')])>
-                                <option value="">— Pilih —</option>
-                                @foreach($states as $s)
-                                    <option value="{{ $s }}" {{ old('state') === $s ? 'selected' : '' }}>{{ $s }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('state'))<p class="sa-error">{{ $errors->first('state') }}</p>@endif
-                        </div>
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-postcode" class="sa-label">Poskod (5 digit)</label>
-                        <input id="reg-postcode" type="text" name="postcode" required maxlength="5" pattern="\d{5}"
-                               value="{{ old('postcode') }}"
-                               @class(['sa-input', 'is-invalid' => $errors->has('postcode')])>
-                        @if($errors->has('postcode'))<p class="sa-error">{{ $errors->first('postcode') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-password" class="sa-label">Password</label>
-                        <input id="reg-password" type="password" name="password" required minlength="8"
-                               placeholder="Minimum 8 aksara"
-                               @class(['sa-input', 'is-invalid' => $errors->has('password')])>
-                        @if($errors->has('password'))<p class="sa-error">{{ $errors->first('password') }}</p>@endif
-                    </div>
-
-                    <div class="sa-field">
-                        <label for="reg-password-confirmation" class="sa-label">Sahkan password</label>
-                        <input id="reg-password-confirmation" type="password" name="password_confirmation" required minlength="8"
-                               @class(['sa-input', 'is-invalid' => $errors->has('password_confirmation')])>
-                        @if($errors->has('password_confirmation'))<p class="sa-error">{{ $errors->first('password_confirmation') }}</p>@endif
-                    </div>
-                @endif
-
-                @if($registerErrorBag && $registerErrorBag->isNotEmpty() && ! $errors->has('email') && ! $errors->has('name'))
-                    {{-- generic register-level error --}}
-                @endif
-
-                <button type="submit" class="btn btn-lg btn-gradient w-full">Sign Up</button>
-
-                <div class="sa-divider"><span>or</span></div>
-
-                <button type="button" class="btn btn-lg btn-glass w-full" @click.prevent="google()">
-                    <svg class="sa-google-g" viewBox="0 0 48 48" aria-hidden="true">
-                        <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
-                        <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
-                        <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
-                        <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571.001-.001.002-.001.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
-                    </svg>
-                    Sign Up with Google
-                </button>
-
-                <p class="sa-info" x-show="googleMsg" x-text="googleMsg" x-transition x-cloak></p>
-            </form>
-
-        </div>
-
-        {{-- Footer (Privacy · Terms · About) --}}
-        <footer class="split-auth__footer">
-            <div>
-                <a href="#">Privacy</a><span class="dot">·</span>
-                <a href="#">Terms</a><span class="dot">·</span>
-                <a href="#">About</a>
             </div>
-            <p class="mt-2 text-[11px] text-white/40">&copy; {{ date('Y') }} J-ZAKAT AI · Majlis Agama Islam Johor</p>
-        </footer>
+
+            @include('auth._auth-footer')
+        </div>
     </main>
 </div>
 </body>

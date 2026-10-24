@@ -1,37 +1,36 @@
 <!DOCTYPE html>
-<html lang="ms" class="h-full">
+<html lang="ms" class="h-full dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0B1220">
-    <meta name="description" content="J-ZAKAT AI — J-ZAKAT MAIJ Sistem Bersepadu Majlis Agama Islam Negeri Johor">
+    <meta name="theme-color" content="#070D1A">
+    <meta name="description" content="J-ZAKAT AI — Sistem Pengurusan Asnaf Majlis Agama Islam Johor">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'J-ZAKAT MAIJ — J-ZAKAT AI')</title>
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=amiri:400,700&display=swap" rel="stylesheet">
+    <title>@yield('title', 'J-ZAKAT AI')</title>
     <style>[x-cloak] { display: none !important; }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="emaij-body min-h-screen antialiased">
-    @include('auth._emaij-background')
+<body class="auth-page">
+<div class="auth-shell auth-shell--centered">
+    <main class="auth-panel auth-panel--centered">
+        @include('auth._auth-topbar')
 
-    <main class="emaij-page">
-        <div class="emaij-page__inner @yield('inner-class')">
-            <div class="emaij-page__brand">
-                @include('auth._emaij-brand')
-            </div>
-
-            <div class="emaij-page__content">
+        <div class="auth-panel__content">
+            <div class="auth-card">
                 @yield('content')
+
+                @hasSection('footer')
+                    <div class="auth-card__footer">
+                        @yield('footer')
+                    </div>
+                @endif
             </div>
 
-            <div class="emaij-page__footer">
-                @yield('footer')
-                <p class="emaij-page__copyright">&copy; Hak Milik Akmal Hafiz 2020 - {{ date('Y') }}</p>
-            </div>
+            @include('auth._auth-footer')
         </div>
     </main>
+</div>
 
-    @stack('scripts')
+@stack('scripts')
 </body>
 </html>
