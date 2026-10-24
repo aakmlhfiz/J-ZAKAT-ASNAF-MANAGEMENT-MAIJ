@@ -1,0 +1,45 @@
+{
+    "source_pdf": "MAIJ-Borang-Agihan-Zakat-blank.pdf",
+    "page_count": 4,
+    "calibrated_at": "2026-08-23T07:03:09+00:00",
+    "checkbox_baselines": {
+        "kesihatan.sihat": 0.0044,
+        "kesihatan.sakit": 0.0147,
+        "kesihatan.cacat": 0.0228,
+        "status_perkahwinan.bujang": 0.0022,
+        "status_perkahwinan.berkahwin": 0.0037,
+        "status_perkahwinan.janda": 0.0243,
+        "status_perkahwinan.duda": 0.0801,
+        "merokok.ya": 0.0015,
+        "merokok.tidak": 0.0044,
+        "perumahan.bina_baru": 0.0549,
+        "perumahan.baik_pulih": 0.0315,
+        "perubatan_pemohon_or_tanggungan.pemohon": 0.0426,
+        "perubatan_pemohon_or_tanggungan.tanggungan": 0.064,
+        "berdikari_pengalaman_ada.tiada": 0.0507,
+        "status_tanah.sendiri": 0.0375,
+        "perumahan_laporan_polis.ada": 0.0463,
+        "perumahan_laporan_polis.tiada": 0.0434,
+        "harta_rumah.ada": 0.0029,
+        "harta_tanah.ada": 0.0022,
+        "harta_kereta.ada": 0.0037
+    },
+    "ink_zones": {
+        "signature_pemohon": 0.0229,
+        "cop_pengesah": 0.0269
+    },
+    "warnings": [
+        "Label kotak semak 'dialisis' (kumpulan 'perubatan_jenis_rawatan') tidak dijumpai pada muka 2.",
+        "Label kotak semak 'pelbagai' (kumpulan 'perubatan_jenis_rawatan') tidak dijumpai pada muka 2.",
+        "Label kotak semak 'peralatan' (kumpulan 'jenis_berdikari') tidak dijumpai pada muka 2.",
+        "Label kotak semak 'modal' (kumpulan 'jenis_berdikari') tidak dijumpai pada muka 2.",
+        "Label kotak semak 'ada' (kumpulan 'berdikari_pengalaman_ada') tidak dijumpai pada muka 2.",
+        "Label kotak semak 'sewa' (kumpulan 'status_tanah') tidak dijumpai pada muka 2.",
+        "Label kotak semak 'tumpang' (kumpulan 'status_tanah') tidak dijumpai pada muka 2.",
+        "Label kotak semak 'sendiri' (kumpulan 'tempat_tinggal') tidak dijumpai pada muka 3.",
+        "Label kotak semak 'menumpang' (kumpulan 'tempat_tinggal') tidak dijumpai pada muka 3.",
+        "Label kotak semak 'menyewa' (kumpulan 'tempat_tinggal') tidak dijumpai pada muka 3.",
+        "Label kotak semak 'lain_lain' (kumpulan 'tempat_tinggal') tidak dijumpai pada muka 3.",
+        "Label kotak semak 'ada' (kumpulan 'harta_motosikal') tidak dijumpai pada muka 3."
+    ]
+}
