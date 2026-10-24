@@ -5,16 +5,24 @@ return [
     |--------------------------------------------------------------------------
     | Default AI provider
     |--------------------------------------------------------------------------
-    | One of: 'mock', 'openai', 'gemini', 'ollama'
+    | One of: 'mock', 'groq', 'openai', 'gemini', 'ollama'
     | 'mock' is the default — works offline, no API key needed.
-    | Real LLM providers are stubbed; set the relevant API key env var to
-    | enable them (e.g. AI_OPENAI_API_KEY=sk-...).
+    | Groq is implemented with OpenAI-compatible function calling.
+    | OpenAI, Gemini and Ollama remain stubs until implemented.
     */
     'default' => env('AI_PROVIDER', 'mock'),
 
     'providers' => [
         'mock' => [
             'driver' => 'mock',
+        ],
+        'groq' => [
+            'driver' => 'groq',
+            'api_key' => env('AI_GROQ_API_KEY'),
+            'model' => env('AI_GROQ_MODEL', 'llama-3.3-70b-versatile'),
+            'base' => env('AI_GROQ_BASE', 'https://api.groq.com/openai/v1'),
+            'timeout' => (int) env('AI_GROQ_TIMEOUT', 30),
+            'max_tokens' => (int) env('AI_GROQ_MAX_TOKENS', 900),
         ],
         'openai' => [
             'driver' => 'openai',
@@ -38,7 +46,7 @@ return [
     | System prompt used by real LLM providers.
     | The MockProvider ignores this and uses pattern-matching instead.
     */
-    'system_prompt' => 'You are the MAIJ Asnaf Assistant, a helpful AI for the Majlis Agama Islam Johor (MAIJ) Smart Asnaf Eligibility System. Respond in Bahasa Malaysia. Use the provided tools (function-calling) to look up applicants, explain eligibility decisions, calculate Had Kifayah (RM 1200 base + RM 350 per dependent + sewa + utiliti), and summarize profiles. Be concise, professional, and always cite specific data points (nama, IC, pendapatan, etc.) when answering.',
+    'system_prompt' => 'You are the J-ZAKAT Asnaf Assistant for Majlis Agama Islam Johor (MAIJ). Respond in Bahasa Malaysia. Use the provided tools to look up applicants, explain eligibility decisions, calculate Had Kifayah, and summarize profiles. Never invent applicant data or calculation rates: always call the relevant tool first. If a tool returns no record, say so clearly. Be concise, professional, protect personal data, and cite the specific data returned by the tools.',
 
     'max_history' => 20,
     'max_message_length' => 1000,

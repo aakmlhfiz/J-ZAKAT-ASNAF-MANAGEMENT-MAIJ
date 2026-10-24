@@ -4,9 +4,11 @@ namespace App\Services\Ai;
 
 use App\Services\Ai\Contracts\AiProvider;
 use App\Services\Ai\Providers\GeminiProvider;
+use App\Services\Ai\Providers\GroqProvider;
 use App\Services\Ai\Providers\MockProvider;
 use App\Services\Ai\Providers\OllamaProvider;
 use App\Services\Ai\Providers\OpenAiProvider;
+use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 
 /**
@@ -19,9 +21,16 @@ class AiService
 
     public function __construct()
     {
-        $default = config('ai.default', 'mock');
+        $default = (string) config('ai.default', 'mock');
+
+        if ($default === 'groq' && trim((string) config('ai.providers.groq.api_key')) === '') {
+            Log::warning('AI_PROVIDER=groq but AI_GROQ_API_KEY is empty; falling back to mock.');
+            $default = 'mock';
+        }
+
         $this->provider = match ($default) {
             'mock' => new MockProvider,
+            'groq' => new GroqProvider,
             'openai' => new OpenAiProvider,
             'gemini' => new GeminiProvider,
             'ollama' => new OllamaProvider,

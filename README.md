@@ -6,7 +6,7 @@ Sistem pengurusan kelayakan asnaf pintar untuk **Majlis Agama Islam Johor (MAIJ)
 
 - **Profil Asnaf** — Pengurusan CRUD pemohon, carian, penapisan, dan padam pukal
 - **Had Kifayah** — Kalkulator MAIDAM-style dengan kadar boleh konfigurasikan setiap kategori
-- **Penilaian AI** — Cadangan kelayakan dengan sokongan OpenAI, Gemini, Ollama, dan Mock provider
+- **Penilaian AI** - Pembantu AI dengan Groq (function calling) dan fallback Mock; OpenAI, Gemini dan Ollama masih stub
 - **Import CSV** — Import pukal pemohon dengan validasi dan rollback
 - **Import PDF/OCR** — Ekstrak data dari dokumen IC dan slip gaji menggunakan Tesseract/pdfparser
 - **Surat Kelulusan** — Jana PDF kelulusan/penolakan dan hantar emel automatik
@@ -109,12 +109,27 @@ php artisan pail
 | `MAIJ_SUPER_ADMIN_EMAIL` | Emel pentadbir utama | — |
 | `BROADCAST_CONNECTION` | Pemandu WebSocket | `reverb` |
 | `REVERB_APP_ID`/`KEY`/`SECRET` | Kredensial Reverb | dijana automatik |
-| `AI_PROVIDER` | `mock` / `openai` / `gemini` / `ollama` | `mock` |
+| `AI_PROVIDER` | `mock` / `groq` / `openai` / `gemini` / `ollama` | `mock` |
+| `AI_GROQ_API_KEY` | API key Groq untuk pembantu AI | - |
 | `OCR_DRIVER` | `tesseract` / `pdfparser` / `hybrid` | `hybrid` |
 | `MAIL_MAILER` | `smtp` / `log` / `array` | `smtp` |
 | `FIREBASE_*` | Kredensial Firebase Auth | — |
 
 Lihat `.env.example` untuk senarai penuh.
+
+### Pembantu AI Groq
+
+1. Cipta API key di [Groq Console](https://console.groq.com/keys).
+2. Tetapkan nilai berikut dalam `.env`:
+
+```env
+AI_PROVIDER=groq
+AI_GROQ_API_KEY=your-new-key
+AI_GROQ_MODEL=llama-3.3-70b-versatile
+AI_GROQ_BASE=https://api.groq.com/openai/v1
+```
+
+3. Jangan commit `.env`. Jika key tiada, sistem akan fallback ke provider `mock`.
 
 ## Seni Bina
 
@@ -130,7 +145,7 @@ Logik perniagaan terkapsul dalam `app/Services/`:
 - `HadAlKifayahService` — Pengiraan Had Kifayah MAIDAM-style
 - `ApprovalService` — Jana surat kelulusan/penolakan
 - `OcrService` — Orkestrasi OCR dengan fallback berbilang pemandu
-- `AiService` — Dispatcher untuk OpenAI/Gemini/Ollama/Mock
+- `AiService` - Dispatcher untuk Groq/OpenAI/Gemini/Ollama/Mock
 - `TwoFactorService` — TOTP generation & verification
 - `NotificationService` — Notifikasi role-scoped & user-specific
 - `ActivityLogger` — Tiga-tier audit logging

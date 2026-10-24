@@ -54,7 +54,7 @@ class CalculateKifayahTool extends AbstractTool
         $pengangkutan_input = (float) ($remaining[1] ?? 0);
         $perubatan_input = (float) ($remaining[2] ?? 0);
 
-        $r = HadAlKifayahService::calculate([
+        return $this->calculate([
             'pendapatan_pemohon' => $pendapatan_pemohon,
             'pendapatan_pasangan' => $pendapatan_pasangan,
             'pendapatan_anak' => $pendapatan_anak,
@@ -65,6 +65,15 @@ class CalculateKifayahTool extends AbstractTool
             'pengangkutan_input' => $pengangkutan_input,
             'perubatan_input' => $perubatan_input,
         ]);
+    }
+
+    /**
+     * Run the calculator with structured input from a function-calling model.
+     * Missing keys are treated as zero by HadAlKifayahService.
+     */
+    public function calculate(array $input): array
+    {
+        $r = HadAlKifayahService::calculate($input);
 
         $formula = sprintf(
             'Had Kifayah = RM %.2f  (A − C = RM %.2f − RM %.2f)',
