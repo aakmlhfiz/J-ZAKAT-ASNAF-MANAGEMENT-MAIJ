@@ -2,7 +2,7 @@
     'title' => 'AI Assistant',
     'subtitle' => 'Pembantu pintar data asnaf MAIJ',
 ])
-@section('title', 'Ustaz Danial — J-ZAKAT AI')
+@section('title', 'Ustaz Danial — J-ZAKAT')
 @section('content')
 <div x-data="aiChatWidget" class="max-w-3xl mx-auto">
     <div class="mb-5 flex items-center gap-3">

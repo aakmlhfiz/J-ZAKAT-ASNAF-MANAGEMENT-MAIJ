@@ -1,6 +1,6 @@
 {{--
     Brand header for the split auth pages — mirrors the landing page nav
-    (logo + J-ZAKAT AI wordmark + back-to-home link).
+    (logo + J-ZAKAT wordmark + back-to-home link).
 --}}
 <div class="split-auth__brand">
     <a href="{{ url('/') }}" class="flex items-center gap-3 group min-w-0">
@@ -8,7 +8,7 @@
             <img src="{{ asset('images/MAIJ.PNG') }}" alt="MAIJ" class="w-full h-full object-contain p-1">
         </div>
         <div class="leading-none min-w-0">
-            <p class="text-[16px] font-bold text-white tracking-tight">J-ZAKAT <span class="text-cyan">AI</span></p>
+            <p class="text-[16px] font-bold text-white tracking-tight">J-ZAKAT</p>
             <p class="text-[10.5px] text-white/50 mt-1 tracking-wider uppercase truncate">Majlis Agama Islam Johor</p>
         </div>
     </a>

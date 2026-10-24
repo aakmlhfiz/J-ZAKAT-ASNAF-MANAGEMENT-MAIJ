@@ -23,7 +23,7 @@ class ApplicationApprovedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Tahniah! Permohonan Zakat Diluluskan — J-ZAKAT AI',
+            subject: 'Tahniah! Permohonan Zakat Diluluskan — J-ZAKAT',
         );
     }
 

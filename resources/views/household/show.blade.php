@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Isi Rumah - ' . ($household->ketua?->nama ?? 'N/A') . ' - J-ZAKAT AI')
+@section('title', 'Profil Isi Rumah - ' . ($household->ketua?->nama ?? 'N/A') . ' - J-ZAKAT')
 
 @php
     $title = 'Profil Isi Rumah';

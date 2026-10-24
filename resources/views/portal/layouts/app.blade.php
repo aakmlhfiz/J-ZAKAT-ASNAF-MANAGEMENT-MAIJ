@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#F5F5F7">
-    <meta name="description" content="J-ZAKAT AI — Portal Permohonan Asnaf · Majlis Agama Islam Johor">
+    <meta name="description" content="J-ZAKAT — Portal Permohonan Asnaf · Majlis Agama Islam Johor">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-role" content="user">
     <meta name="user-id" content="{{ auth('portal')->id() ?? '' }}">
     <meta name="user-guard" content="portal">
     <meta name="user-dark-mode" content="system">
-    <title>@yield('title', 'Portal Pemohon') — J-ZAKAT AI</title>
+    <title>@yield('title', 'Portal Pemohon') — J-ZAKAT</title>
     <style>[x-cloak] { display: none !important; }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
@@ -47,7 +47,7 @@
                 @yield('content')
             </main>
             <footer class="px-6 md:px-10 py-5 text-center text-small text-tertiary border-t border-divider bg-card/40">
-                <p>© {{ date('Y') }} <span class="font-semibold text-text">J-ZAKAT AI</span> · Platform Pintar Kelayakan Asnaf</p>
+                <p>© {{ date('Y') }} <span class="font-semibold text-text">J-ZAKAT</span> · Platform Pintar Kelayakan Asnaf</p>
                 <p class="text-[11px] mt-1 opacity-80">Dibangunkan untuk Majlis Agama Islam Johor</p>
             </footer>
         </div>

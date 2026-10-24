@@ -13,7 +13,7 @@
                 <img src="{{ asset('images/MAIJ.PNG') }}" alt="">
             </span>
             <span class="auth-brand-copy">
-                <span class="auth-wordmark">J-ZAKAT <em>AI</em></span>
+                <span class="auth-wordmark">J-ZAKAT</span>
                 <span class="auth-brand-sub">Majlis Agama Islam Johor</span>
             </span>
         </a>

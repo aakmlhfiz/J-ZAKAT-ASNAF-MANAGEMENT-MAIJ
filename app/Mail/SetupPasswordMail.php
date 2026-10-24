@@ -21,7 +21,7 @@ class SetupPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Selamat Datang ke J-ZAKAT AI — Sila Tetapkan Kata Laluan Anda',
+            subject: 'Selamat Datang ke J-ZAKAT — Sila Tetapkan Kata Laluan Anda',
         );
     }
 

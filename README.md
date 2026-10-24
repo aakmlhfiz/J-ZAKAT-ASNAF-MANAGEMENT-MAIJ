@@ -1,4 +1,4 @@
-# J-ZAKAT AI — Smart Asnaf Eligibility System
+# J-ZAKAT — Smart Asnaf Eligibility System
 
 Sistem pengurusan kelayakan asnaf pintar untuk **Majlis Agama Islam Johor (MAIJ)**. Aplikasi ini membolehkan pentadbir mengurus profil pemohon, menjalankan pengiraan Had Kifayah, menjana surat kelulusan/penolakan, dan membuat penilaian menggunakan AI.
 
@@ -103,7 +103,7 @@ php artisan pail
 
 | Pembolehubah | Tujuan | Lalai |
 |---|---|---|
-| `APP_NAME` | Nama aplikasi | `J-ZAKAT AI` |
+| `APP_NAME` | Nama aplikasi | `J-ZAKAT` |
 | `APP_URL` | URL asas | `http://127.0.0.1:8000` |
 | `DB_CONNECTION` | Pemandu pangkalan data | `sqlite` |
 | `MAIJ_SUPER_ADMIN_EMAIL` | Emel pentadbir utama | — |

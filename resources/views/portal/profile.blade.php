@@ -1,5 +1,5 @@
 @extends('portal.layouts.app', [
-    'title' => 'Profil Saya — J-ZAKAT AI',
+    'title' => 'Profil Saya — J-ZAKAT',
     'subtitle' => 'Pengurusan akaun pemohon',
 ])
 

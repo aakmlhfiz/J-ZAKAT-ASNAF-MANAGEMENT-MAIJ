@@ -1,5 +1,5 @@
 {{--
-    Public landing page — J-ZAKAT AI
+    Public landing page — J-ZAKAT
     Data passed from the `/` route via WelcomePreviewService::getAll():
       $stats (total, layak, tidak_layak, dalam_semakan), $chartLabels, $chartValues, $aiPick
 --}}
@@ -9,9 +9,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0B1220">
-    <meta name="description" content="J-ZAKAT AI — Platform Pintar Pengurusan Zakat Majlis Agama Islam Johor. Permohonan bantuan zakat dalam talian dengan penilaian Had Kifayah dan analisis AI.">
+    <meta name="description" content="J-ZAKAT — Platform Pintar Pengurusan Zakat Majlis Agama Islam Johor. Permohonan bantuan zakat dalam talian dengan penilaian Had Kifayah dan analisis AI.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>J-ZAKAT AI — Platform Pintar Pengurusan Zakat</title>
+    <title>J-ZAKAT — Platform Pintar Pengurusan Zakat</title>
     <style>[x-cloak] { display: none !important; }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -30,7 +30,7 @@
                         <img src="{{ asset('images/MAIJ.PNG') }}" alt="MAIJ" class="w-full h-full object-contain p-1">
                     </div>
                     <div class="leading-none">
-                        <p class="text-[16px] font-bold text-white tracking-tight">J-ZAKAT <span class="text-cyan">AI</span></p>
+                        <p class="text-[16px] font-bold text-white tracking-tight">J-ZAKAT</p>
                         <p class="text-[10.5px] text-white/50 mt-1 tracking-wider uppercase">Majlis Agama Islam Johor</p>
                     </div>
                 </a>
@@ -90,7 +90,7 @@
                     </span>
 
                     <h1 class="mt-6 text-[34px] leading-[1.12] sm:text-[44px] sm:leading-[1.1] lg:text-[52px] font-bold tracking-tight text-white">
-                        J-ZAKAT AI —
+                        J-ZAKAT —
                         <span class="text-gradient-royal">Platform Pintar Pengurusan Zakat</span>
                     </h1>
 
@@ -352,7 +352,7 @@
                             <img src="{{ asset('images/MAIJ.PNG') }}" alt="MAIJ" class="w-full h-full object-contain p-1">
                         </div>
                         <div class="leading-none">
-                            <p class="text-[15px] font-bold text-white tracking-tight">J-ZAKAT <span class="text-cyan">AI</span></p>
+                            <p class="text-[15px] font-bold text-white tracking-tight">J-ZAKAT</p>
                             <p class="text-[10.5px] text-white/45 mt-1 tracking-wider uppercase">Platform Pintar Pengurusan Zakat</p>
                         </div>
                     </div>
@@ -392,7 +392,7 @@
             <div class="landing-divider my-8"></div>
 
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-[12.5px] text-white/40">
-                <p>&copy; {{ date('Y') }} J-ZAKAT AI · Majlis Agama Islam Johor. Hak cipta terpelihara.</p>
+                <p>&copy; {{ date('Y') }} J-ZAKAT · MAH. Hak cipta terpelihara.</p>
                 <div class="flex items-center gap-4">
                     <a href="#" class="hover:text-white/70 transition-fast">Privacy</a>
                     <a href="#" class="hover:text-white/70 transition-fast">Terms</a>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Carian Isi Rumah - Household Intelligence - J-ZAKAT AI')
+@section('title', 'Carian Isi Rumah - Household Intelligence - J-ZAKAT')
 
 @php
     $title = 'Carian Isi Rumah';

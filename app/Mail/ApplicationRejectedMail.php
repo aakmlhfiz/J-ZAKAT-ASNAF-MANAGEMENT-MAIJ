@@ -23,7 +23,7 @@ class ApplicationRejectedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Keputusan Permohonan Zakat — J-ZAKAT AI',
+            subject: 'Keputusan Permohonan Zakat — J-ZAKAT',
         );
     }
 

@@ -7,7 +7,7 @@
             <img src="{{ asset('images/MAIJ.PNG') }}" alt="MAIJ" class="w-full h-full object-contain">
         </div>
         <div>
-            <p class="text-[15px] font-semibold text-text leading-none">J-ZAKAT AI</p>
+            <p class="text-[15px] font-semibold text-text leading-none">J-ZAKAT</p>
             <p class="text-[11px] text-tertiary mt-1 leading-none">Smart Eligibility Platform</p>
         </div>
     </div>

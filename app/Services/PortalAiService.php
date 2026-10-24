@@ -72,7 +72,7 @@ class PortalAiService
         ], $items, array_keys($items));
 
         return [
-            'reply' => "Salam, saya pembantu maya J-ZAKAT AI. Anda boleh bertanya tentang:\n\n• Jenis bantuan yang boleh dipohon\n• Dokumen yang diperlukan\n• Cara menghantar permohonan\n• Status permohonan anda\n• Kemas kini maklumat isi rumah\n• Tindakan jika dokumen ditolak\n\nSila pilih atau taip soalan anda.",
+            'reply' => "Salam, saya pembantu maya J-ZAKAT. Anda boleh bertanya tentang:\n\n• Jenis bantuan yang boleh dipohon\n• Dokumen yang diperlukan\n• Cara menghantar permohonan\n• Status permohonan anda\n• Kemas kini maklumat isi rumah\n• Tindakan jika dokumen ditolak\n\nSila pilih atau taip soalan anda.",
             'data' => ['type' => 'suggestions', 'suggestions' => $suggestions],
         ];
     }

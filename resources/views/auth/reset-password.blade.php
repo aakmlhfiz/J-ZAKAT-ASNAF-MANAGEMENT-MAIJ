@@ -1,6 +1,6 @@
 @php $mode = $mode ?? 'admin'; @endphp
 @extends('auth.centered')
-@section('title', 'Set Semula Kata Laluan — J-ZAKAT AI')
+@section('title', 'Set Semula Kata Laluan — J-ZAKAT')
 
 @section('content')
     <div class="auth-card__head auth-card__head--center">

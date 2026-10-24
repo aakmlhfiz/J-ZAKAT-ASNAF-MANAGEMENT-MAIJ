@@ -13,7 +13,7 @@
                     <tr>
                         <td>
                             <p style="margin:0;font-size:28px;font-weight:700;color:#FFFFFF;">&#10004; DILULUSKAN</p>
-                            <p style="margin:4px 0 0;font-size:13px;color:rgba(255,255,255,0.85);">J-ZAKAT AI · Majlis Agama Islam Johor</p>
+                            <p style="margin:4px 0 0;font-size:13px;color:rgba(255,255,255,0.85);">J-ZAKAT · Majlis Agama Islam Johor</p>
                         </td>
                     </tr>
                 </table>
@@ -67,7 +67,7 @@
 
                             <div style="margin:32px 0 0;padding-top:24px;border-top:1px solid #E2E8F0;text-align:center;">
                                 <p style="margin:0;font-size:12px;color:#94A3B8;">
-                                    © {{ date('Y') }} <strong style="color:#1E293B;">J-ZAKAT AI</strong> · Majlis Agama Islam Johor (MAIJ)
+                                    © {{ date('Y') }} <strong style="color:#1E293B;">J-ZAKAT</strong> · Majlis Agama Islam Johor (MAIJ)
                                 </p>
                             </div>
                         </td>

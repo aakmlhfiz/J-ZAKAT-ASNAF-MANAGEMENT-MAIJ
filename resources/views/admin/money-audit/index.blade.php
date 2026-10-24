@@ -1,11 +1,11 @@
 @extends('layouts.app', [
     'title' => 'Audit Kewangan',
-    'subtitle' => 'Pengauditan transaksi bantuan & pergerakan wang J-ZAKAT AI',
+    'subtitle' => 'Pengauditan transaksi bantuan & pergerakan wang J-ZAKAT',
 ])
 
 @section('content')
 
-<x-page-header title="Audit Kewangan" subtitle="Pengauditan transaksi bantuan & pergerakan wang J-ZAKAT AI" eyebrow="Pentadbiran" icon="fa-money-check-dollar">
+<x-page-header title="Audit Kewangan" subtitle="Pengauditan transaksi bantuan & pergerakan wang J-ZAKAT" eyebrow="Pentadbiran" icon="fa-money-check-dollar">
     <x-slot:actions>
         <a href="{{ route('admin.money-audit.export', request()->only(['jenis_bantuan', 'status', 'frequency', 'from', 'to', 'search'])) }}"
            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-fast">

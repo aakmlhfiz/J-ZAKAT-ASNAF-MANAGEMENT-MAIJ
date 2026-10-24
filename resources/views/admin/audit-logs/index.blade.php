@@ -1,11 +1,11 @@
 @extends('layouts.app', [
     'title' => 'Audit Log',
-    'subtitle' => 'Rekod aktiviti sistem J-ZAKAT AI',
+    'subtitle' => 'Rekod aktiviti sistem J-ZAKAT',
 ])
 
 @section('content')
 
-<x-page-header title="Audit Log" subtitle="Rekod aktiviti sistem J-ZAKAT AI" eyebrow="Pentadbiran" icon="fa-clipboard-list">
+<x-page-header title="Audit Log" subtitle="Rekod aktiviti sistem J-ZAKAT" eyebrow="Pentadbiran" icon="fa-clipboard-list">
     <x-slot:actions>
         <a href="{{ route('admin.audit-logs.export', request()->only(['user_id', 'role', 'category', 'action', 'from', 'to', 'search'])) }}"
            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-fast">

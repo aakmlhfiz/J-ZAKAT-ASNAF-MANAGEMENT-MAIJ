@@ -23,7 +23,7 @@ class AdditionalDocumentsRequestedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Dokumen Tambahan Diperlukan — J-ZAKAT AI',
+            subject: 'Dokumen Tambahan Diperlukan — J-ZAKAT',
         );
     }
 

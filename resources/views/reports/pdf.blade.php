@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Laporan J-ZAKAT AI</title>
+    <title>Laporan J-ZAKAT</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -89,7 +89,7 @@
     </style>
 </head>
 <body>
-    <h1>Laporan J-ZAKAT AI</h1>
+    <h1>Laporan J-ZAKAT</h1>
     <p class="meta">Tarikh dijana: {{ now()->format('d F Y, H:i') }} &nbsp;·&nbsp; Majlis Agama Islam Johor (MAIJ)</p>
 
     <h2>Ringkasan Keseluruhan</h2>
@@ -167,7 +167,7 @@
     </table>
 
     <div class="footer">
-        © {{ date('Y') }} J-ZAKAT AI — Smart Asnaf Eligibility System
+        © {{ date('Y') }} J-ZAKAT — Smart Asnaf Eligibility System
     </div>
 </body>
 </html>

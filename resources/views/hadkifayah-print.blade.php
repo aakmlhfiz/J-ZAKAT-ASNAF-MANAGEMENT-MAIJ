@@ -6,7 +6,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Had Al-Kifayah — J-ZAKAT AI</title>
+    <title>Laporan Had Al-Kifayah — J-ZAKAT</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -51,7 +51,7 @@
     <div class="header">
         <div>
             <h1>Laporan Had Al-Kifayah</h1>
-            <p class="meta">J-ZAKAT AI — Smart Asnaf Eligibility System</p>
+            <p class="meta">J-ZAKAT — Smart Asnaf Eligibility System</p>
         </div>
         <div class="meta">
             <p>Tarikh: {{ now()->format('d F Y, H:i') }}</p>
@@ -141,7 +141,7 @@
     </table>
 
     <div class="footer">
-        &copy; {{ date('Y') }} J-ZAKAT AI — Smart Asnaf Eligibility System
+        &copy; {{ date('Y') }} J-ZAKAT — Smart Asnaf Eligibility System
     </div>
 </body>
 </html>

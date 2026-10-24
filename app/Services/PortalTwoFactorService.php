@@ -24,7 +24,7 @@ class PortalTwoFactorService
             return '';
         }
 
-        $issuer = rawurlencode('J-ZAKAT AI');
+        $issuer = rawurlencode('J-ZAKAT');
         $account = rawurlencode($user->email);
 
         return "otpauth://totp/{$issuer}:{$account}?secret={$user->two_factor_secret}&issuer={$issuer}&algorithm=SHA1&digits=6&period=30";

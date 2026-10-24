@@ -23,7 +23,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="brand">J-ZAKAT AI</div>
+            <div class="brand">J-ZAKAT</div>
             <div class="org">Majlis Agama Islam Johor (MAIJ)</div>
         </div>
 
@@ -48,13 +48,13 @@
 
         <div class="divider"></div>
         <p style="font-size: 12px; color: #64748B;">
-            Resit ini merupakan pengesahan rasmi penerimaan permohonan anda oleh sistem J-ZAKAT AI.
+            Resit ini merupakan pengesahan rasmi penerimaan permohonan anda oleh sistem J-ZAKAT.
             Simpan resit ini sebagai rujukan. Keputusan kelayakan muktamad adalah tertakluk kepada penilaian rasmi MAIJ.
         </p>
 
         <div class="footer">
             <p>Dijana pada {{ $generated_at->format('d M Y, h:i A') }} · <span class="mark">SULIT — Penggunaan Dalaman MAIJ</span></p>
-            <p>&copy; {{ date('Y') }} J-ZAKAT AI · Majlis Agama Islam Johor</p>
+            <p>&copy; {{ date('Y') }} J-ZAKAT · Majlis Agama Islam Johor</p>
         </div>
     </div>
 </body>

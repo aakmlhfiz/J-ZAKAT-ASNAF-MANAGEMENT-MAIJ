@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>403 — Akses Dinafikan | J-ZAKAT AI</title>
+    <title>403 — Akses Dinafikan | J-ZAKAT</title>
     @vite(['resources/css/app.css'])
     <style>html{font-family:'Inter','Segoe UI',system-ui,sans-serif}</style>
 </head>

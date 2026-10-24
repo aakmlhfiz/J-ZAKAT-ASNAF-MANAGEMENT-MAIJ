@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Import Data - J-ZAKAT AI')
+@section('title', 'Import Data - J-ZAKAT')
 
 @php
     $title = 'Import Data';

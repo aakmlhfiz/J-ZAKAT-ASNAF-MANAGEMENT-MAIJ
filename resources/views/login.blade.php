@@ -47,9 +47,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#070D1A">
-    <meta name="description" content="J-ZAKAT AI — {{ $tabTitle }} Majlis Agama Islam Johor">
+    <meta name="description" content="J-ZAKAT — {{ $tabTitle }} Majlis Agama Islam Johor">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $tabTitle }} — J-ZAKAT AI</title>
+    <title>{{ $tabTitle }} — J-ZAKAT</title>
     <style>[x-cloak] { display: none !important; }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -504,7 +504,7 @@
                         <label class="auth-check auth-check--top">
                             <input type="checkbox" required>
                             <span>
-                                Saya bersetuju dengan Terma &amp; Syarat serta Notis Privasi J-ZAKAT AI.
+                                Saya bersetuju dengan Terma &amp; Syarat serta Notis Privasi J-ZAKAT.
                             </span>
                         </label>
 

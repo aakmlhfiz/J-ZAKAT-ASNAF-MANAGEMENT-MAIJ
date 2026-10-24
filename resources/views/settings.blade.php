@@ -1,6 +1,6 @@
 @extends('layouts.app', [
     'title' => 'Tetapan',
-    'subtitle' => 'Konfigurasi sistem J-ZAKAT AI',
+    'subtitle' => 'Konfigurasi sistem J-ZAKAT',
 ])
 @section('content')
 
@@ -10,7 +10,7 @@
     $initials = $user ? strtoupper(mb_substr($user->name, 0, 1)) : 'A';
 @endphp
 
-<x-page-header title="Tetapan" subtitle="Konfigurasi sistem J-ZAKAT AI" eyebrow="Sistem" icon="fa-gear" />
+<x-page-header title="Tetapan" subtitle="Konfigurasi sistem J-ZAKAT" eyebrow="Sistem" icon="fa-gear" />
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 stagger">
     <x-app-card class="p-6" :hover="false">
@@ -56,9 +56,9 @@
     </x-app-card>
 
     <x-app-card class="p-6" :hover="false">
-        <x-section-header title="Sistem" description="Informasi sistem J-ZAKAT AI" icon="fa-microchip" />
+        <x-section-header title="Sistem" description="Informasi sistem J-ZAKAT" icon="fa-microchip" />
         <div class="space-y-3.5">
-            <div><p class="text-eyebrow text-tertiary">Nama Sistem</p><p class="text-body text-text font-medium mt-1">J-ZAKAT AI Platform</p></div>
+            <div><p class="text-eyebrow text-tertiary">Nama Sistem</p><p class="text-body text-text font-medium mt-1">J-ZAKAT Platform</p></div>
             <div><p class="text-eyebrow text-tertiary">Organisasi</p><p class="text-body text-text font-medium mt-1">Majlis Agama Islam Johor</p></div>
             <div><p class="text-eyebrow text-tertiary">Versi</p><p class="text-body text-text font-medium mt-1">v2.0 Enterprise ({{ strtoupper($status['db_driver'] ?? 'mysql') }})</p></div>
             <div><p class="text-eyebrow text-tertiary">Pembekal AI</p><p class="text-body text-text font-medium mt-1">{{ ucfirst($status['ai_provider'] ?? 'mock') }}</p></div>
@@ -109,7 +109,7 @@
             <div class="flex items-center justify-between py-1.5"><span class="text-secondary">Ikon</span><span class="font-medium">Font Awesome 6</span></div>
             <div class="flex items-center justify-between py-1.5"><span class="text-secondary">Tipografi</span><span class="font-medium">Inter / Segoe UI</span></div>
         </div>
-        <p class="text-eyebrow text-tertiary mt-4 pt-3 border-t border-divider">© {{ date('Y') }} J-ZAKAT AI · Smart Asnaf Eligibility</p>
+        <p class="text-eyebrow text-tertiary mt-4 pt-3 border-t border-divider">© {{ date('Y') }} J-ZAKAT · Smart Asnaf Eligibility</p>
     </x-app-card>
 </div>
 @endsection

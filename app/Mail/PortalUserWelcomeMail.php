@@ -20,7 +20,7 @@ class PortalUserWelcomeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Selamat Datang ke J-ZAKAT AI — Akaun Pemohon Anda',
+            subject: 'Selamat Datang ke J-ZAKAT — Akaun Pemohon Anda',
         );
     }
 

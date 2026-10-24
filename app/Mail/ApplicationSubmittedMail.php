@@ -22,7 +22,7 @@ class ApplicationSubmittedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Permohonan Zakat Baru Dihantar — J-ZAKAT AI',
+            subject: 'Permohonan Zakat Baru Dihantar — J-ZAKAT',
         );
     }
 

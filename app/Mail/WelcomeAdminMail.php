@@ -21,7 +21,7 @@ class WelcomeAdminMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Selamat Datang ke J-ZAKAT AI — Akaun Pentadbir Anda',
+            subject: 'Selamat Datang ke J-ZAKAT — Akaun Pentadbir Anda',
         );
     }
 

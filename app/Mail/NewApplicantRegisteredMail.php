@@ -20,7 +20,7 @@ class NewApplicantRegisteredMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pemohon Baru Berdaftar — J-ZAKAT AI',
+            subject: 'Pemohon Baru Berdaftar — J-ZAKAT',
         );
     }
 

@@ -21,7 +21,7 @@ class SalaryUpdateReminderMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Kemas Kini Maklumat Gaji Anda — J-ZAKAT AI',
+            subject: 'Kemas Kini Maklumat Gaji Anda — J-ZAKAT',
         );
     }
 

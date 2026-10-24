@@ -109,7 +109,7 @@
                 <img src="{{ asset('images/MAIJ.PNG') }}" alt="MAIJ" class="w-full h-full object-contain p-1">
             </div>
             <div x-show="!collapsed" x-cloak class="ml-3 overflow-hidden">
-                <p class="text-[15px] font-bold text-white leading-none tracking-tight">J-ZAKAT <span class="text-cyan">AI</span></p>
+                <p class="text-[15px] font-bold text-white leading-none tracking-tight">J-ZAKAT</p>
                 <p class="text-[11px] text-white/55 mt-1 leading-none">{{ $brandSubtitle }}</p>
             </div>
         </a>
