@@ -19,7 +19,7 @@ return [
         'groq' => [
             'driver' => 'groq',
             'api_key' => env('AI_GROQ_API_KEY'),
-            'model' => env('AI_GROQ_MODEL', 'llama-3.3-70b-versatile'),
+            'model' => env('AI_GROQ_MODEL', 'openai/gpt-oss-120b'),
             'base' => env('AI_GROQ_BASE', 'https://api.groq.com/openai/v1'),
             'timeout' => (int) env('AI_GROQ_TIMEOUT', 30),
             'max_tokens' => (int) env('AI_GROQ_MAX_TOKENS', 900),

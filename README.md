@@ -125,7 +125,7 @@ Lihat `.env.example` untuk senarai penuh.
 ```env
 AI_PROVIDER=groq
 AI_GROQ_API_KEY=your-new-key
-AI_GROQ_MODEL=llama-3.3-70b-versatile
+AI_GROQ_MODEL=openai/gpt-oss-120b
 AI_GROQ_BASE=https://api.groq.com/openai/v1
 ```
 
