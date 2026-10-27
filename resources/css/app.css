@@ -1516,12 +1516,15 @@ button:focus-visible, a:focus-visible { outline-offset: 3px; }
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 12px;
-    border: 1px solid rgba(148, 163, 184, 0.13);
+    padding: 12px 14px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
     border-radius: 14px;
-    background: rgba(8, 15, 30, 0.42);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: linear-gradient(135deg, rgba(15, 28, 52, 0.90) 0%, rgba(8, 15, 30, 0.84) 100%);
+    box-shadow:
+        0 12px 30px -24px rgba(2, 6, 23, 0.95),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
 }
 
 .auth-point-icon {
