@@ -20,7 +20,7 @@
 
         <div class="auth-visual__content">
             <span class="auth-eyebrow">
-                <x-icon name="sparkles" :size="13" />
+                <x-icon name="landmark" :size="13" />
                 {{ $roleLabel }} &middot; Sistem Rasmi MAIJ
             </span>
 
@@ -36,21 +36,21 @@
 
             <ul class="auth-points">
                 <li>
-                    <span class="auth-point-icon"><x-icon name="shield-check" :size="17" /></span>
+                    <span class="auth-point-icon"><x-icon name="shield-check" :size="18" :stroke="1.8" /></span>
                     <span>
                         <strong>Selamat &amp; disulitkan</strong>
                         <span>Data pemohon dilindungi dan akses dikawal.</span>
                     </span>
                 </li>
                 <li>
-                    <span class="auth-point-icon"><x-icon name="sparkles" :size="17" /></span>
+                    <span class="auth-point-icon"><x-icon name="scale" :size="18" :stroke="1.8" /></span>
                     <span>
                         <strong>Penilaian pintar</strong>
                         <span>Had Kifayah dan analisis AI dalam satu aliran kerja.</span>
                     </span>
                 </li>
                 <li>
-                    <span class="auth-point-icon"><x-icon name="activity" :size="17" /></span>
+                    <span class="auth-point-icon"><x-icon name="clipboard-check" :size="18" :stroke="1.8" /></span>
                     <span>
                         <strong>Telus &amp; boleh diaudit</strong>
                         <span>Setiap tindakan direkod untuk akauntabiliti.</span>
