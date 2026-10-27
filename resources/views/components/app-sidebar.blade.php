@@ -7,62 +7,62 @@
 
     if ($isPortal) {
         $singleItems = [
-            ['route' => 'user.dashboard', 'icon' => 'layout-dashboard', 'label' => 'Dashboard'],
+            ['route' => 'user.dashboard', 'icon' => 'layout-dashboard', 'label' => __('navigation.sidebar.dashboard')],
         ];
         $groups = [
-            'permohonan' => ['label' => 'Permohonan', 'items' => [
-                ['route' => 'user.applications.create', 'icon' => 'file-plus', 'label' => 'Mohon Bantuan'],
-                ['route' => 'user.applications.index', 'icon' => 'file-text', 'label' => 'Permohonan Saya'],
-                ['route' => 'user.applications.status', 'icon' => 'chart-line', 'label' => 'Status Permohonan'],
+            'permohonan' => ['label' => __('navigation.sidebar.groups.applications'), 'items' => [
+                ['route' => 'user.applications.create', 'icon' => 'file-plus', 'label' => __('navigation.sidebar.items.apply')],
+                ['route' => 'user.applications.index', 'icon' => 'file-text', 'label' => __('navigation.sidebar.items.my_applications')],
+                ['route' => 'user.applications.status', 'icon' => 'chart-line', 'label' => __('navigation.sidebar.items.application_status')],
             ]],
-            'keluarga' => ['label' => 'Keluarga', 'items' => [
-                ['route' => 'user.profile', 'icon' => 'user', 'label' => 'Profil Saya'],
-                ['route' => 'user.household', 'icon' => 'house', 'label' => 'Isi Rumah Saya'],
-                ['route' => 'user.household.finance', 'icon' => 'wallet', 'label' => 'Kewangan Saya'],
-                ['route' => 'user.household.assistance', 'icon' => 'hand-heart', 'label' => 'Bantuan Saya'],
+            'keluarga' => ['label' => __('navigation.sidebar.groups.family'), 'items' => [
+                ['route' => 'user.profile', 'icon' => 'user', 'label' => __('navigation.sidebar.items.my_profile')],
+                ['route' => 'user.household', 'icon' => 'house', 'label' => __('navigation.sidebar.items.my_household')],
+                ['route' => 'user.household.finance', 'icon' => 'wallet', 'label' => __('navigation.sidebar.items.my_finances')],
+                ['route' => 'user.household.assistance', 'icon' => 'hand-heart', 'label' => __('navigation.sidebar.items.my_assistance')],
             ]],
-            'dokumen' => ['label' => 'Dokumen', 'items' => [
-                ['route' => 'user.documents.index', 'icon' => 'folder', 'label' => 'Dokumen Saya'],
-                ['route' => 'user.letters.index', 'icon' => 'mail', 'label' => 'Surat & Resit'],
+            'dokumen' => ['label' => __('navigation.sidebar.groups.documents'), 'items' => [
+                ['route' => 'user.documents.index', 'icon' => 'folder', 'label' => __('navigation.sidebar.items.my_documents')],
+                ['route' => 'user.letters.index', 'icon' => 'mail', 'label' => __('navigation.sidebar.items.letters_receipts')],
             ]],
-            'bantuan' => ['label' => 'Bantuan', 'items' => [
-                ['route' => 'user.ai.page', 'icon' => 'bot', 'label' => 'AI Assistant'],
-                ['route' => 'user.notifications.index', 'icon' => 'bell', 'label' => 'Notifikasi'],
-                ['route' => 'user.hadkifayah', 'icon' => 'calculator', 'label' => 'Kira Had Kifayah'],
+            'bantuan' => ['label' => __('navigation.sidebar.groups.help'), 'items' => [
+                ['route' => 'user.ai.page', 'icon' => 'bot', 'label' => __('navigation.sidebar.items.ai_assistant')],
+                ['route' => 'user.notifications.index', 'icon' => 'bell', 'label' => __('navigation.sidebar.items.notifications')],
+                ['route' => 'user.hadkifayah', 'icon' => 'calculator', 'label' => __('navigation.sidebar.items.calculate_kifayah')],
             ]],
-            'akaun' => ['label' => 'Akaun', 'items' => [
-                ['route' => 'user.profile', 'icon' => 'settings', 'label' => 'Tetapan'],
+            'akaun' => ['label' => __('navigation.sidebar.groups.account'), 'items' => [
+                ['route' => 'user.profile', 'icon' => 'settings', 'label' => __('navigation.sidebar.items.settings')],
             ]],
         ];
         $isSuperAdmin = false;
     } else {
         $singleItems = [
-            ['route' => 'dashboard', 'icon' => 'layout-dashboard', 'label' => 'Dashboard'],
+            ['route' => 'dashboard', 'icon' => 'layout-dashboard', 'label' => __('navigation.sidebar.dashboard')],
         ];
         $groups = [
-            'household' => ['label' => 'Isi Rumah', 'items' => [
-                ['route' => 'household.dashboard', 'icon' => 'house', 'label' => 'Household Intelligence'],
+            'household' => ['label' => __('navigation.sidebar.groups.household'), 'items' => [
+                ['route' => 'household.dashboard', 'icon' => 'house', 'label' => __('navigation.sidebar.items.household_intelligence')],
             ]],
-            'asnaf' => ['label' => 'Asnaf', 'items' => [
-                ['route' => 'profilasnaf', 'icon' => 'user-plus', 'label' => 'Profil Asnaf'],
-                ['route' => 'viewprofile.index', 'icon' => 'id-card', 'label' => 'Senarai Asnaf'],
-                ['route' => 'history', 'icon' => 'clipboard-list', 'label' => 'Permohonan'],
+            'asnaf' => ['label' => __('navigation.sidebar.groups.asnaf'), 'items' => [
+                ['route' => 'profilasnaf', 'icon' => 'user-plus', 'label' => __('navigation.sidebar.items.asnaf_profile')],
+                ['route' => 'viewprofile.index', 'icon' => 'id-card', 'label' => __('navigation.sidebar.items.asnaf_list')],
+                ['route' => 'history', 'icon' => 'clipboard-list', 'label' => __('navigation.sidebar.items.applications')],
             ]],
-            'ai' => ['label' => 'AI & Kelayakan', 'items' => [
-                ['route' => 'ai.page', 'icon' => 'sparkles', 'label' => 'AI Assistant'],
-                ['route' => 'hadkifayah', 'icon' => 'calculator', 'label' => 'Had Kifayah'],
-                ['route' => 'ai-assessment', 'icon' => 'brain', 'label' => 'AI Assessment'],
+            'ai' => ['label' => __('navigation.sidebar.groups.ai'), 'items' => [
+                ['route' => 'ai.page', 'icon' => 'sparkles', 'label' => __('navigation.sidebar.items.ai_assistant')],
+                ['route' => 'hadkifayah', 'icon' => 'calculator', 'label' => __('navigation.sidebar.items.had_kifayah')],
+                ['route' => 'ai-assessment', 'icon' => 'brain', 'label' => __('navigation.sidebar.items.ai_assessment')],
             ]],
-            'data' => ['label' => 'Data', 'items' => [
-                ['route' => 'import-pdf.index', 'icon' => 'scan-line', 'label' => 'Import PDF'],
-                ['route' => 'reports', 'icon' => 'chart-column', 'label' => 'Laporan'],
+            'data' => ['label' => __('navigation.sidebar.groups.data'), 'items' => [
+                ['route' => 'import-pdf.index', 'icon' => 'scan-line', 'label' => __('navigation.sidebar.items.import_pdf')],
+                ['route' => 'reports', 'icon' => 'chart-column', 'label' => __('navigation.sidebar.items.reports')],
             ]],
-            'system' => ['label' => 'Sistem', 'items' => [
-                ['route' => 'profile', 'icon' => 'user-circle', 'label' => 'Profil'],
-                ['route' => 'settings', 'icon' => 'settings', 'label' => 'Tetapan'],
-                ['route' => 'admin.invitations.index', 'icon' => 'ticket', 'label' => 'Kod Undangan'],
-                ['route' => 'admin.audit-logs.index', 'icon' => 'clipboard-check', 'label' => 'Audit Log'],
-                ['route' => 'admin.money-audit.index', 'icon' => 'banknote', 'label' => 'Audit Kewangan'],
+            'system' => ['label' => __('navigation.sidebar.groups.system'), 'items' => [
+                ['route' => 'profile', 'icon' => 'user-circle', 'label' => __('navigation.sidebar.items.profile')],
+                ['route' => 'settings', 'icon' => 'settings', 'label' => __('navigation.sidebar.items.settings')],
+                ['route' => 'admin.invitations.index', 'icon' => 'ticket', 'label' => __('navigation.sidebar.items.invitation_codes')],
+                ['route' => 'admin.audit-logs.index', 'icon' => 'clipboard-check', 'label' => __('navigation.sidebar.items.audit_log')],
+                ['route' => 'admin.money-audit.index', 'icon' => 'banknote', 'label' => __('navigation.sidebar.items.financial_audit')],
             ]],
         ];
         $isSuperAdmin = $user && in_array($user->email, (array) config('app.super_admin_emails'), true);
@@ -75,8 +75,8 @@
     }
 
     $homeRoute = $isPortal ? 'user.dashboard' : 'dashboard';
-    $brandSubtitle = $isPortal ? 'Portal Pemohon' : 'Smart Eligibility';
-    $roleLabel = $isPortal ? 'Pemohon' : 'Pentadbir';
+    $brandSubtitle = $isPortal ? __('navigation.brand.portal') : __('navigation.brand.admin');
+    $roleLabel = $isPortal ? __('navigation.role.applicant') : __('navigation.role.administrator');
 @endphp
 
 <div x-show="mobileOpen" x-cloak @click="closeMobile()"

@@ -42,6 +42,6 @@ class PasswordResetLinkController extends Controller
             }
         }
 
-        return back()->with('status', 'Jika akaun wujud, pautan set semula kata laluan telah dihantar ke emel anda.');
+        return back()->with('status', __('auth.errors.reset_sent'));
     }
 }

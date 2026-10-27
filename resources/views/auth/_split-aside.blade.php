@@ -1,9 +1,6 @@
 @php
     $isPortal = ($context ?? 'admin') === 'portal';
-    $roleLabel = $isPortal ? 'Portal Pemohon' : 'Portal Pentadbir';
-    $headline = $isPortal
-        ? 'Urus permohonan bantuan zakat dengan lebih mudah.'
-        : 'Urus kelayakan asnaf dengan lebih yakin.';
+    $mode = $isPortal ? 'portal' : 'admin';
 @endphp
 
 <aside class="auth-visual" aria-hidden="true">
@@ -14,46 +11,45 @@
             </span>
             <span class="auth-brand-copy">
                 <span class="auth-wordmark">J-ZAKAT</span>
-                <span class="auth-brand-sub">Majlis Agama Islam Johor</span>
+                <span class="auth-brand-sub">{{ __('auth.brand.tagline') }}</span>
             </span>
         </a>
 
         <div class="auth-visual__content">
             <span class="auth-eyebrow">
                 <x-icon name="landmark" :size="13" />
-                {{ $roleLabel }} &middot; Sistem Rasmi MAIJ
+                {{ __('auth.roles.'.$mode) }} &middot; {{ __('auth.system_official') }}
             </span>
 
             <h1>
-                {{ $headline }}
-                <span class="auth-highlight">Teknologi untuk ummah.</span>
+                {{ __('auth.aside.'.$mode.'.headline') }}
+                <span class="auth-highlight">{{ __('auth.aside.highlight') }}</span>
             </h1>
 
             <p class="auth-visual__lede">
-                Platform bersepadu untuk pengurusan permohonan, pengiraan Had Kifayah dan
-                analisis kelayakan asnaf dalam satu sistem yang telus.
+                {{ __('auth.aside.lede') }}
             </p>
 
             <ul class="auth-points">
                 <li>
                     <span class="auth-point-icon"><x-icon name="shield-check" :size="18" :stroke="1.8" /></span>
                     <span>
-                        <strong>Selamat &amp; disulitkan</strong>
-                        <span>Data pemohon dilindungi dan akses dikawal.</span>
+                        <strong>{{ __('auth.aside.points.secure.title') }}</strong>
+                        <span>{{ __('auth.aside.points.secure.desc') }}</span>
                     </span>
                 </li>
                 <li>
                     <span class="auth-point-icon"><x-icon name="scale" :size="18" :stroke="1.8" /></span>
                     <span>
-                        <strong>Penilaian pintar</strong>
-                        <span>Had Kifayah dan analisis AI dalam satu aliran kerja.</span>
+                        <strong>{{ __('auth.aside.points.assessment.title') }}</strong>
+                        <span>{{ __('auth.aside.points.assessment.desc') }}</span>
                     </span>
                 </li>
                 <li>
                     <span class="auth-point-icon"><x-icon name="clipboard-check" :size="18" :stroke="1.8" /></span>
                     <span>
-                        <strong>Telus &amp; boleh diaudit</strong>
-                        <span>Setiap tindakan direkod untuk akauntabiliti.</span>
+                        <strong>{{ __('auth.aside.points.audit.title') }}</strong>
+                        <span>{{ __('auth.aside.points.audit.desc') }}</span>
                     </span>
                 </li>
             </ul>
@@ -61,7 +57,7 @@
 
         <div class="auth-visual__footer">
             <span class="auth-pulse" aria-hidden="true"></span>
-            Sistem rasmi Majlis Agama Islam Johor
+            {{ __('auth.aside.footer') }}
         </div>
     </div>
 </aside>

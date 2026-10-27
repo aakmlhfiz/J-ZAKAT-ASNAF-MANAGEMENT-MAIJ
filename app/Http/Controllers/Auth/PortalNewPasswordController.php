@@ -50,7 +50,7 @@ class PortalNewPasswordController extends Controller
         }
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('user.login')->with('status', 'Kata laluan anda telah berjaya ditetapkan semula.')
-            : back()->withErrors(['email' => 'Pautan set semula tidak sah atau telah luput.']);
+            ? redirect()->route('user.login')->with('status', __('auth.errors.reset_success'))
+            : back()->withErrors(['email' => __('auth.errors.reset_invalid')]);
     }
 }

@@ -21,6 +21,7 @@ use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ImportDataController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MoneyAuditController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Portal\AiController as PortalAiController;
@@ -48,7 +49,10 @@ Route::get('/', function () {
     return view('welcome', app(WelcomePreviewService::class)->getAll());
 })->name('welcome');
 
-// Auth pages (public — no guest middleware so logged-in users can also access)
+// Locale switch (public, persists to session and the authenticated user when available)
+Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
+
+// Auth pages (public - no guest middleware so logged-in users can also access)
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('throttle:login');
 

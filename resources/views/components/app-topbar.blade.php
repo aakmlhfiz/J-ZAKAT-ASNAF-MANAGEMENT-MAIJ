@@ -1,13 +1,13 @@
 @php
     $isPortal = auth('portal')->check();
     $searchAction = $isPortal ? route('user.applications.index') : route('viewprofile.index');
-    $searchPlaceholder = $isPortal ? 'Cari permohonan…' : 'Cari pemohon…';
+    $searchPlaceholder = $isPortal ? __('navigation.topbar.search_applications') : __('navigation.topbar.search_applicants');
 @endphp
 <header class="sticky top-0 z-30 bg-card/85 backdrop-blur-xl border-b border-divider shadow-[0_1px_0_rgba(15,23,42,0.04)]" x-data="{ searchFocus: false }">
     <div class="px-5 md:px-8 py-4 flex items-center justify-between gap-4">
         <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2.5">
-                <button @click="$dispatch('toggle-sidebar')" class="md:hidden w-9 h-9 rounded-[11px] hover:bg-muted flex items-center justify-center text-secondary hover:text-text transition-fast shrink-0" aria-label="Toggle sidebar">
+                <button @click="$dispatch('toggle-sidebar')" class="md:hidden w-9 h-9 rounded-[11px] hover:bg-muted flex items-center justify-center text-secondary hover:text-text transition-fast shrink-0" aria-label="{{ __('navigation.topbar.toggle_sidebar') }}">
                     <x-icon name="menu" :size="19" />
                 </button>
                 <div class="min-w-0 flex-1">
@@ -23,7 +23,9 @@
         </div>
 
         <div class="flex items-center gap-2 shrink-0">
-            <button @click="cycleDarkMode()" class="w-10 h-10 rounded-[12px] hover:bg-muted flex items-center justify-center text-secondary hover:text-text transition-fast" aria-label="Tukar tema" title="Tukar tema">
+            <x-language-switcher variant="light" class="hidden md:inline-flex" />
+
+            <button @click="cycleDarkMode()" class="w-10 h-10 rounded-[12px] hover:bg-muted flex items-center justify-center text-secondary hover:text-text transition-fast" aria-label="{{ __('navigation.topbar.toggle_theme') }}" title="{{ __('navigation.topbar.toggle_theme') }}">
                 <x-icon x-show="!dark" name="moon" :size="18" />
                 <x-icon x-show="dark" x-cloak name="sun" :size="18" />
             </button>

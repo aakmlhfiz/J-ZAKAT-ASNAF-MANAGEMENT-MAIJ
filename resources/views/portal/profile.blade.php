@@ -316,18 +316,23 @@
                         </x-app-card>
 
                         <x-app-card class="p-6" :hover="false">
-                            <x-section-header title="Bahasa" description="Pilih bahasa antara muka pengguna." icon="fa-language" />
-                            <div class="grid grid-cols-2 gap-3">
-                                <button type="button" @click="window.dispatchEvent(new CustomEvent('toast', {detail:{message:'Bahasa Melayu dipilih.',type:'success',title:'Bahasa'}}))" class="theme-card surface-flat p-4 rounded-[14px] flex items-center gap-3 {{ ($user->language ?? 'ms') === 'ms' ? 'selected' : '' }}">
-                                    <span class="text-[28px]">🇲🇾</span>
-                                    <div><p class="text-body text-text font-semibold text-left">Bahasa Melayu</p><p class="text-small text-secondary text-left">Malaysia</p></div>
-                                </button>
-                                <button type="button" @click="window.dispatchEvent(new CustomEvent('toast', {detail:{message:'English selected.',type:'info',title:'Language'}}))" class="theme-card surface-flat p-4 rounded-[14px] flex items-center gap-3 {{ ($user->language ?? 'ms') === 'en' ? 'selected' : '' }}">
-                                    <span class="text-[28px]">🇬🇧</span>
-                                    <div><p class="text-body text-text font-semibold text-left">English</p><p class="text-small text-secondary text-left">United Kingdom</p></div>
-                                </button>
-                            </div>
-                        </x-app-card>
+    <x-section-header :title="__('common.language')" :description="__('common.language_description')" icon="fa-language" />
+    <div class="grid grid-cols-2 gap-3">
+        @foreach(['ms' => ['label' => __('common.language_ms'), 'region' => 'Malaysia', 'flag' => '🇲🇾'], 'en' => ['label' => __('common.language_en'), 'region' => 'United Kingdom', 'flag' => '🇬🇧']] as $code => $language)
+            <form method="POST" action="{{ route('locale.update') }}">
+                @csrf
+                <input type="hidden" name="locale" value="{{ $code }}">
+                <button type="submit" class="theme-card surface-flat p-4 rounded-[14px] flex items-center gap-3 w-full {{ ($user->language ?? 'ms') === $code ? 'selected' : '' }}">
+                    <span class="text-[28px]">{{ $language['flag'] }}</span>
+                    <div>
+                        <p class="text-body text-text font-semibold text-left">{{ $language['label'] }}</p>
+                        <p class="text-small text-secondary text-left">{{ $language['region'] }}</p>
+                    </div>
+                </button>
+            </form>
+        @endforeach
+    </div>
+</x-app-card>
 
                     </div>
                 </div>

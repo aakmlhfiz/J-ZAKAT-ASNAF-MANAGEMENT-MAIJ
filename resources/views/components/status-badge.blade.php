@@ -15,7 +15,21 @@
         'primary'       => ['bg'=>'bg-primary-soft',  'text'=>'text-primary',  'dot'=>'bg-primary'],
     ];
     $s = $map[$status] ?? ['bg'=>'bg-muted', 'text'=>'text-secondary', 'dot'=>'bg-secondary'];
-    $default = ucfirst(str_replace('-', ' ', $status));
+    $labels = [
+        'layak' => __('common.status.layak'),
+        'tidak-layak' => __('common.status.tidak_layak'),
+        'dalam-semakan' => __('common.status.dalam_semakan'),
+        'sah' => __('common.status.valid'),
+        'bertindih' => __('common.status.overlap'),
+        'duplicate' => __('common.status.duplicate'),
+        'normal' => __('common.status.normal'),
+        'success' => __('common.status.success'),
+        'warning' => __('common.status.warning'),
+        'danger' => __('common.status.danger'),
+        'info' => __('common.status.info'),
+        'primary' => __('common.status.primary'),
+    ];
+    $default = $labels[$status] ?? ucfirst(str_replace('-', ' ', $status));
     $sizeCls = $size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-[12px]';
     $radiusCls = $pill ? 'rounded-pill' : 'rounded-[6px]';
 @endphp

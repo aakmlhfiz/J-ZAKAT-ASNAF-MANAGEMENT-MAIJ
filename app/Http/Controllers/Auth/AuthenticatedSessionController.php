@@ -56,11 +56,11 @@ class AuthenticatedSessionController extends Controller
         AuditLogger::authLogin(null, $request, 'failed');
 
         if ($request->wantsJson()) {
-            return response()->json(['errors' => ['email' => ['Email atau kata laluan tidak sah.']]], 422);
+            return response()->json(['errors' => ['email' => [__('auth.errors.invalid_credentials')]]], 422);
         }
 
         return back()->withErrors([
-            'email' => 'Email atau kata laluan tidak sah.',
+            'email' => __('auth.errors.invalid_credentials'),
         ])->onlyInput('email');
     }
 
@@ -101,14 +101,14 @@ class AuthenticatedSessionController extends Controller
         if ($attempts >= 5) {
             session()->forget(['auth.2fa.user_id', 'auth.2fa.remember', 'auth.2fa.attempts']);
 
-            return back()->withErrors(['code' => 'Terlalu banyak percubaan. Sila log masuk semula.']);
+            return back()->withErrors(['code' => __('auth.errors.too_many_attempts')]);
         }
 
         $service = app(TwoFactorService::class);
         if (! $service->verifyCode($user->two_factor_secret, $request->code)) {
             session()->put('auth.2fa.attempts', $attempts + 1);
 
-            return back()->withErrors(['code' => 'Kod 2FA tidak sah. Sila cuba lagi.']);
+            return back()->withErrors(['code' => __('auth.errors.invalid_2fa')]);
         }
 
         Auth::guard('web')->login($user, session('auth.2fa.remember', false));

@@ -32,15 +32,15 @@ class RegisteredUserController extends Controller
         $invitation = AdminInvitation::where('code', $request->invitation_code)->first();
 
         if (! $invitation) {
-            return back()->withErrors(['invitation_code' => 'Kod undangan tidak sah.'])->withInput();
+            return back()->withErrors(['invitation_code' => __('auth.errors.invitation_invalid')])->withInput();
         }
 
         if (! $invitation->isUsable()) {
             $reason = match (true) {
-                $invitation->used_at !== null => 'Kod undangan ini telah digunakan.',
-                ! $invitation->is_active => 'Kod undangan ini telah dinyahaktifkan.',
-                $invitation->expires_at && $invitation->expires_at->isPast() => 'Kod undangan ini telah luput.',
-                default => 'Kod undangan tidak boleh digunakan.',
+                $invitation->used_at !== null => __('auth.errors.invitation_used'),
+                ! $invitation->is_active => __('auth.errors.invitation_inactive'),
+                $invitation->expires_at && $invitation->expires_at->isPast() => __('auth.errors.invitation_expired'),
+                default => __('auth.errors.invitation_unusable'),
             };
 
             return back()->withErrors(['invitation_code' => $reason])->withInput();

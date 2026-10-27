@@ -117,6 +117,24 @@ php artisan pail
 
 Lihat `.env.example` untuk senarai penuh.
 
+### Bahasa / Language
+
+Aplikasi menyokong dua bahasa:
+
+- **BM** — Bahasa Melayu (`ms`) — lalai
+- **EN** — English (`en`)
+
+Pilihan bahasa boleh ditukar melalui **BM / EN** di header. Pilihan disimpan dalam session dan juga pada kolum `language` pengguna yang log masuk.
+
+Fasa 1 merangkumi landing page, halaman auth, navigasi dan dashboard. Modul lain akan diterjemah dalam fasa seterusnya.
+
+Fail terjemahan terletak di:
+
+```text
+lang/ms/
+lang/en/
+```
+
 ### Pembantu AI Groq
 
 1. Cipta API key di [Groq Console](https://console.groq.com/keys).

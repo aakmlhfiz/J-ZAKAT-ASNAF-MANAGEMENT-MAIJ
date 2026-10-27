@@ -1,14 +1,14 @@
 @php
     $isPortal = auth('portal')->check();
     $user = $isPortal ? auth('portal')->user() : auth('web')->user();
-    $name = $user?->name ?? ($isPortal ? 'Pemohon' : 'Administrator');
+    $name = $user?->name ?? ($isPortal ? __('navigation.role.applicant') : __('navigation.role.administrator'));
     $email = $user?->email ?? ($isPortal ? 'pemohon@maij.gov.my' : 'admin@maij.gov.my');
     $initials = strtoupper(mb_substr($name, 0, 1));
     $photo = $user?->profile_photo ? asset('storage/' . $user->profile_photo) : null;
 
     $profileRoute = $isPortal ? route('user.profile') : route('profile');
     $logoutRoute = $isPortal ? route('user.logout') : route('logout');
-    $statusLabel = $isPortal ? 'Aktif · Pemohon' : 'Aktif · Pentadbir';
+    $statusLabel = $isPortal ? __('navigation.user_menu.status_portal') : __('navigation.user_menu.status_admin');
 @endphp
 <div x-data="{ open: false }"
      @click.outside="open = false"
@@ -61,30 +61,34 @@
         <div class="p-2">
             <a href="{{ $profileRoute }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-text hover:bg-muted transition-fast">
                 <x-icon name="user" :size="17" class="text-tertiary" />
-                <span>Profil Saya</span>
+                <span>{{ __('navigation.user_menu.profile') }}</span>
             </a>
             @if($isPortal)
                 <a href="{{ route('user.hadkifayah') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-text hover:bg-muted transition-fast">
                     <x-icon name="calculator" :size="17" class="text-tertiary" />
-                    <span>Had Kifayah</span>
+                    <span>{{ __('navigation.user_menu.had_kifayah') }}</span>
                 </a>
             @else
                 <a href="{{ route('settings') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-text hover:bg-muted transition-fast">
                     <x-icon name="settings" :size="17" class="text-tertiary" />
-                    <span>Tetapan</span>
+                    <span>{{ __('navigation.user_menu.settings') }}</span>
                 </a>
                 <a href="{{ route('hadkifayah.settings') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-text hover:bg-muted transition-fast">
                     <x-icon name="sliders" :size="17" class="text-tertiary" />
-                    <span>Had Kifayah</span>
+                    <span>{{ __('navigation.user_menu.had_kifayah') }}</span>
                 </a>
             @endif
         </div>
+        <div class="px-3 py-2.5 border-t border-divider flex items-center justify-between gap-3">
+            <span class="text-small text-secondary">{{ __('common.language') }}</span>
+            <x-language-switcher variant="light" />
+        </div>
         <div class="p-2 border-t border-divider">
-            <button @click="$dispatch('open-confirm', { title: 'Log Keluar', message: 'Adakah anda pasti ingin log keluar dari akaun ini?', confirmText: 'Log Keluar', variant: 'destructive', action: 'logout' }); open = false;"
+            <button @click="$dispatch('open-confirm', { title: '{{ __('navigation.user_menu.logout_title') }}', message: '{{ __('navigation.user_menu.logout_message') }}', confirmText: '{{ __('navigation.user_menu.logout') }}', variant: 'destructive', action: 'logout' }); open = false;"
                     role="menuitem"
                     class="w-full flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-danger hover:bg-danger-soft transition-fast">
                 <x-icon name="log-out" :size="17" />
-                <span>Log Keluar</span>
+                <span>{{ __('navigation.user_menu.logout') }}</span>
             </button>
         </div>
     </div>

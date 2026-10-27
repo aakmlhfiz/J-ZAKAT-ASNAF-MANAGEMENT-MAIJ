@@ -4,6 +4,7 @@ use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EnsurePasswordIsNotExpired;
 use App\Http\Middleware\EnsurePortalUserActive;
 use App\Http\Middleware\EnsureSuperAdmin;
+use App\Http\Middleware\SetLocale;
 use App\Services\FirebaseService;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -25,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->appendToGroup('web', [
+            SetLocale::class,
             EnsurePasswordIsNotExpired::class,
         ]);
     })

@@ -6,12 +6,6 @@ use App\Models\ProfilAsnaf;
 
 class WelcomePreviewService
 {
-    private const MALAY_MONTHS = [
-        1 => 'Jan', 2 => 'Feb', 3 => 'Mac', 4 => 'Apr',
-        5 => 'Mei', 6 => 'Jun', 7 => 'Jul', 8 => 'Ogos',
-        9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Dis',
-    ];
-
     public function getStats(): array
     {
         $total = ProfilAsnaf::count();
@@ -36,12 +30,12 @@ class WelcomePreviewService
         for ($i = 11; $i >= 0; $i--) {
             $date = now()->subMonths($i);
             $monthKey = $date->format('Y-m');
-            $chartLabels[] = self::MALAY_MONTHS[(int) $date->format('n')];
+            $chartLabels[] = $date->copy()->locale(app()->getLocale())->translatedFormat('M');
             $chartValues[] = (int) $monthlyData->where('month', $monthKey)->sum('cnt');
         }
 
         if (array_sum($chartValues) === 0) {
-            $chartLabels = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogos', 'Sep', 'Okt', 'Nov', 'Dis'];
+            $chartLabels = __('common.months_short');
             $chartValues = [320, 412, 480, 510, 590, 640, 720, 810, 780, 860, 920, 1010];
         }
 
@@ -64,9 +58,9 @@ class WelcomePreviewService
             'score' => $latest->confidenceScore(),
             'tone' => $latest->statusTone(),
             'status_label' => match ($latest->statusSlug()) {
-                'layak' => 'Layak',
-                'tidak-layak' => 'Tidak Layak',
-                default => 'Semakan',
+                'layak' => __('common.status.layak'),
+                'tidak-layak' => __('common.status.tidak_layak'),
+                default => __('common.status.dalam_semakan'),
             },
         ];
     }

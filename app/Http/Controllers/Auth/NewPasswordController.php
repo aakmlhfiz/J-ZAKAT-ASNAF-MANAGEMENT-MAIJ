@@ -51,7 +51,7 @@ class NewPasswordController extends Controller
         }
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('status', 'Kata laluan anda telah berjaya ditetapkan semula.')
-            : back()->withErrors(['email' => 'Pautan set semula tidak sah atau telah luput.']);
+            ? redirect()->route('login')->with('status', __('auth.errors.reset_success'))
+            : back()->withErrors(['email' => __('auth.errors.reset_invalid')]);
     }
 }

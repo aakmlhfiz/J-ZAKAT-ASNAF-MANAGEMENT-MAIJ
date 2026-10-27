@@ -31,8 +31,8 @@ class PortalLoginController extends Controller
                 Auth::guard('portal')->logout();
 
                 $message = $user->status === 'suspended'
-                    ? 'Akaun anda telah digantung. Sila hubungi pihak MAIJ.'
-                    : 'Akaun anda tidak aktif. Sila hubungi pihak MAIJ.';
+                    ? __('auth.errors.suspended')
+                    : __('auth.errors.inactive');
 
                 if ($request->wantsJson()) {
                     return response()->json(['errors' => ['email' => [$message]]], 422);
@@ -68,14 +68,14 @@ class PortalLoginController extends Controller
             ActivityLogger::failedLogin($request->email, $request);
             AuditLogger::authLogin(null, $request, 'failed');
 
-            return response()->json(['errors' => ['email' => ['Email atau kata laluan tidak sah.']]], 422);
+            return response()->json(['errors' => ['email' => [__('auth.errors.invalid_credentials')]]], 422);
         }
 
         ActivityLogger::failedLogin($request->email, $request);
         AuditLogger::authLogin(null, $request, 'failed');
 
         return back()->withErrors([
-            'email' => 'Email atau kata laluan tidak sah.',
+            'email' => __('auth.errors.invalid_credentials'),
         ])->onlyInput('email');
     }
 
@@ -108,19 +108,19 @@ class PortalLoginController extends Controller
         if ($attempts >= 5) {
             $request->session()->forget(['auth.2fa.user_id', 'auth.2fa.portal', 'auth.2fa.remember', 'auth.2fa.attempts']);
 
-            return back()->withErrors(['code' => 'Terlalu banyak percubaan. Sila log masuk semula.']);
+            return back()->withErrors(['code' => __('auth.errors.too_many_attempts')]);
         }
 
         if (! $user->isActive()) {
             $request->session()->forget(['auth.2fa.user_id', 'auth.2fa.portal', 'auth.2fa.remember']);
 
-            return back()->withErrors(['code' => 'Akaun anda tidak aktif. Sila hubungi pihak MAIJ.']);
+            return back()->withErrors(['code' => __('auth.errors.inactive')]);
         }
 
         if (! $service->verifyCode($user->two_factor_secret, $request->code)) {
             $request->session()->put('auth.2fa.attempts', $attempts + 1);
 
-            return back()->withErrors(['code' => 'Kod 2FA tidak sah. Sila cuba lagi.']);
+            return back()->withErrors(['code' => __('auth.errors.invalid_2fa')]);
         }
 
         Auth::guard('portal')->login($user, session('auth.2fa.remember', false));

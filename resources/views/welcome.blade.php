@@ -4,14 +4,14 @@
       $stats (total, layak, tidak_layak, dalam_semakan), $chartLabels, $chartValues, $aiPick
 --}}
 <!DOCTYPE html>
-<html lang="ms" class="h-full dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0B1220">
-    <meta name="description" content="J-ZAKAT — Platform Pintar Pengurusan Zakat Majlis Agama Islam Johor. Permohonan bantuan zakat dalam talian dengan penilaian Had Kifayah dan analisis AI.">
+    <meta name="description" content="{{ __('landing.meta.description') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>J-ZAKAT — Platform Pintar Pengurusan Zakat</title>
+    <title>{{ __('landing.meta.title') }}</title>
     <style>[x-cloak] { display: none !important; }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -25,35 +25,33 @@
     <header class="landing-nav" :class="scrolled ? 'is-scrolled' : ''">
         <div class="max-w-7xl mx-auto px-5 md:px-8">
             <div class="flex items-center justify-between h-16 md:h-[72px]">
-                <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+                <a href="{{ url('/') }}" class="flex items-center gap-3 group shrink-0">
                     <div class="w-10 h-10 rounded-[13px] bg-white flex items-center justify-center shadow-lg ring-1 ring-white/20 overflow-hidden">
                         <img src="{{ asset('images/MAIJ.PNG') }}" alt="MAIJ" class="w-full h-full object-contain p-1">
                     </div>
                     <div class="leading-none">
-                        <p class="text-[16px] font-bold text-white tracking-tight">J-ZAKAT</p>
-                        <p class="text-[10.5px] text-white/50 mt-1 tracking-wider uppercase">Majlis Agama Islam Johor</p>
+                        <p class="text-[16px] font-bold text-white tracking-tight whitespace-nowrap">J-ZAKAT</p>
+                        <p class="hidden xl:block text-[10.5px] text-white/50 mt-1 tracking-wider uppercase whitespace-nowrap">Majlis Agama Islam Johor</p>
                     </div>
                 </a>
 
-                <nav class="hidden lg:flex items-center gap-1">
-                    <a href="#utama" class="px-3.5 py-2 rounded-[11px] text-[13.5px] font-medium text-white/75 hover:text-white hover:bg-white/8 transition-fast">Home</a>
-                    <a href="#ciri" class="px-3.5 py-2 rounded-[11px] text-[13.5px] font-medium text-white/75 hover:text-white hover:bg-white/8 transition-fast">Perkhidmatan</a>
-                    <a href="#statistik" class="px-3.5 py-2 rounded-[11px] text-[13.5px] font-medium text-white/75 hover:text-white hover:bg-white/8 transition-fast">Statistik</a>
-                    <a href="#cara" class="px-3.5 py-2 rounded-[11px] text-[13.5px] font-medium text-white/75 hover:text-white hover:bg-white/8 transition-fast">Cara Mohon</a>
-                    <a href="#faq" class="px-3.5 py-2 rounded-[11px] text-[13.5px] font-medium text-white/75 hover:text-white hover:bg-white/8 transition-fast">FAQ</a>
-                    <a href="#hubungi" class="px-3.5 py-2 rounded-[11px] text-[13.5px] font-medium text-white/75 hover:text-white hover:bg-white/8 transition-fast">Hubungi</a>
+                <nav class="hidden xl:flex items-center gap-1">
+                    @foreach(__('landing.nav.items') as $navItem)
+                        <a href="{{ $navItem['href'] }}" class="px-3.5 py-2 rounded-[11px] text-[13.5px] font-medium text-white/75 hover:text-white hover:bg-white/8 transition-fast whitespace-nowrap">{{ $navItem['label'] }}</a>
+                    @endforeach
                 </nav>
 
-                <div class="hidden lg:flex items-center gap-2.5">
+                <div class="hidden xl:flex items-center gap-2.5">
+                    <x-language-switcher variant="dark" />
                     <a href="{{ route('user.login') }}" class="btn btn-sm btn-glass">
-                        <x-icon name="log-in" :size="15" /> Log Masuk
+                        <x-icon name="log-in" :size="15" /> {{ __('landing.nav.login') }}
                     </a>
                     <a href="{{ route('user.register') }}" class="btn btn-sm btn-gradient">
-                        <x-icon name="hand-heart" :size="15" /> Mohon Bantuan Zakat
+                        <x-icon name="hand-heart" :size="15" /> {{ __('landing.nav.apply') }}
                     </a>
                 </div>
 
-                <button @click="mobileNav = !mobileNav" class="lg:hidden w-10 h-10 rounded-[11px] bg-white/8 hover:bg-white/12 flex items-center justify-center text-white transition-fast" aria-label="Menu">
+                <button @click="mobileNav = !mobileNav" class="xl:hidden w-10 h-10 rounded-[11px] bg-white/8 hover:bg-white/12 flex items-center justify-center text-white transition-fast" aria-label="Menu">
                     <x-icon x-show="!mobileNav" name="menu" :size="20" />
                     <x-icon x-show="mobileNav" x-cloak name="x" :size="20" />
                 </button>
@@ -62,15 +60,16 @@
 
         {{-- Mobile nav --}}
         <div x-show="mobileNav" x-cloak x-transition
-             class="lg:hidden border-t border-white/10 bg-[#0B1220]/95 backdrop-blur-xl">
+             class="xl:hidden border-t border-white/10 bg-[#0B1220]/95 backdrop-blur-xl">
             <div class="px-5 py-4 space-y-1">
-                @foreach([['#utama','Home'],['#ciri','Perkhidmatan'],['#statistik','Statistik'],['#cara','Cara Mohon'],['#faq','FAQ'],['#hubungi','Hubungi']] as [$href,$label])
-                    <a href="{{ $href }}" @click="mobileNav=false" class="block px-3 py-2.5 rounded-[11px] text-[14px] font-medium text-white/80 hover:text-white hover:bg-white/8 transition-fast">{{ $label }}</a>
+                @foreach(__('landing.nav.items') as $navItem)
+                    <a href="{{ $navItem['href'] }}" @click="mobileNav=false" class="block px-3 py-2.5 rounded-[11px] text-[14px] font-medium text-white/80 hover:text-white hover:bg-white/8 transition-fast">{{ $navItem['label'] }}</a>
                 @endforeach
                 <div class="pt-2 space-y-2">
-                    <a href="{{ route('user.login') }}" class="btn btn-md btn-glass w-full"><x-icon name="log-in" :size="16" /> Log Masuk Pemohon</a>
-                    <a href="{{ route('login') }}" class="btn btn-md btn-glass w-full"><x-icon name="shield-check" :size="16" /> Log Masuk Pentadbir</a>
-                    <a href="{{ route('user.register') }}" class="btn btn-md btn-gradient w-full"><x-icon name="hand-heart" :size="16" /> Mohon Bantuan Zakat</a>
+                    <div class="flex justify-center pb-1"><x-language-switcher variant="dark" /></div>
+                    <a href="{{ route('user.login') }}" class="btn btn-md btn-glass w-full"><x-icon name="log-in" :size="16" /> {{ __('landing.nav.portal_login') }}</a>
+                    <a href="{{ route('login') }}" class="btn btn-md btn-glass w-full"><x-icon name="shield-check" :size="16" /> {{ __('landing.nav.admin_login') }}</a>
+                    <a href="{{ route('user.register') }}" class="btn btn-md btn-gradient w-full"><x-icon name="hand-heart" :size="16" /> {{ __('landing.nav.apply') }}</a>
                 </div>
             </div>
         </div>
@@ -85,34 +84,33 @@
             <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-center">
                 <div class="reveal">
                     <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill text-[11.5px] font-semibold tracking-wide uppercase bg-cyan/10 text-cyan border border-cyan/25">
-                        <x-icon name="sparkles" :size="13" /> Platform Zakat Berkuasa AI
+                        <x-icon name="sparkles" :size="13" /> {{ __('landing.hero.badge') }}
                     </span>
 
                     <h1 class="mt-6 text-[34px] leading-[1.12] sm:text-[44px] sm:leading-[1.1] lg:text-[52px] font-bold tracking-tight text-white">
                         J-ZAKAT —
-                        <span class="text-gradient-royal">Platform Pintar Pengurusan Zakat</span>
+                        <span class="text-gradient-royal">{{ __('landing.hero.title') }}</span>
                     </h1>
 
                     <p class="mt-5 text-[15.5px] leading-relaxed text-white/70 max-w-xl">
-                        Sistem pengurusan permohonan bantuan zakat yang cekap dan telus untuk
-                        <span class="text-white/90 font-medium">Majlis Agama Islam Johor</span> — lengkap dengan
-                        penilaian Had Kifayah automatik, analisis kelayakan asnaf berkuasa AI, dan pemantauan status
-                        permohonan dalam satu platform bersepadu.
+                        {{ __('landing.hero.lead_before') }}
+                        <span class="text-white/90 font-medium">{{ __('landing.hero.organisation') }}</span>
+                        {{ __('landing.hero.lead_after') }}
                     </p>
 
                     <div class="mt-8 flex flex-col sm:flex-row gap-3">
                         <a href="{{ route('user.register') }}" class="btn btn-lg btn-gradient">
-                            <x-icon name="hand-heart" :size="19" /> Mohon Bantuan Zakat
+                            <x-icon name="hand-heart" :size="19" /> {{ __('landing.hero.apply') }}
                         </a>
                         <a href="{{ route('user.login') }}" class="btn btn-lg btn-glass">
-                            <x-icon name="log-in" :size="19" /> Log Masuk
+                            <x-icon name="log-in" :size="19" /> {{ __('landing.hero.login') }}
                         </a>
                     </div>
 
                     <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-[12.5px] text-white/55">
-                        <span class="inline-flex items-center gap-2"><x-icon name="shield-check" :size="15" class="text-emerald" /> Selamat &amp; disulitkan</span>
-                        <span class="inline-flex items-center gap-2"><x-icon name="activity" :size="15" class="text-cyan" /> Penilaian automatik</span>
-                        <span class="inline-flex items-center gap-2"><x-icon name="eye" :size="15" class="text-cyan" /> Telus &amp; boleh diaudit</span>
+                        <span class="inline-flex items-center gap-2"><x-icon name="shield-check" :size="15" class="text-emerald" /> {{ __('landing.hero.trust.secure') }}</span>
+                        <span class="inline-flex items-center gap-2"><x-icon name="activity" :size="15" class="text-cyan" /> {{ __('landing.hero.trust.assessment') }}</span>
+                        <span class="inline-flex items-center gap-2"><x-icon name="eye" :size="15" class="text-cyan" /> {{ __('landing.hero.trust.audit') }}</span>
                     </div>
                 </div>
 
@@ -127,20 +125,20 @@
                                         <x-icon name="brain" :size="22" />
                                     </div>
                                     <div>
-                                        <p class="text-[13px] font-semibold text-white">Penilaian AI</p>
-                                        <p class="text-[11px] text-white/50">Analisis kelayakan asnaf</p>
+                                        <p class="text-[13px] font-semibold text-white">{{ __('landing.hero.card.title') }}</p>
+                                        <p class="text-[11px] text-white/50">{{ __('landing.hero.card.subtitle') }}</p>
                                     </div>
                                 </div>
-                                <span class="badge badge-success"><span class="w-1.5 h-1.5 rounded-full bg-success"></span> Aktif</span>
+                                <span class="badge badge-success"><span class="w-1.5 h-1.5 rounded-full bg-success"></span> {{ __('landing.hero.card.active') }}</span>
                             </div>
 
                             @php $total = max((int)($stats['total'] ?? 0), 0); @endphp
                             <div class="space-y-3">
                                 @php
                                     $heroRows = [
-                                        ['label' => 'Layak', 'value' => (int)($stats['layak'] ?? 0), 'color' => 'var(--color-success)', 'icon' => 'circle-check'],
-                                        ['label' => 'Tidak Layak', 'value' => (int)($stats['tidak_layak'] ?? 0), 'color' => 'var(--color-danger)', 'icon' => 'circle-x'],
-                                        ['label' => 'Dalam Semakan', 'value' => (int)($stats['dalam_semakan'] ?? 0), 'color' => 'var(--color-warning)', 'icon' => 'clock'],
+                                        ['label' => __('landing.stats.layak'), 'value' => (int)($stats['layak'] ?? 0), 'color' => 'var(--color-success)', 'icon' => 'circle-check'],
+                                        ['label' => __('landing.stats.tidak_layak'), 'value' => (int)($stats['tidak_layak'] ?? 0), 'color' => 'var(--color-danger)', 'icon' => 'circle-x'],
+                                        ['label' => __('landing.stats.dalam_semakan'), 'value' => (int)($stats['dalam_semakan'] ?? 0), 'color' => 'var(--color-warning)', 'icon' => 'clock'],
                                     ];
                                 @endphp
                                 @foreach($heroRows as $row)
@@ -155,7 +153,7 @@
                             </div>
 
                             <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-                                <span class="text-[12px] text-white/50">Jumlah permohonan</span>
+                                <span class="text-[12px] text-white/50">{{ __('landing.hero.card.total') }}</span>
                                 <span class="text-[18px] font-bold text-cyan tabular-nums">{{ number_format((int)($stats['total'] ?? 0)) }}</span>
                             </div>
                         </div>
@@ -169,18 +167,18 @@
     <section id="ciri" class="relative py-20 md:py-24 bg-[#0B1220]">
         <div class="max-w-7xl mx-auto px-5 md:px-8">
             <div class="reveal max-w-2xl">
-                <p class="text-eyebrow text-cyan mb-3">Perkhidmatan</p>
-                <h2 class="text-[28px] sm:text-[34px] font-bold tracking-tight text-white leading-tight">Teknologi pintar untuk pengurusan zakat yang telus</h2>
-                <p class="mt-4 text-[15px] text-white/60">Menggabungkan penilaian automatik, kecerdasan buatan dan aliran kerja digital untuk mempercepat bantuan sampai kepada yang layak.</p>
+                <p class="text-eyebrow text-cyan mb-3">{{ __('landing.features.eyebrow') }}</p>
+                <h2 class="text-[28px] sm:text-[34px] font-bold tracking-tight text-white leading-tight">{{ __('landing.features.title') }}</h2>
+                <p class="mt-4 text-[15px] text-white/60">{{ __('landing.features.subtitle') }}</p>
             </div>
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12 stagger">
                 @php
                     $features = [
-                        ['icon' => 'brain', 'title' => 'Penilaian AI', 'desc' => 'Analisis kelayakan asnaf berkuasa AI dengan skor keyakinan dan justifikasi automatik.'],
-                        ['icon' => 'calculator', 'title' => 'Kiraan Had Kifayah', 'desc' => 'Pengiraan Had Al-Kifayah mengikut metodologi MAIDAM dengan pecahan kategori lengkap.'],
-                        ['icon' => 'file-plus', 'title' => 'Permohonan Online', 'desc' => 'Hantar permohonan bantuan zakat dalam talian, termasuk imbasan Borang Bantuan MAIJ.'],
-                        ['icon' => 'chart-line', 'title' => 'Penjejakan Permohonan', 'desc' => 'Pantau status permohonan, dokumen, surat kelulusan dan resit dalam satu portal.'],
+                        ['icon' => 'brain', 'title' => __('landing.features.ai.title'), 'desc' => __('landing.features.ai.desc')],
+                        ['icon' => 'calculator', 'title' => __('landing.features.kifayah.title'), 'desc' => __('landing.features.kifayah.desc')],
+                        ['icon' => 'file-plus', 'title' => __('landing.features.application.title'), 'desc' => __('landing.features.application.desc')],
+                        ['icon' => 'chart-line', 'title' => __('landing.features.tracking.title'), 'desc' => __('landing.features.tracking.desc')],
                     ];
                 @endphp
                 @foreach($features as $f)
@@ -200,17 +198,17 @@
     <section id="statistik" class="py-20 md:py-24" style="background: linear-gradient(180deg, #0B1220 0%, #0E1830 100%);">
         <div class="max-w-7xl mx-auto px-5 md:px-8">
             <div class="reveal text-center max-w-2xl mx-auto">
-                <p class="text-eyebrow text-cyan mb-3">Statistik</p>
-                <h2 class="text-[28px] sm:text-[34px] font-bold tracking-tight text-white leading-tight">Pemantauan permohonan secara langsung</h2>
-                <p class="mt-4 text-[15px] text-white/60">Data dikemas kini daripada pangkalan data sistem — menunjukkan status semasa permohonan asnaf yang direkodkan.</p>
+                <p class="text-eyebrow text-cyan mb-3">{{ __('landing.stats.eyebrow') }}</p>
+                <h2 class="text-[28px] sm:text-[34px] font-bold tracking-tight text-white leading-tight">{{ __('landing.stats.title') }}</h2>
+                <p class="mt-4 text-[15px] text-white/60">{{ __('landing.stats.subtitle') }}</p>
             </div>
 
             @php
                 $statCards = [
-                    ['label' => 'Jumlah Permohonan', 'value' => (int)($stats['total'] ?? 0), 'icon' => 'clipboard-list', 'color' => 'var(--color-cyan)'],
-                    ['label' => 'Layak', 'value' => (int)($stats['layak'] ?? 0), 'icon' => 'circle-check', 'color' => 'var(--color-success)'],
-                    ['label' => 'Tidak Layak', 'value' => (int)($stats['tidak_layak'] ?? 0), 'icon' => 'circle-x', 'color' => 'var(--color-danger)'],
-                    ['label' => 'Dalam Semakan', 'value' => (int)($stats['dalam_semakan'] ?? 0), 'icon' => 'clock', 'color' => 'var(--color-warning)'],
+                    ['label' => __('landing.stats.total'), 'value' => (int)($stats['total'] ?? 0), 'icon' => 'clipboard-list', 'color' => 'var(--color-cyan)'],
+                    ['label' => __('landing.stats.layak'), 'value' => (int)($stats['layak'] ?? 0), 'icon' => 'circle-check', 'color' => 'var(--color-success)'],
+                    ['label' => __('landing.stats.tidak_layak'), 'value' => (int)($stats['tidak_layak'] ?? 0), 'icon' => 'circle-x', 'color' => 'var(--color-danger)'],
+                    ['label' => __('landing.stats.dalam_semakan'), 'value' => (int)($stats['dalam_semakan'] ?? 0), 'icon' => 'clock', 'color' => 'var(--color-warning)'],
                 ];
             @endphp
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-12 stagger">
@@ -236,10 +234,10 @@
             <div class="reveal mt-10 landing-card p-6">
                 <div class="flex items-end justify-between mb-6">
                     <div>
-                        <h3 class="text-[15px] font-semibold text-white">Trend Permohonan</h3>
-                        <p class="text-[12px] text-white/50 mt-1">12 bulan terakhir</p>
+                        <h3 class="text-[15px] font-semibold text-white">{{ __('landing.stats.trend_title') }}</h3>
+                        <p class="text-[12px] text-white/50 mt-1">{{ __('landing.stats.trend_subtitle') }}</p>
                     </div>
-                    <span class="badge badge-info"><x-icon name="activity" :size="13" /> Langsung</span>
+                    <span class="badge badge-info"><x-icon name="activity" :size="13" /> {{ __('landing.stats.live') }}</span>
                 </div>
                 <div class="flex items-end gap-1.5 sm:gap-2.5 h-40">
                     @foreach($chartValues as $i => $v)
@@ -259,16 +257,16 @@
     <section id="cara" class="py-20 md:py-24 bg-[#0B1220]">
         <div class="max-w-7xl mx-auto px-5 md:px-8">
             <div class="reveal max-w-2xl">
-                <p class="text-eyebrow text-cyan mb-3">Cara Memohon</p>
-                <h2 class="text-[28px] sm:text-[34px] font-bold tracking-tight text-white leading-tight">Empat langkah mudah untuk memohon bantuan zakat</h2>
+                <p class="text-eyebrow text-cyan mb-3">{{ __('landing.how.eyebrow') }}</p>
+                <h2 class="text-[28px] sm:text-[34px] font-bold tracking-tight text-white leading-tight">{{ __('landing.how.title') }}</h2>
             </div>
 
             @php
                 $steps = [
-                    ['title' => 'Daftar akaun pemohon', 'desc' => 'Cipta akaun portal menggunakan nombor kad pengenalan dan maklumat peribadi anda.'],
-                    ['title' => 'Lengkapkan permohonan', 'desc' => 'Isi borang permohonan dalam talian atau imbas Borang Bantuan MAIJ yang telah lengkap diisi.'],
-                    ['title' => 'Semakan & pengesahan', 'desc' => 'Pegawai MAIJ menyemak permohonan, kelayakan Had Kifayah dan dokumen sokongan.'],
-                    ['title' => 'Terima keputusan', 'desc' => 'Pantau status, muat turun surat keputusan dan resit permohonan melalui portal.'],
+                    ['title' => __('landing.how.steps.register.title'), 'desc' => __('landing.how.steps.register.desc')],
+                    ['title' => __('landing.how.steps.complete.title'), 'desc' => __('landing.how.steps.complete.desc')],
+                    ['title' => __('landing.how.steps.review.title'), 'desc' => __('landing.how.steps.review.desc')],
+                    ['title' => __('landing.how.steps.result.title'), 'desc' => __('landing.how.steps.result.desc')],
                 ];
             @endphp
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12 stagger">
@@ -285,8 +283,8 @@
             </div>
 
             <div class="reveal mt-12 flex flex-col sm:flex-row gap-3">
-                <a href="{{ route('user.register') }}" class="btn btn-lg btn-gradient"><x-icon name="hand-heart" :size="19" /> Mulakan Permohonan</a>
-                <a href="#faq" class="btn btn-lg btn-glass"><x-icon name="circle-help" :size="19" /> Soalan Lazim</a>
+                <a href="{{ route('user.register') }}" class="btn btn-lg btn-gradient"><x-icon name="hand-heart" :size="19" /> {{ __('landing.how.start') }}</a>
+                <a href="#faq" class="btn btn-lg btn-glass"><x-icon name="circle-help" :size="19" /> {{ __('landing.how.faq') }}</a>
             </div>
         </div>
     </section>
@@ -295,16 +293,16 @@
     <section id="faq" class="py-20 md:py-24" style="background: linear-gradient(180deg, #0B1220 0%, #0E1830 100%);">
         <div class="max-w-3xl mx-auto px-5 md:px-8">
             <div class="reveal text-center">
-                <p class="text-eyebrow text-cyan mb-3">Soalan Lazim</p>
-                <h2 class="text-[28px] sm:text-[34px] font-bold tracking-tight text-white leading-tight">Pertanyaan yang kerap diajukan</h2>
+                <p class="text-eyebrow text-cyan mb-3">{{ __('landing.faq.eyebrow') }}</p>
+                <h2 class="text-[28px] sm:text-[34px] font-bold tracking-tight text-white leading-tight">{{ __('landing.faq.title') }}</h2>
             </div>
 
             @php
                 $faqs = [
-                    ['q' => 'Siapa yang layak memohon bantuan zakat?', 'a' => 'Warganegara Malaysia beragama Islam yang bermastautin di Johor, dengan pendapatan isi rumah di bawah garis Had Kifayah yang ditetapkan.'],
-                    ['q' => 'Apakah dokumen yang diperlukan?', 'a' => 'Salinan kad pengenalan, slip gaji atau penyata pendapatan, bil utiliti/komitmen bulanan, serta dokumen sokongan mengikut jenis bantuan.'],
-                    ['q' => 'Bagaimanakah Had Kifayah dikira?', 'a' => 'Berdasarkan kategori isi rumah (ketua keluarga, pasangan, tanggungan, pelajar IPT dan kanak-kanak), status perumahan serta perbelanjaan tetap seperti utiliti, pengangkutan dan perubatan.'],
-                    ['q' => 'Berapa lama tempoh semakan permohonan?', 'a' => 'Permohonan yang lengkap akan disemak oleh pegawai MAIJ mengikut tempoh yang ditetapkan. Anda boleh memantau status melalui portal pada bila-bila masa.'],
+                    ['q' => __('landing.faq.items.eligibility.q'), 'a' => __('landing.faq.items.eligibility.a')],
+                    ['q' => __('landing.faq.items.documents.q'), 'a' => __('landing.faq.items.documents.a')],
+                    ['q' => __('landing.faq.items.kifayah.q'), 'a' => __('landing.faq.items.kifayah.a')],
+                    ['q' => __('landing.faq.items.duration.q'), 'a' => __('landing.faq.items.duration.a')],
                 ];
             @endphp
 
@@ -329,12 +327,12 @@
                 <div class="pattern-mask islamic-pattern opacity-[0.08]"></div>
                 <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                     <div class="max-w-xl">
-                        <h2 class="text-[26px] sm:text-[30px] font-bold tracking-tight text-white leading-tight">Mulakan permohonan bantuan zakat anda hari ini</h2>
-                        <p class="mt-3 text-[14.5px] text-white/70">Daftar akaun pemohon dan lengkapkan permohonan dalam beberapa minit.</p>
+                        <h2 class="text-[26px] sm:text-[30px] font-bold tracking-tight text-white leading-tight">{{ __('landing.cta.title') }}</h2>
+                        <p class="mt-3 text-[14.5px] text-white/70">{{ __('landing.cta.subtitle') }}</p>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3 shrink-0">
-                        <a href="{{ route('user.register') }}" class="btn btn-lg bg-white text-navy hover:bg-white/90"><x-icon name="hand-heart" :size="19" /> Daftar Sekarang</a>
-                        <a href="{{ route('user.login') }}" class="btn btn-lg btn-glass"><x-icon name="log-in" :size="19" /> Log Masuk</a>
+                        <a href="{{ route('user.register') }}" class="btn btn-lg bg-white text-navy hover:bg-white/90"><x-icon name="hand-heart" :size="19" /> {{ __('landing.cta.register') }}</a>
+                        <a href="{{ route('user.login') }}" class="btn btn-lg btn-glass"><x-icon name="log-in" :size="19" /> {{ __('landing.cta.login') }}</a>
                     </div>
                 </div>
             </div>
@@ -352,38 +350,38 @@
                         </div>
                         <div class="leading-none">
                             <p class="text-[15px] font-bold text-white tracking-tight">J-ZAKAT</p>
-                            <p class="text-[10.5px] text-white/45 mt-1 tracking-wider uppercase">Platform Pintar Pengurusan Zakat</p>
+                            <p class="text-[10.5px] text-white/45 mt-1 tracking-wider uppercase">{{ __('landing.footer.tagline') }}</p>
                         </div>
                     </div>
                     <p class="mt-5 text-[13.5px] leading-relaxed text-white/50 max-w-md">
-                        Sistem pengurusan kelayakan asnaf pintar untuk Majlis Agama Islam Johor — menggabungkan penilaian Had Kifayah, analisis AI dan aliran kerja digital untuk mempercepat bantuan.
+                        {{ __('landing.footer.description') }}
                     </p>
                     <div class="mt-6 flex items-start gap-3 text-[13px] text-white/55">
                         <x-icon name="map-pin" :size="17" class="text-cyan shrink-0 mt-0.5" />
-                        <span>Majlis Agama Islam Johor, Pusat Islam Iskandar Johor,<br>Jalan Masjid Abu Bakar, 80990 Johor Bahru.</span>
+                        <span>{!! __('landing.footer.address') !!}</span>
                     </div>
                     <div class="mt-3 flex items-center gap-2.5 text-[13px] text-white/55">
                         <x-icon name="phone" :size="16" class="text-cyan" />
-                        <span>07-228 2928</span>
+                        <span>{{ __('landing.footer.phone') }}</span>
                     </div>
                 </div>
 
                 <div>
-                    <h4 class="text-[12px] font-semibold uppercase tracking-wider text-white/40 mb-4">Pautan Pantas</h4>
+                    <h4 class="text-[12px] font-semibold uppercase tracking-wider text-white/40 mb-4">{{ __('landing.footer.quick_links') }}</h4>
                     <ul class="space-y-2.5 text-[13.5px]">
-                        <li><a href="#ciri" class="landing-section-link">Perkhidmatan</a></li>
-                        <li><a href="#cara" class="landing-section-link">Cara Mohon</a></li>
-                        <li><a href="#faq" class="landing-section-link">Soalan Lazim</a></li>
-                        <li><a href="{{ route('user.hadkifayah') }}" class="landing-section-link">Kira Had Kifayah</a></li>
+                        <li><a href="#ciri" class="landing-section-link">{{ __('landing.footer.services') }}</a></li>
+                        <li><a href="#cara" class="landing-section-link">{{ __('landing.footer.how') }}</a></li>
+                        <li><a href="#faq" class="landing-section-link">{{ __('landing.footer.faq') }}</a></li>
+                        <li><a href="{{ route('user.hadkifayah') }}" class="landing-section-link">{{ __('landing.footer.calculate') }}</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="text-[12px] font-semibold uppercase tracking-wider text-white/40 mb-4">Akaun</h4>
+                    <h4 class="text-[12px] font-semibold uppercase tracking-wider text-white/40 mb-4">{{ __('landing.footer.account') }}</h4>
                     <ul class="space-y-2.5 text-[13.5px]">
-                        <li><a href="{{ route('user.register') }}" class="landing-section-link">Daftar Pemohon</a></li>
-                        <li><a href="{{ route('user.login') }}" class="landing-section-link">Log Masuk Pemohon</a></li>
-                        <li><a href="{{ route('login') }}" class="landing-section-link">Log Masuk Pentadbir</a></li>
+                        <li><a href="{{ route('user.register') }}" class="landing-section-link">{{ __('landing.footer.register') }}</a></li>
+                        <li><a href="{{ route('user.login') }}" class="landing-section-link">{{ __('landing.footer.portal_login') }}</a></li>
+                        <li><a href="{{ route('login') }}" class="landing-section-link">{{ __('landing.footer.admin_login') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -391,11 +389,11 @@
             <div class="landing-divider my-8"></div>
 
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-[12.5px] text-white/40">
-                <p>&copy; {{ date('Y') }} J-ZAKAT · MAH. Hak cipta terpelihara.</p>
+                <p>{{ __('landing.footer.copyright', ['year' => date('Y')]) }}</p>
                 <div class="flex items-center gap-4">
-                    <a href="#" class="hover:text-white/70 transition-fast">Privacy</a>
-                    <a href="#" class="hover:text-white/70 transition-fast">Terms</a>
-                    <a href="#" class="hover:text-white/70 transition-fast">About</a>
+                    <a href="#" class="hover:text-white/70 transition-fast">{{ __('landing.footer.privacy') }}</a>
+                    <a href="#" class="hover:text-white/70 transition-fast">{{ __('landing.footer.terms') }}</a>
+                    <a href="#" class="hover:text-white/70 transition-fast">{{ __('landing.footer.about') }}</a>
                 </div>
             </div>
         </div>

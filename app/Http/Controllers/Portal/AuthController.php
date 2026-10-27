@@ -80,6 +80,6 @@ class AuthController extends Controller
         }
 
         return redirect()->route('user.dashboard')
-            ->with('success', 'Selamat datang! Akaun anda telah berjaya dicipta.');
+            ->with('success', __('auth.errors.welcome_portal'));
     }
 }

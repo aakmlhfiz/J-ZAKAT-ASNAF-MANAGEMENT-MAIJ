@@ -12,7 +12,7 @@
     $registerAction = $isPortal ? route('user.register') : route('register');
     $forgotUrl      = $isPortal ? route('user.password.request') : route('password.request');
     $otherLoginUrl  = $isPortal ? route('login') : route('user.login');
-    $otherLoginText = $isPortal ? 'Log masuk pentadbir' : 'Log masuk pemohon';
+    $otherLoginText = $isPortal ? __('auth.login.switch_portal_link') : __('auth.login.switch_admin_link');
 
     $states = [
         'Johor','Kedah','Kelantan','Melaka','Negeri Sembilan','Pahang',
@@ -26,28 +26,24 @@
         || old('invitation_code') || old('ic_no')) ? 'signup' : 'signin';
 
     $tabTitle = $initialTab === 'signup'
-        ? ($isPortal ? 'Daftar Pemohon' : 'Daftar Pentadbir')
-        : ($isPortal ? 'Log Masuk Pemohon' : 'Log Masuk');
+        ? ($isPortal ? __('auth.meta.portal_register') : __('auth.meta.register'))
+        : ($isPortal ? __('auth.meta.portal_login') : __('auth.meta.login'));
 
-    $roleLabel = $isPortal ? 'Portal Pemohon' : 'Portal Pentadbir';
-    $signinTitle = 'Selamat kembali';
-    $signinSubtitle = $isPortal
-        ? 'Log masuk untuk menyemak permohonan dan status bantuan anda.'
-        : 'Log masuk untuk meneruskan pengurusan asnaf dan permohonan.';
-    $signupTitle = $isPortal ? 'Daftar akaun pemohon' : 'Daftar akaun pentadbir';
-    $signupSubtitle = $isPortal
-        ? 'Lengkapkan maklumat anda untuk memohon bantuan zakat.'
-        : 'Gunakan kod undangan yang diberikan oleh pentadbir sistem.';
+    $roleLabel = __('auth.roles.'.$mode);
+    $signinTitle = __('auth.login.title');
+    $signinSubtitle = $isPortal ? __('auth.login.subtitle_portal') : __('auth.login.subtitle_admin');
+    $signupTitle = $isPortal ? __('auth.login.signup_title_portal') : __('auth.login.signup_title_admin');
+    $signupSubtitle = $isPortal ? __('auth.login.signup_subtitle_portal') : __('auth.login.signup_subtitle_admin');
     $displayTitle = $initialTab === 'signup' ? $signupTitle : $signinTitle;
     $displaySubtitle = $initialTab === 'signup' ? $signupSubtitle : $signinSubtitle;
 @endphp
 <!DOCTYPE html>
-<html lang="ms" class="h-full dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#070D1A">
-    <meta name="description" content="J-ZAKAT — {{ $tabTitle }} Majlis Agama Islam Johor">
+    <meta name="description" content="J-ZAKAT — {{ $tabTitle }} · Majlis Agama Islam Johor">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $tabTitle }} — J-ZAKAT</title>
     <style>[x-cloak] { display: none !important; }</style>
@@ -86,14 +82,14 @@
                     </p>
                 </div>
 
-                <div class="auth-tabs" role="tablist" aria-label="Pilih log masuk atau pendaftaran">
+                <div class="auth-tabs" role="tablist" aria-label="{{ __('auth.tabs.login') }} / {{ __('auth.tabs.register') }}">
                     <button type="button"
                             role="tab"
                             :aria-selected="tab === 'signin'"
                             @click="tab = 'signin'"
                             class="auth-tab {{ $initialTab === 'signin' ? 'is-active' : '' }}"
                             :class="{ 'is-active': tab === 'signin' }">
-                        Log Masuk
+                        {{ __('auth.tabs.login') }}
                     </button>
                     <button type="button"
                             role="tab"
@@ -101,7 +97,7 @@
                             @click="tab = 'signup'"
                             class="auth-tab {{ $initialTab === 'signup' ? 'is-active' : '' }}"
                             :class="{ 'is-active': tab === 'signup' }">
-                        Daftar
+                        {{ __('auth.tabs.register') }}
                     </button>
                 </div>
 
@@ -119,11 +115,11 @@
                         <input type="hidden" name="_form" value="signin">
 
                         <div class="auth-field">
-                            <label for="signin-email" class="auth-label">Emel</label>
+                            <label for="signin-email" class="auth-label">{{ __('auth.fields.email') }}</label>
                             <div class="auth-input-wrap">
                                 <x-icon name="mail" :size="18" class="auth-input-icon" />
                                 <input id="signin-email" type="email" name="email" required
-                                       autocomplete="email" placeholder="nama@maij.gov.my"
+                                       autocomplete="email" placeholder="{{ __('auth.fields.email_placeholder') }}"
                                        value="{{ old('email') }}"
                                        {{ $initialTab === 'signin' ? 'autofocus' : '' }}
                                        @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('email') && ! $hasRegisterOld])>
@@ -137,17 +133,17 @@
                         </div>
 
                         <div class="auth-field">
-                            <label for="signin-password" class="auth-label">Kata laluan</label>
+                            <label for="signin-password" class="auth-label">{{ __('auth.fields.password') }}</label>
                             <div class="auth-input-wrap">
                                 <x-icon name="lock" :size="18" class="auth-input-icon" />
                                 <input id="signin-password" type="password" name="password" required
-                                       placeholder="Masukkan kata laluan"
+                                       placeholder="{{ __('auth.fields.password_placeholder') }}"
                                        autocomplete="current-password"
                                        x-bind:type="showPassword ? 'text' : 'password'"
                                        @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password') && ! $hasRegisterOld])>
                                 <button type="button" class="auth-eye"
                                         @click="showPassword = !showPassword"
-                                        :aria-label="showPassword ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                        :aria-label="showPassword ? '{{ __('auth.hide_password') }}' : '{{ __('auth.show_password') }}'">
                                     <span x-show="!showPassword"><x-icon name="eye" :size="18" /></span>
                                     <span x-show="showPassword" x-cloak><x-icon name="eye-off" :size="18" /></span>
                                 </button>
@@ -163,22 +159,22 @@
                         <div class="auth-row">
                             <label class="auth-check">
                                 <input type="checkbox" name="remember" value="1" {{ old('remember') ? 'checked' : '' }}>
-                                <span>Kekal log masuk</span>
+                                <span>{{ __('auth.login.remember') }}</span>
                             </label>
-                            <a href="{{ $forgotUrl }}" class="auth-link">Lupa kata laluan?</a>
+                            <a href="{{ $forgotUrl }}" class="auth-link">{{ __('auth.login.forgot') }}</a>
                         </div>
 
                         <button type="submit" class="auth-submit" :disabled="submittingSignIn">
-                            <span x-show="!submittingSignIn">Log Masuk</span>
+                            <span x-show="!submittingSignIn">{{ __('auth.login.submit') }}</span>
                             <span x-show="submittingSignIn" x-cloak class="inline-flex items-center gap-2">
                                 <span class="auth-spinner"></span>
-                                Memproses...
+                                {{ __('auth.login.processing') }}
                             </span>
                             <x-icon name="arrow-right" :size="17" x-show="!submittingSignIn" />
                         </button>
 
                         <p class="auth-switch">
-                            {{ $isPortal ? 'Pentadbir MAIJ?' : 'Pemohon bantuan?' }}
+                            {{ $isPortal ? __('auth.login.switch_portal') : __('auth.login.switch_admin') }}
                             <a href="{{ $otherLoginUrl }}">{{ $otherLoginText }}</a>
                         </p>
                     </form>
@@ -197,11 +193,11 @@
 
                         @if($mode === 'admin')
                             <div class="auth-field">
-                                <label for="reg-name" class="auth-label">Nama penuh</label>
+                                <label for="reg-name" class="auth-label">{{ __('auth.fields.name') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="user" :size="18" class="auth-input-icon" />
                                     <input id="reg-name" type="text" name="name" required maxlength="255"
-                                           autocomplete="name" placeholder="Nama seperti dalam kad pengenalan"
+                                           autocomplete="name" placeholder="{{ __('auth.fields.name_placeholder') }}"
                                            value="{{ old('name') }}"
                                            @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('name')])>
                                 </div>
@@ -214,11 +210,11 @@
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-email" class="auth-label">Emel</label>
+                                <label for="reg-email" class="auth-label">{{ __('auth.fields.email') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="mail" :size="18" class="auth-input-icon" />
                                     <input id="reg-email" type="email" name="email" required maxlength="255"
-                                           autocomplete="email" placeholder="nama@maij.gov.my"
+                                           autocomplete="email" placeholder="{{ __('auth.fields.email_placeholder') }}"
                                            value="{{ old('email') }}"
                                            @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('email')])>
                                 </div>
@@ -231,11 +227,11 @@
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-invitation" class="auth-label">Kod undangan pentadbir</label>
+                                <label for="reg-invitation" class="auth-label">{{ __('auth.fields.invitation') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="key" :size="18" class="auth-input-icon" />
                                     <input id="reg-invitation" type="text" name="invitation_code" required maxlength="64"
-                                           placeholder="MAIJ-XXXX-XXXX-XXXX-XXXX"
+                                           placeholder="{{ __('auth.fields.invitation_placeholder') }}"
                                            value="{{ old('invitation_code') }}"
                                            @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('invitation_code')])>
                                 </div>
@@ -247,22 +243,22 @@
                                 @else
                                     <p class="auth-hint">
                                         <x-icon name="lock" :size="12" />
-                                        Kod undangan diberikan oleh pentadbir sistem.
+                                        {{ __('auth.fields.invitation_hint') }}
                                     </p>
                                 @endif
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-password" class="auth-label">Kata laluan</label>
+                                <label for="reg-password" class="auth-label">{{ __('auth.fields.password') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="lock" :size="18" class="auth-input-icon" />
                                     <input id="reg-password" type="password" name="password" required minlength="8"
-                                           placeholder="Minimum 8 aksara" autocomplete="new-password"
+                                           placeholder="{{ __('auth.fields.password_new_placeholder') }}" autocomplete="new-password"
                                            x-bind:type="showRegPassword ? 'text' : 'password'"
                                            @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password')])>
                                     <button type="button" class="auth-eye"
                                             @click="showRegPassword = !showRegPassword"
-                                            :aria-label="showRegPassword ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                            :aria-label="showRegPassword ? '{{ __('auth.hide_password') }}' : '{{ __('auth.show_password') }}'">
                                         <span x-show="!showRegPassword"><x-icon name="eye" :size="18" /></span>
                                         <span x-show="showRegPassword" x-cloak><x-icon name="eye-off" :size="18" /></span>
                                     </button>
@@ -273,21 +269,21 @@
                                         {{ $errors->first('password') }}
                                     </p>
                                 @else
-                                    <p class="auth-hint">Minimum 8 aksara. Gunakan gabungan huruf dan nombor.</p>
+                                    <p class="auth-hint">{{ __('auth.fields.password_hint') }}</p>
                                 @endif
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-password-confirmation" class="auth-label">Sahkan kata laluan</label>
+                                <label for="reg-password-confirmation" class="auth-label">{{ __('auth.fields.confirm_password') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="lock" :size="18" class="auth-input-icon" />
                                     <input id="reg-password-confirmation" type="password" name="password_confirmation" required minlength="8"
-                                           placeholder="Ulang kata laluan" autocomplete="new-password"
+                                           placeholder="{{ __('auth.fields.confirm_placeholder') }}" autocomplete="new-password"
                                            x-bind:type="showRegPasswordConfirmation ? 'text' : 'password'"
                                            @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password_confirmation')])>
                                     <button type="button" class="auth-eye"
                                             @click="showRegPasswordConfirmation = !showRegPasswordConfirmation"
-                                            :aria-label="showRegPasswordConfirmation ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                            :aria-label="showRegPasswordConfirmation ? '{{ __('auth.hide_password') }}' : '{{ __('auth.show_password') }}'">
                                         <span x-show="!showRegPasswordConfirmation"><x-icon name="eye" :size="18" /></span>
                                         <span x-show="showRegPasswordConfirmation" x-cloak><x-icon name="eye-off" :size="18" /></span>
                                     </button>
@@ -301,11 +297,11 @@
                             </div>
                         @else
                             <div class="auth-field">
-                                <label for="reg-name" class="auth-label">Nama penuh</label>
+                                <label for="reg-name" class="auth-label">{{ __('auth.fields.name') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="user" :size="18" class="auth-input-icon" />
                                     <input id="reg-name" type="text" name="name" required maxlength="255"
-                                           autocomplete="name" placeholder="Nama seperti dalam kad pengenalan"
+                                           autocomplete="name" placeholder="{{ __('auth.fields.name_placeholder') }}"
                                            value="{{ old('name') }}"
                                            @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('name')])>
                                 </div>
@@ -318,9 +314,9 @@
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-ic" class="auth-label">No Kad Pengenalan</label>
+                                <label for="reg-ic" class="auth-label">{{ __('auth.fields.ic') }}</label>
                                 <input id="reg-ic" type="text" name="ic_no" required maxlength="12" inputmode="numeric"
-                                       pattern="\d{12}" placeholder="12 digit tanpa sengkang"
+                                       pattern="\d{12}" placeholder="{{ __('auth.fields.ic_placeholder') }}"
                                        value="{{ old('ic_no') }}"
                                        @class(['auth-input', 'is-invalid' => $errors->has('ic_no')])>
                                 @if($errors->has('ic_no'))
@@ -333,7 +329,7 @@
 
                             <div class="auth-grid">
                                 <div class="auth-field">
-                                    <label for="reg-dob" class="auth-label">Tarikh lahir</label>
+                                    <label for="reg-dob" class="auth-label">{{ __('auth.fields.dob') }}</label>
                                     <input id="reg-dob" type="date" name="date_of_birth" required
                                            autocomplete="bday" value="{{ old('date_of_birth') }}"
                                            @class(['auth-input', 'is-invalid' => $errors->has('date_of_birth')])>
@@ -345,12 +341,12 @@
                                     @endif
                                 </div>
                                 <div class="auth-field">
-                                    <label for="reg-gender" class="auth-label">Jantina</label>
+                                    <label for="reg-gender" class="auth-label">{{ __('auth.fields.gender') }}</label>
                                     <select id="reg-gender" name="gender" required
                                             @class(['auth-select', 'is-invalid' => $errors->has('gender')])>
-                                        <option value="">Pilih</option>
-                                        <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>Lelaki</option>
-                                        <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>Perempuan</option>
+                                        <option value="">{{ __('common.actions.select') }}</option>
+                                        <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>{{ __('auth.fields.male') }}</option>
+                                        <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>{{ __('auth.fields.female') }}</option>
                                     </select>
                                     @if($errors->has('gender'))
                                         <p class="auth-error" role="alert">
@@ -362,7 +358,7 @@
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-phone" class="auth-label">No telefon</label>
+                                <label for="reg-phone" class="auth-label">{{ __('auth.fields.phone') }}</label>
                                 <input id="reg-phone" type="tel" name="phone" required maxlength="15"
                                        autocomplete="tel" placeholder="0123456789"
                                        value="{{ old('phone') }}"
@@ -376,11 +372,11 @@
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-email" class="auth-label">Emel</label>
+                                <label for="reg-email" class="auth-label">{{ __('auth.fields.email') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="mail" :size="18" class="auth-input-icon" />
                                     <input id="reg-email" type="email" name="email" required maxlength="255"
-                                           autocomplete="email" placeholder="nama@contoh.com"
+                                           autocomplete="email" placeholder="{{ __('auth.fields.email_placeholder_public') }}"
                                            value="{{ old('email') }}"
                                            @class(['auth-input', 'auth-input--icon', 'is-invalid' => $errors->has('email')])>
                                 </div>
@@ -393,9 +389,9 @@
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-address" class="auth-label">Alamat</label>
+                                <label for="reg-address" class="auth-label">{{ __('auth.fields.address') }}</label>
                                 <input id="reg-address" type="text" name="address" required maxlength="500"
-                                       autocomplete="street-address" placeholder="Alamat lengkap"
+                                       autocomplete="street-address" placeholder="{{ __('auth.fields.address_placeholder') }}"
                                        value="{{ old('address') }}"
                                        @class(['auth-input', 'is-invalid' => $errors->has('address')])>
                                 @if($errors->has('address'))
@@ -408,9 +404,9 @@
 
                             <div class="auth-grid">
                                 <div class="auth-field">
-                                    <label for="reg-district" class="auth-label">Daerah</label>
+                                    <label for="reg-district" class="auth-label">{{ __('auth.fields.district') }}</label>
                                     <input id="reg-district" type="text" name="district" required maxlength="100"
-                                           autocomplete="address-level2" placeholder="Daerah"
+                                           autocomplete="address-level2" placeholder="{{ __('auth.fields.district_placeholder') }}"
                                            value="{{ old('district') }}"
                                            @class(['auth-input', 'is-invalid' => $errors->has('district')])>
                                     @if($errors->has('district'))
@@ -421,10 +417,10 @@
                                     @endif
                                 </div>
                                 <div class="auth-field">
-                                    <label for="reg-state" class="auth-label">Negeri</label>
+                                    <label for="reg-state" class="auth-label">{{ __('auth.fields.state') }}</label>
                                     <select id="reg-state" name="state" required
                                             @class(['auth-select', 'is-invalid' => $errors->has('state')])>
-                                        <option value="">Pilih</option>
+                                        <option value="">{{ __('common.actions.select') }}</option>
                                         @foreach($states as $state)
                                             <option value="{{ $state }}" {{ old('state') === $state ? 'selected' : '' }}>{{ $state }}</option>
                                         @endforeach
@@ -439,9 +435,9 @@
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-postcode" class="auth-label">Poskod</label>
+                                <label for="reg-postcode" class="auth-label">{{ __('auth.fields.postcode') }}</label>
                                 <input id="reg-postcode" type="text" name="postcode" required maxlength="5" inputmode="numeric"
-                                       pattern="\d{5}" autocomplete="postal-code" placeholder="5 digit"
+                                       pattern="\d{5}" autocomplete="postal-code" placeholder="{{ __('auth.fields.postcode_placeholder') }}"
                                        value="{{ old('postcode') }}"
                                        @class(['auth-input', 'is-invalid' => $errors->has('postcode')])>
                                 @if($errors->has('postcode'))
@@ -453,16 +449,16 @@
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-password" class="auth-label">Kata laluan</label>
+                                <label for="reg-password" class="auth-label">{{ __('auth.fields.password') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="lock" :size="18" class="auth-input-icon" />
                                     <input id="reg-password" type="password" name="password" required minlength="8"
-                                           placeholder="Minimum 8 aksara" autocomplete="new-password"
+                                           placeholder="{{ __('auth.fields.password_new_placeholder') }}" autocomplete="new-password"
                                            x-bind:type="showRegPassword ? 'text' : 'password'"
                                            @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password')])>
                                     <button type="button" class="auth-eye"
                                             @click="showRegPassword = !showRegPassword"
-                                            :aria-label="showRegPassword ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                            :aria-label="showRegPassword ? '{{ __('auth.hide_password') }}' : '{{ __('auth.show_password') }}'">
                                         <span x-show="!showRegPassword"><x-icon name="eye" :size="18" /></span>
                                         <span x-show="showRegPassword" x-cloak><x-icon name="eye-off" :size="18" /></span>
                                     </button>
@@ -473,21 +469,21 @@
                                         {{ $errors->first('password') }}
                                     </p>
                                 @else
-                                    <p class="auth-hint">Minimum 8 aksara. Gunakan gabungan huruf dan nombor.</p>
+                                    <p class="auth-hint">{{ __('auth.fields.password_hint') }}</p>
                                 @endif
                             </div>
 
                             <div class="auth-field">
-                                <label for="reg-password-confirmation" class="auth-label">Sahkan kata laluan</label>
+                                <label for="reg-password-confirmation" class="auth-label">{{ __('auth.fields.confirm_password') }}</label>
                                 <div class="auth-input-wrap">
                                     <x-icon name="lock" :size="18" class="auth-input-icon" />
                                     <input id="reg-password-confirmation" type="password" name="password_confirmation" required minlength="8"
-                                           placeholder="Ulang kata laluan" autocomplete="new-password"
+                                           placeholder="{{ __('auth.fields.confirm_placeholder') }}" autocomplete="new-password"
                                            x-bind:type="showRegPasswordConfirmation ? 'text' : 'password'"
                                            @class(['auth-input', 'auth-input--icon', 'auth-input--password', 'is-invalid' => $errors->has('password_confirmation')])>
                                     <button type="button" class="auth-eye"
                                             @click="showRegPasswordConfirmation = !showRegPasswordConfirmation"
-                                            :aria-label="showRegPasswordConfirmation ? 'Sembunyikan kata laluan' : 'Tunjukkan kata laluan'">
+                                            :aria-label="showRegPasswordConfirmation ? '{{ __('auth.hide_password') }}' : '{{ __('auth.show_password') }}'">
                                         <span x-show="!showRegPasswordConfirmation"><x-icon name="eye" :size="18" /></span>
                                         <span x-show="showRegPasswordConfirmation" x-cloak><x-icon name="eye-off" :size="18" /></span>
                                     </button>
@@ -504,22 +500,22 @@
                         <label class="auth-check auth-check--top">
                             <input type="checkbox" required>
                             <span>
-                                Saya bersetuju dengan Terma &amp; Syarat serta Notis Privasi J-ZAKAT.
+                                {{ __('auth.terms') }}
                             </span>
                         </label>
 
                         <button type="submit" class="auth-submit" :disabled="submittingSignUp">
-                            <span x-show="!submittingSignUp">Daftar Akaun</span>
+                            <span x-show="!submittingSignUp">{{ __('auth.login.signup_submit') }}</span>
                             <span x-show="submittingSignUp" x-cloak class="inline-flex items-center gap-2">
                                 <span class="auth-spinner"></span>
-                                Memproses...
+                                {{ __('auth.login.processing') }}
                             </span>
                             <x-icon name="arrow-right" :size="17" x-show="!submittingSignUp" />
                         </button>
 
                         <p class="auth-switch">
-                            Sudah mempunyai akaun?
-                            <a href="#" @click.prevent="tab = 'signin'">Log masuk di sini</a>
+                            {{ __('auth.login.has_account') }}
+                            <a href="#" @click.prevent="tab = 'signin'">{{ __('auth.login.signup_login') }}</a>
                         </p>
                     </form>
                 </div>
