@@ -79,7 +79,6 @@
     {{-- ============================== HERO ============================== --}}
     <section id="utama" class="landing-hero">
         <div class="landing-hero__photo"></div>
-        <div class="pattern-mask islamic-pattern opacity-[0.06]"></div>
         <div class="landing-hero__glow"></div>
 
         <div class="relative max-w-7xl mx-auto px-5 md:px-8 pt-16 md:pt-24 pb-20 md:pb-28">
