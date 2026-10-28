@@ -50,8 +50,13 @@ class HadKifayahSettingController extends Controller
         NotificationService::notifyRoles(
             ['admin', 'pegawai'],
             'had_kifayah_updated',
-            'Had Kifayah dikemas kini',
-            $nilaiKetua ? "Ketua Keluarga: RM {$nilaiKetua} · ".now()->diffForHumans() : now()->diffForHumans(),
+            __('hadkifayah.notification.updated_title'),
+            $nilaiKetua
+                ? __('hadkifayah.notification.updated_body', [
+                    'value' => $nilaiKetua,
+                    'time' => now()->locale(app()->getLocale())->diffForHumans(),
+                ])
+                : now()->locale(app()->getLocale())->diffForHumans(),
             'fa-solid fa-calculator',
             'primary',
             route('hadkifayah.settings')
@@ -59,7 +64,7 @@ class HadKifayahSettingController extends Controller
 
         return redirect()
             ->route('hadkifayah.settings')
-            ->with('success', 'Tetapan Had Kifayah telah dikemas kini.');
+            ->with('success', __('hadkifayah.settings.updated'));
     }
 
     /**

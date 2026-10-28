@@ -60,7 +60,7 @@ class HouseholdController extends Controller
         $household = $this->householdService->findByHouseholdId($id);
 
         if (! $household) {
-            abort(404, 'Isi rumah tidak dijumpai.');
+            abort(404, __('household.not_found'));
         }
 
         $aiAnalysis = $this->aiService->calculateHouseholdScore($household);

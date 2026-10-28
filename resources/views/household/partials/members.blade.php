@@ -1,4 +1,4 @@
-<x-section-header title="Ahli Isi Rumah" icon="fa-users" description="{{ $household->total_members }} orang ahli keluarga" />
+<x-section-header :title="__('household.labels.household_members')" icon="fa-users" :description="__('household.members.description', ['count' => $household->total_members])" />
 
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
     @php
@@ -29,7 +29,7 @@
                             {{ $member->hubungan }}
                         </span>
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold rounded-pill bg-muted text-secondary">
-                            {{ $member->umur }} thn
+                            {{ $member->umur }} {{ __('household.members.age_unit') }}
                         </span>
                     </div>
                 </div>
@@ -37,20 +37,20 @@
 
             <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-divider">
                 <div>
-                    <p class="text-[10px] uppercase tracking-wide text-tertiary">Pekerjaan</p>
+                    <p class="text-[10px] uppercase tracking-wide text-tertiary">{{ __('household.labels.occupation') }}</p>
                     <p class="text-small text-text font-medium mt-0.5 truncate">{{ $member->pekerjaan ?? '-' }}</p>
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase tracking-wide text-tertiary">Pendidikan</p>
+                    <p class="text-[10px] uppercase tracking-wide text-tertiary">{{ __('household.labels.education') }}</p>
                     <p class="text-small text-text font-medium mt-0.5 truncate">{{ $member->pendidikan ?? '-' }}</p>
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase tracking-wide text-tertiary">Pendapatan</p>
+                    <p class="text-[10px] uppercase tracking-wide text-tertiary">{{ __('household.labels.income') }}</p>
                     <p class="text-small text-text font-semibold mt-0.5">RM {{ number_format($member->pendapatan_bulanan, 2) }}</p>
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase tracking-wide text-tertiary">Kesihatan</p>
-                    <p class="text-small text-text font-medium mt-0.5 truncate">{{ $member->status_kesihatan ?? 'Sihat' }}</p>
+                    <p class="text-[10px] uppercase tracking-wide text-tertiary">{{ __('household.labels.health') }}</p>
+                    <p class="text-small text-text font-medium mt-0.5 truncate">{{ $member->status_kesihatan ?? __('household.members.healthy') }}</p>
                 </div>
             </div>
 

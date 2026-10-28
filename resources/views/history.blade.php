@@ -1,23 +1,23 @@
 @extends('layouts.app', [
-    'title' => 'Senarai Permohonan',
-    'subtitle' => 'Pengurusan & carian permohonan',
+    'title' => __('applications.history.title'),
+    'subtitle' => __('applications.history.subtitle'),
 ])
 @section('content')
 @php
     $current = request('status');
     $search  = request('search');
     $filters = [
-        ''                 => ['label' => 'Semua',     'tone' => 'primary', 'count' => $totals['all']         ?? null],
-        'Layak'            => ['label' => 'Layak',     'tone' => 'success', 'count' => $totals['layak']       ?? null],
-        'Tidak Layak'      => ['label' => 'Tidak Layak','tone' => 'danger',  'count' => $totals['tidak_layak'] ?? null],
-        'Dalam Semakan'    => ['label' => 'Semakan',   'tone' => 'warning', 'count' => $totals['semakan']     ?? null],
+        ''                 => ['label' => __('applications.history.filter_all'), 'tone' => 'primary', 'count' => $totals['all']         ?? null],
+        'Layak'            => ['label' => __('common.status.layak'),     'tone' => 'success', 'count' => $totals['layak']       ?? null],
+        'Tidak Layak'      => ['label' => __('common.status.tidak_layak'),'tone' => 'danger',  'count' => $totals['tidak_layak'] ?? null],
+        'Dalam Semakan'    => ['label' => __('applications.history.filter_review'),   'tone' => 'warning', 'count' => $totals['semakan']     ?? null],
     ];
 @endphp
 
-<x-page-header title="Senarai Permohonan" subtitle="{{ $items->total() }} rekod dijumpai" eyebrow="Permohonan" icon="fa-table-list">
+<x-page-header title="{{ __('applications.history.title') }}" subtitle="{{ trans_choice('applications.history.records_found', $items->total()) }}" eyebrow="{{ __('applications.history.eyebrow') }}" icon="fa-table-list">
     <x-slot:actions>
-        <x-app-button variant="outline" size="md" icon="fa-file-import" href="{{ route('importcsv') }}">Import CSV</x-app-button>
-        <x-app-button variant="primary" size="md" icon="fa-plus" href="{{ route('profilasnaf') }}">Tambah</x-app-button>
+        <x-app-button variant="outline" size="md" icon="fa-file-import" href="{{ route('importcsv') }}">{{ __('applications.history.import_csv') }}</x-app-button>
+        <x-app-button variant="primary" size="md" icon="fa-plus" href="{{ route('profilasnaf') }}">{{ __('applications.history.add') }}</x-app-button>
     </x-slot:actions>
 </x-page-header>
 
@@ -25,7 +25,7 @@
     <form method="GET" class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center">
         <div class="relative flex-1 max-w-md">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-tertiary text-[13px] pointer-events-none"></i>
-            <input type="search" name="search" value="{{ $search }}" placeholder="Cari nama, No. IC, atau IC Ketua Rumah…" class="input-base pl-10 py-2.5 text-[13px]">
+            <input type="search" name="search" value="{{ $search }}" placeholder="{{ __('applications.history.search_placeholder') }}" class="input-base pl-10 py-2.5 text-[13px]">
         </div>
         <div class="flex items-center gap-2 flex-wrap">
             @foreach($filters as $value => $f)
@@ -57,13 +57,13 @@
         <table class="app-table">
             <thead>
                 <tr>
-                    <th>Nama</th>
-                    <th>No. IC</th>
-                    <th>IC Ketua Rumah</th>
-                    <th class="text-right">Pendapatan</th>
-                    <th class="text-right">Had Kifayah</th>
-                    <th>Status</th>
-                    <th>Tarikh</th>
+                    <th>{{ __('applications.history.column_name') }}</th>
+                    <th>{{ __('applications.history.column_ic') }}</th>
+                    <th>{{ __('applications.history.column_head_ic') }}</th>
+                    <th class="text-right">{{ __('applications.history.column_income') }}</th>
+                    <th class="text-right">{{ __('applications.history.column_kifayah') }}</th>
+                    <th>{{ __('applications.history.column_status') }}</th>
+                    <th>{{ __('applications.history.column_date') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,11 +80,11 @@
                         <td class="text-right tabular-nums">RM {{ number_format((float) $p->pendapatan, 2) }}</td>
                         <td class="text-right tabular-nums">RM {{ number_format((float) $p->had_kifayah, 2) }}</td>
                         <td><x-status-badge :status="$p->statusSlug()" /></td>
-                        <td class="text-secondary">{{ $p->created_at->format('d M Y') }}</td>
+                        <td class="text-secondary">{{ $p->created_at->locale(app()->getLocale())->translatedFormat('d M Y') }}</td>
                     </tr>
                 @empty
                     <tr><td colspan="7">
-                        <x-empty-state icon="fa-folder-open" title="Tiada rekod dijumpai" :description="($search || $current) ? 'Cuba ubah carian atau penapis anda.' : 'Tambah permohonan baharu untuk mula.'" />
+                        <x-empty-state icon="fa-folder-open" title="{{ __('applications.history.empty_title') }}" :description="($search || $current) ? __('applications.history.empty_filtered') : __('applications.history.empty_default')" />
                     </td></tr>
                 @endforelse
             </tbody>

@@ -24,6 +24,7 @@ return [
         'view_all' => 'View all',
         'processing' => 'Processing...',
         'select' => 'Select',
+        'continue' => 'Continue',
     ],
 
     'status' => [

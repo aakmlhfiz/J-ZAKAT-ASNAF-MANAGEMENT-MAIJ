@@ -29,17 +29,17 @@ class DashboardController extends Controller
 
         $hasData = $stats['total'] > 0;
 
-        $trendLabels = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogos', 'Sep', 'Okt', 'Nov', 'Dis'];
+        $trendLabels = __('common.months_short');
         $trendData = $hasData
             ? $this->getRealTrend($applications)
             : [3, 5, 4, 7, 6, 9, 8, 12, 10, 14, 11, 15];
 
         $statusData = [
-            'Draf' => $stats['draft'],
-            'Dihantar' => $stats['submitted'],
-            'Dalam Semakan' => $stats['under_review'],
-            'Diluluskan' => $stats['approved'],
-            'Ditolak' => $stats['rejected'],
+            __('applications.status.draft') => $stats['draft'],
+            __('applications.status.submitted') => $stats['submitted'],
+            __('applications.status.under_review') => $stats['under_review'],
+            __('applications.status.approved') => $stats['approved'],
+            __('applications.status.rejected') => $stats['rejected'],
         ];
 
         return view('portal.dashboard', compact(

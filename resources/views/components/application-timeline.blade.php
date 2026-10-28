@@ -4,12 +4,12 @@
     $status = $application->status ?? 'draft';
 
     $steps = [
-        ['key' => 'draft', 'label' => 'Draf'],
-        ['key' => 'submitted', 'label' => 'Dihantar'],
-        ['key' => 'under_review', 'label' => 'Dalam Semakan'],
-        ['key' => 'kewangan', 'label' => 'Semakan Kewangan'],
-        ['key' => 'pegawai', 'label' => 'Semakan Pegawai'],
-        ['key' => 'decision', 'label' => 'Keputusan'],
+        ['key' => 'draft', 'label' => __('applications.timeline.draft')],
+        ['key' => 'submitted', 'label' => __('applications.timeline.submitted')],
+        ['key' => 'under_review', 'label' => __('applications.timeline.under_review')],
+        ['key' => 'kewangan', 'label' => __('applications.timeline.finance_review')],
+        ['key' => 'pegawai', 'label' => __('applications.timeline.officer_review')],
+        ['key' => 'decision', 'label' => __('applications.timeline.decision')],
     ];
 
     $currentIndex = match ($status) {
@@ -50,7 +50,7 @@
                     <p class="mt-2 text-[11px] font-medium text-center leading-tight
                         {{ $done || $active || ($isDecision && $decisionDone) ? 'text-text' : 'text-tertiary' }}">
                         @if ($isDecision && $decisionDone)
-                            {{ $decisionApproved ? 'Diluluskan' : 'Ditolak' }}
+                            {{ $decisionApproved ? __('applications.timeline.approved') : __('applications.timeline.rejected') }}
                         @else
                             {{ $step['label'] }}
                         @endif

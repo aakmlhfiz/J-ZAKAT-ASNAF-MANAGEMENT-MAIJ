@@ -1,12 +1,12 @@
 @extends('layouts.app', [
-    'title' => 'Kalkulator Had Al-Kifayah',
-    'subtitle' => 'Kira kelayakan mengikut metodologi MAIDAM',
+    'title' => __('hadkifayah.title'),
+    'subtitle' => __('hadkifayah.subtitle'),
 ])
 
 @section('content')
-    <x-page-header title="Kalkulator Had Al-Kifayah" subtitle="Kira kelayakan mengikut metodologi MAIDAM" eyebrow="Penilaian AI" icon="fa-calculator">
+    <x-page-header :title="__('hadkifayah.title')" :subtitle="__('hadkifayah.subtitle')" :eyebrow="__('hadkifayah.eyebrow')" icon="fa-calculator">
         <x-slot:actions>
-            <x-app-button variant="outline" size="md" icon="fa-sliders" href="{{ route('hadkifayah.settings') }}">Tetapan</x-app-button>
+            <x-app-button variant="outline" size="md" icon="fa-sliders" href="{{ route('hadkifayah.settings') }}">{{ __('hadkifayah.settings_button') }}</x-app-button>
         </x-slot:actions>
     </x-page-header>
 
@@ -132,6 +132,19 @@
                 return this.result.status === 'Layak' ? 'fa-circle-check' : 'fa-circle-xmark';
             },
 
+            get statusLabel() {
+                if (!this.result) return '—';
+                return this.result.status === 'Layak'
+                    ? @js(__('common.status.layak'))
+                    : @js(__('common.status.tidak_layak'));
+            },
+
+            get dependantUnit() {
+                return this.totalTanggungan === 1
+                    ? @js(__('hadkifayah.needs.person_one'))
+                    : @js(__('hadkifayah.needs.person_many'));
+            },
+
             reset() {
                 this.pendapatan_pemohon = 0;
                 this.pendapatan_pasangan = 0;
@@ -198,58 +211,58 @@
         class="grid grid-cols-1 lg:grid-cols-3 gap-6"
     >
         <div class="lg:col-span-2 space-y-6">
-            <x-form-section title="Maklumat Pendapatan" description="Jumlah pendapatan isi rumah sebulan (A)" icon="fa-wallet" accent="primary">
+            <x-form-section :title="__('hadkifayah.income.title')" :description="__('hadkifayah.income.description')" icon="fa-wallet" accent="primary">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <x-app-input label="Pendapatan Pemohon (RM)" name="pendapatan_pemohon" type="number" step="0.01" min="0" x-model.number="pendapatan_pemohon" placeholder="0.00" icon="fa-user" />
-                    <x-app-input label="Pendapatan Pasangan (RM)" name="pendapatan_pasangan" type="number" step="0.01" min="0" x-model.number="pendapatan_pasangan" placeholder="0.00" icon="fa-user" />
-                    <x-app-input label="Pendapatan Anak (RM)" name="pendapatan_anak" type="number" step="0.01" min="0" x-model.number="pendapatan_anak" placeholder="0.00" icon="fa-children" />
-                    <x-app-input label="Pendapatan Lain (RM)" name="pendapatan_lain" type="number" step="0.01" min="0" x-model.number="pendapatan_lain" placeholder="0.00" icon="fa-coins" />
+                    <x-app-input :label="__('hadkifayah.income.applicant')" name="pendapatan_pemohon" type="number" step="0.01" min="0" x-model.number="pendapatan_pemohon" placeholder="0.00" icon="fa-user" />
+                    <x-app-input :label="__('hadkifayah.income.spouse')" name="pendapatan_pasangan" type="number" step="0.01" min="0" x-model.number="pendapatan_pasangan" placeholder="0.00" icon="fa-user" />
+                    <x-app-input :label="__('hadkifayah.income.child')" name="pendapatan_anak" type="number" step="0.01" min="0" x-model.number="pendapatan_anak" placeholder="0.00" icon="fa-children" />
+                    <x-app-input :label="__('hadkifayah.income.other')" name="pendapatan_lain" type="number" step="0.01" min="0" x-model.number="pendapatan_lain" placeholder="0.00" icon="fa-coins" />
                 </div>
                 <div class="soft-panel p-4 flex items-center justify-between">
-                    <span class="text-small text-secondary font-medium">Jumlah Pendapatan Isi Rumah (A)</span>
+                    <span class="text-small text-secondary font-medium">{{ __('hadkifayah.income.total') }}</span>
                     <span class="text-metric text-primary tabular-nums" x-text="'RM ' + pendapatanTotal.toFixed(2)"></span>
                 </div>
             </x-form-section>
 
-            <x-form-section title="Keperluan Had Kifayah" description="Kandungan isi rumah mengikut kategori tanggungan" icon="fa-people-group" accent="success">
+            <x-form-section :title="__('hadkifayah.needs.title')" :description="__('hadkifayah.needs.description')" icon="fa-people-group" accent="success">
                 <div class="space-y-5">
                     <div>
-                        <p class="text-eyebrow text-tertiary mb-3">Kategori Ketua Keluarga</p>
+                        <p class="text-eyebrow text-tertiary mb-3">{{ __('hadkifayah.needs.head_category') }}</p>
                         <div class="flex items-center justify-between soft-panel p-3">
-                            <span class="text-body text-text">Ketua Keluarga</span>
-                            <span class="text-body text-text font-semibold">1 orang <span class="text-secondary font-normal">(RM {{ number_format($rates['Ketua Keluarga'] ?? 0, 2) }})</span></span>
+                            <span class="text-body text-text">{{ __('hadkifayah.needs.head') }}</span>
+                            <span class="text-body text-text font-semibold">{{ __('hadkifayah.needs.head_count') }} <span class="text-secondary font-normal">(RM {{ number_format($rates['Ketua Keluarga'] ?? 0, 2) }})</span></span>
                         </div>
                     </div>
 
                     <div>
-                        <p class="text-eyebrow text-tertiary mb-3">Kategori Dewasa</p>
+                        <p class="text-eyebrow text-tertiary mb-3">{{ __('hadkifayah.needs.adult_category') }}</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <x-app-input label="Isteri / Suami" name="n_isteri_suami" type="number" min="0" max="20" step="1" x-model.number="n_isteri_suami" placeholder="0" hint="RM {{ number_format($rates['Dewasa']['Isteri / Suami'] ?? 0, 2) }} / orang" />
-                            <x-app-input label="Ibu Bapa Tanggungan" name="n_ibu_bapa" type="number" min="0" max="20" step="1" x-model.number="n_ibu_bapa" placeholder="0" hint="RM {{ number_format($rates['Dewasa']['Ibu Bapa Tanggungan'] ?? 0, 2) }} / orang" />
-                            <x-app-input label="Dewasa Tidak Bekerja" name="n_dewasa_tidak_bekerja" type="number" min="0" max="20" step="1" x-model.number="n_dewasa_tidak_bekerja" placeholder="0" hint="RM {{ number_format($rates['Dewasa']['Dewasa Tidak Bekerja'] ?? 0, 2) }} / orang" />
-                            <x-app-input label="Dewasa Bekerja Tetapi Masih Ditanggung" name="n_dewasa_bekerja_tanggung" type="number" min="0" max="20" step="1" x-model.number="n_dewasa_bekerja_tanggung" placeholder="0" hint="RM {{ number_format($rates['Dewasa']['Dewasa Bekerja Tetapi Masih Ditanggung'] ?? 0, 2) }} / orang" />
+                            <x-app-input :label="__('hadkifayah.needs.spouse')" name="n_isteri_suami" type="number" min="0" max="20" step="1" x-model.number="n_isteri_suami" placeholder="0" :hint="__('hadkifayah.needs.rate_per_person', ['rate' => number_format($rates['Dewasa']['Isteri / Suami'] ?? 0, 2)])" />
+                            <x-app-input :label="__('hadkifayah.needs.parents')" name="n_ibu_bapa" type="number" min="0" max="20" step="1" x-model.number="n_ibu_bapa" placeholder="0" :hint="__('hadkifayah.needs.rate_per_person', ['rate' => number_format($rates['Dewasa']['Ibu Bapa Tanggungan'] ?? 0, 2)])" />
+                            <x-app-input :label="__('hadkifayah.needs.adult_unemployed')" name="n_dewasa_tidak_bekerja" type="number" min="0" max="20" step="1" x-model.number="n_dewasa_tidak_bekerja" placeholder="0" :hint="__('hadkifayah.needs.rate_per_person', ['rate' => number_format($rates['Dewasa']['Dewasa Tidak Bekerja'] ?? 0, 2)])" />
+                            <x-app-input :label="__('hadkifayah.needs.adult_working_dependant')" name="n_dewasa_bekerja_tanggung" type="number" min="0" max="20" step="1" x-model.number="n_dewasa_bekerja_tanggung" placeholder="0" :hint="__('hadkifayah.needs.rate_per_person', ['rate' => number_format($rates['Dewasa']['Dewasa Bekerja Tetapi Masih Ditanggung'] ?? 0, 2)])" />
                         </div>
                     </div>
 
                     <div>
-                        <p class="text-eyebrow text-tertiary mb-3">Kategori Pendidikan</p>
+                        <p class="text-eyebrow text-tertiary mb-3">{{ __('hadkifayah.needs.education_category') }}</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <x-app-input label="Dewasa Belajar IPT" name="n_ipt" type="number" min="0" max="20" step="1" x-model.number="n_ipt" placeholder="0" hint="RM {{ number_format($rates['IPT'] ?? 0, 2) }} / orang" />
-                            <x-app-input label="Remaja Sekolah Menengah" name="n_remaja" type="number" min="0" max="20" step="1" x-model.number="n_remaja" placeholder="0" hint="RM {{ number_format($rates['Remaja'] ?? 0, 2) }} / orang" />
-                            <x-app-input label="Kanak-Kanak Sekolah Rendah" name="n_kanak_rendah" type="number" min="0" max="20" step="1" x-model.number="n_kanak_rendah" placeholder="0" hint="RM {{ number_format($rates['Kanak-Kanak']['Sekolah Rendah'] ?? 0, 2) }} / orang" />
-                            <x-app-input label="Kanak-Kanak Tadika" name="n_kanak_tadika" type="number" min="0" max="20" step="1" x-model.number="n_kanak_tadika" placeholder="0" hint="RM {{ number_format($rates['Kanak-Kanak']['Tadika'] ?? 0, 2) }} / orang" />
+                            <x-app-input :label="__('hadkifayah.needs.higher_education')" name="n_ipt" type="number" min="0" max="20" step="1" x-model.number="n_ipt" placeholder="0" :hint="__('hadkifayah.needs.rate_per_person', ['rate' => number_format($rates['IPT'] ?? 0, 2)])" />
+                            <x-app-input :label="__('hadkifayah.needs.teenager')" name="n_remaja" type="number" min="0" max="20" step="1" x-model.number="n_remaja" placeholder="0" :hint="__('hadkifayah.needs.rate_per_person', ['rate' => number_format($rates['Remaja'] ?? 0, 2)])" />
+                            <x-app-input :label="__('hadkifayah.needs.primary_school')" name="n_kanak_rendah" type="number" min="0" max="20" step="1" x-model.number="n_kanak_rendah" placeholder="0" :hint="__('hadkifayah.needs.rate_per_person', ['rate' => number_format($rates['Kanak-Kanak']['Sekolah Rendah'] ?? 0, 2)])" />
+                            <x-app-input :label="__('hadkifayah.needs.kindergarten')" name="n_kanak_tadika" type="number" min="0" max="20" step="1" x-model.number="n_kanak_tadika" placeholder="0" :hint="__('hadkifayah.needs.rate_per_person', ['rate' => number_format($rates['Kanak-Kanak']['Tadika'] ?? 0, 2)])" />
                         </div>
                     </div>
 
                     <div class="soft-panel p-3 flex items-center gap-2 text-small">
                         <i class="fa-solid fa-circle-info text-primary text-[13px]"></i>
-                        <span class="text-secondary">Jumlah tanggungan:</span>
-                        <span class="text-text font-semibold" x-text="totalTanggungan + ' orang'"></span>
+                        <span class="text-secondary">{{ __('hadkifayah.needs.total_dependants') }}</span>
+                        <span class="text-text font-semibold" x-text="totalTanggungan + ' ' + dependantUnit"></span>
                     </div>
                 </div>
             </x-form-section>
 
-            <x-form-section title="Kategori Perumahan" description="Status tempat tinggal isi rumah" icon="fa-house" accent="warning">
+            <x-form-section :title="__('hadkifayah.housing.title')" :description="__('hadkifayah.housing.description')" icon="fa-house" accent="warning">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label class="cursor-pointer">
                         <input type="radio" x-model="perumahan" value="sendiri" class="peer sr-only">
@@ -260,8 +273,8 @@
                                     <i class="fa-solid fa-house text-[18px]"></i>
                                 </div>
                                 <div>
-                                    <p class="text-body text-text font-semibold">Rumah Sendiri</p>
-                                    <p class="text-small text-secondary">Tempat tinggal milik sendiri</p>
+                                    <p class="text-body text-text font-semibold">{{ __('hadkifayah.housing.own') }}</p>
+                                    <p class="text-small text-secondary">{{ __('hadkifayah.housing.own_description') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -275,8 +288,8 @@
                                     <i class="fa-solid fa-key text-[18px]"></i>
                                 </div>
                                 <div>
-                                    <p class="text-body text-text font-semibold">Rumah Sewa</p>
-                                    <p class="text-small text-secondary">Disewa <span class="text-text font-medium">+ RM {{ number_format($rates['Rumah Sewa'] ?? 0, 2) }}</span></p>
+                                    <p class="text-body text-text font-semibold">{{ __('hadkifayah.housing.rent') }}</p>
+                                    <p class="text-small text-secondary">{{ __('hadkifayah.housing.rent_description') }} <span class="text-text font-medium">+ RM {{ number_format($rates['Rumah Sewa'] ?? 0, 2) }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -284,28 +297,28 @@
                 </div>
             </x-form-section>
 
-            <x-form-section title="Kategori Keperluan" description="Perbelanjaan tetap bulanan isi rumah" icon="fa-receipt" accent="info">
+            <x-form-section :title="__('hadkifayah.expenses.title')" :description="__('hadkifayah.expenses.description')" icon="fa-receipt" accent="info">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <x-app-input label="Utiliti (RM)" name="utiliti_input" type="number" step="0.01" min="0" x-model.number="utiliti_input" placeholder="0.00" icon="fa-bolt" />
-                    <x-app-input label="Pengangkutan (RM)" name="pengangkutan_input" type="number" step="0.01" min="0" x-model.number="pengangkutan_input" placeholder="0.00" icon="fa-bus" />
-                    <x-app-input label="Perubatan (RM)" name="perubatan_input" type="number" step="0.01" min="0" x-model.number="perubatan_input" placeholder="0.00" icon="fa-briefcase-medical" />
+                    <x-app-input :label="__('hadkifayah.expenses.utilities')" name="utiliti_input" type="number" step="0.01" min="0" x-model.number="utiliti_input" placeholder="0.00" icon="fa-bolt" />
+                    <x-app-input :label="__('hadkifayah.expenses.transport')" name="pengangkutan_input" type="number" step="0.01" min="0" x-model.number="pengangkutan_input" placeholder="0.00" icon="fa-bus" />
+                    <x-app-input :label="__('hadkifayah.expenses.medical')" name="perubatan_input" type="number" step="0.01" min="0" x-model.number="perubatan_input" placeholder="0.00" icon="fa-briefcase-medical" />
                 </div>
             </x-form-section>
 
             <div class="flex items-center gap-3 flex-wrap">
-                <x-app-button variant="primary" size="lg" icon="fa-calculator" @click="runPreview()">Kira Semula</x-app-button>
-                <x-app-button variant="secondary" size="lg" icon="fa-rotate-left" @click="reset()">Set Semula</x-app-button>
-                <x-app-button variant="outline" size="lg" icon="fa-print" @click="printResult()">Cetak</x-app-button>
+                <x-app-button variant="primary" size="lg" icon="fa-calculator" @click="runPreview()">{{ __('hadkifayah.buttons.recalculate') }}</x-app-button>
+                <x-app-button variant="secondary" size="lg" icon="fa-rotate-left" @click="reset()">{{ __('hadkifayah.buttons.reset') }}</x-app-button>
+                <x-app-button variant="outline" size="lg" icon="fa-print" @click="printResult()">{{ __('hadkifayah.buttons.print') }}</x-app-button>
             </div>
         </div>
 
         <div class="space-y-6 lg:sticky lg:top-6 lg:self-start">
-            <x-result-card label="Jumlah Pendapatan (A)" subtext="Pendapatan isi rumah" icon="fa-wallet" status="primary" accent="primary">
+            <x-result-card :label="__('hadkifayah.result.income_total')" :subtext="__('hadkifayah.result.income_subtext')" icon="fa-wallet" status="primary" accent="primary">
                 <p class="text-metric text-text mt-1 tabular-nums" x-text="'RM ' + pendapatanTotal.toFixed(2)"></p>
-                <p class="text-small text-secondary mt-2">Auto-kira dari 4 sumber pendapatan</p>
+                <p class="text-small text-secondary mt-2">{{ __('hadkifayah.income.auto_hint') }}</p>
             </x-result-card>
 
-            <x-result-card label="Jumlah Had Kifayah (C)" subtext="Garis kecukupan minimum" icon="fa-calculator" status="primary" accent="success">
+            <x-result-card :label="__('hadkifayah.result.threshold_total')" :subtext="__('hadkifayah.result.threshold_subtext')" icon="fa-calculator" status="primary" accent="success">
                 <p class="text-metric text-text mt-1 tabular-nums" x-text="result ? 'RM ' + Number(result.had_kifayah_total).toFixed(2) : 'RM 0.00'"></p>
                 <div class="mt-3 pt-3 border-t border-divider space-y-1.5 text-small" x-show="result">
                     <template x-for="row in (result ? result.breakdown : [])" :key="row.label">
@@ -317,15 +330,15 @@
                 </div>
             </x-result-card>
 
-            <x-result-card label="Perbezaan (A − C)" subtext="Baki kelayakan" icon="fa-scale-balanced" x-bind:status="result && result.baki < 0 ? 'success' : 'danger'" x-bind:accent="result && result.baki < 0 ? 'success' : 'danger'">
+            <x-result-card :label="__('hadkifayah.result.difference')" :subtext="__('hadkifayah.result.difference_subtext')" icon="fa-scale-balanced" x-bind:status="result && result.baki < 0 ? 'success' : 'danger'" x-bind:accent="result && result.baki < 0 ? 'success' : 'danger'">
                 <p class="text-metric text-text mt-1 tabular-nums" x-text="result ? 'RM ' + Number(result.baki).toFixed(2) : 'RM 0.00'"></p>
             </x-result-card>
 
             <x-app-card class="p-6" :hover="false" elevated>
                 <div class="flex items-center justify-between mb-5">
                     <div>
-                        <p class="text-eyebrow text-primary">Penilaian Pintar</p>
-                        <h2 class="text-h3 text-text mt-1">Analisis AI</h2>
+                        <p class="text-eyebrow text-primary">{{ __('hadkifayah.assessment.eyebrow') }}</p>
+                        <h2 class="text-h3 text-text mt-1">{{ __('hadkifayah.assessment.title') }}</h2>
                     </div>
                     <div class="w-11 h-11 rounded-[14px] bg-primary-soft text-primary flex items-center justify-center">
                         <i class="fa-solid fa-brain text-[16px]"></i>
@@ -338,24 +351,24 @@
                         <span class="ai-typing-dot"></span>
                         <span class="ai-typing-dot"></span>
                     </span>
-                    <span>Mengira…</span>
+                    <span>{{ __('hadkifayah.assessment.calculating') }}</span>
                 </div>
 
                 <div x-show="!loading && !result" class="text-center py-4 text-small text-secondary">
-                    Masukkan maklumat untuk melihat analisis.
+                    {{ __('hadkifayah.assessment.empty') }}
                 </div>
 
                 <div x-show="!loading && result" class="space-y-4">
                     <div>
-                        <p class="text-eyebrow text-tertiary mb-1.5">Status</p>
+                        <p class="text-eyebrow text-tertiary mb-1.5">{{ __('hadkifayah.assessment.status') }}</p>
                         <x-status-badge status="primary" x-bind:status="statusVariant">
-                            <span x-text="result ? result.status : '—'"></span>
+                            <span x-text="statusLabel"></span>
                         </x-status-badge>
                     </div>
 
                     <div>
                         <div class="flex items-center justify-between mb-1.5">
-                            <p class="text-eyebrow text-tertiary">AI Confidence</p>
+                            <p class="text-eyebrow text-tertiary">{{ __('hadkifayah.assessment.confidence') }}</p>
                             <p class="text-body text-text font-semibold tabular-nums" x-text="result ? result.confidence + '%' : '—'"></p>
                         </div>
                         <div class="h-2 bg-muted rounded-pill overflow-hidden">
@@ -364,12 +377,12 @@
                     </div>
 
                     <div>
-                        <p class="text-eyebrow text-tertiary mb-1.5">AI Recommendation</p>
+                        <p class="text-eyebrow text-tertiary mb-1.5">{{ __('hadkifayah.assessment.recommendation') }}</p>
                         <p class="text-small text-text leading-relaxed" x-text="result ? result.recommendation : '—'"></p>
                     </div>
 
                     <div>
-                        <p class="text-eyebrow text-tertiary mb-2">AI Reasoning</p>
+                        <p class="text-eyebrow text-tertiary mb-2">{{ __('hadkifayah.assessment.reasoning') }}</p>
                         <ul class="space-y-1.5 text-small">
                             <template x-for="(line, idx) in (result ? result.reasoning : [])" :key="idx">
                                 <li class="text-text leading-relaxed" x-text="line"></li>

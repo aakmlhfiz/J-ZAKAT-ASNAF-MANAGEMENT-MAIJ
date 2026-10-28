@@ -63,8 +63,8 @@ class ViewProfileController extends Controller
                 NotificationService::notifyUsers(
                     [$owner->id],
                     'application_under_review_user',
-                    'Permohonan Dalam Semakan',
-                    "Permohonan {$pendingPortalApp->application_no} kini sedang disemak oleh pegawai MAIJ.",
+                    __('asnaf.notifications.under_review_title'),
+                    __('asnaf.notifications.under_review_body', ['no' => $pendingPortalApp->application_no]),
                     'fa-solid fa-magnifying-glass-chart',
                     'info',
                     route('user.applications.show', $pendingPortalApp->id),
@@ -75,9 +75,9 @@ class ViewProfileController extends Controller
         $confidence = $profil->confidenceScore();
 
         $recommendation = match ($profil->status_kelayakan) {
-            HadAlKifayahService::STATUS_LAYAK => 'Pemohon disyorkan layak menerima bantuan. Sila teruskan dengan proses pengesahan.',
-            HadAlKifayahService::STATUS_TIDAK_LAYAK => 'Pemohon tidak memenuhi garis Had Kifayah. Tindakan susulan boleh dipertimbangkan.',
-            default => 'Permohonan masih dalam semakan. Sila tunggu keputusan.',
+            HadAlKifayahService::STATUS_LAYAK => __('asnaf.recommendation.eligible'),
+            HadAlKifayahService::STATUS_TIDAK_LAYAK => __('asnaf.recommendation.not_eligible'),
+            default => __('asnaf.recommendation.under_review'),
         };
 
         return view('viewprofile', [
@@ -97,8 +97,8 @@ class ViewProfileController extends Controller
         AuditLogger::applicationApproved(auth('web')->user(), $profil, request());
 
         $msg = $result['email_sent']
-            ? "Permohonan {$profil->nama} telah diluluskan. Surat dihantar ke emel pemohon."
-            : "Permohonan {$profil->nama} telah diluluskan. Surat tersedia untuk dimuat turun.";
+            ? __('asnaf.flash.approved_email', ['name' => $profil->nama])
+            : __('asnaf.flash.approved_download', ['name' => $profil->nama]);
 
         return redirect()
             ->route('viewprofile', $profil->ic)
@@ -114,8 +114,8 @@ class ViewProfileController extends Controller
         AuditLogger::applicationRejected(auth('web')->user(), $profil, $request, $request->input('approval_remarks'));
 
         $msg = $result['email_sent']
-            ? "Permohonan {$profil->nama} telah ditolak. Notis dihantar ke emel pemohon."
-            : "Permohonan {$profil->nama} telah ditolak. Notis tersedia untuk dimuat turun.";
+            ? __('asnaf.flash.rejected_email', ['name' => $profil->nama])
+            : __('asnaf.flash.rejected_download', ['name' => $profil->nama]);
 
         return redirect()
             ->route('viewprofile', $profil->ic)
@@ -129,7 +129,7 @@ class ViewProfileController extends Controller
         if (! $profil->letter_path || ! Storage::disk('local')->exists($profil->letter_path)) {
             return redirect()
                 ->route('viewprofile', $profil->ic)
-                ->with('error', 'Surat tidak dijumpai. Sila jana semula.');
+                ->with('error', __('asnaf.flash.letter_missing'));
         }
 
         $filename = $profil->letter_type === 'approved'
@@ -146,6 +146,6 @@ class ViewProfileController extends Controller
 
         return redirect()
             ->route('viewprofile.index')
-            ->with('success', "Profil {$profil->nama} telah dipadam.");
+            ->with('success', __('asnaf.flash.deleted', ['name' => $profil->nama]));
     }
 }

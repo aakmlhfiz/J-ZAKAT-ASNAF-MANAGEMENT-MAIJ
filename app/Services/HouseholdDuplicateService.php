@@ -18,8 +18,8 @@ class HouseholdDuplicateService
             $warnings[] = [
                 'type' => 'duplicate_member',
                 'severity' => 'high',
-                'title' => 'Ahli Keluarga Mempunyai Rekod Berganda',
-                'description' => 'IC berikut ditemui dalam isi rumah lain: '.implode(', ', $duplicateMembers),
+                'title' => __('household.duplicates.member_title'),
+                'description' => __('household.duplicates.member_description', ['ics' => implode(', ', $duplicateMembers)]),
             ];
         }
 
@@ -28,8 +28,8 @@ class HouseholdDuplicateService
             $warnings[] = [
                 'type' => 'duplicate_assistance',
                 'severity' => 'medium',
-                'title' => 'Bantuan Berganda Dikesan',
-                'description' => 'Ahli keluarga yang sama mempunyai bantuan aktif berganda: '.implode(', ', $duplicateAssistance),
+                'title' => __('household.duplicates.assistance_title'),
+                'description' => __('household.duplicates.assistance_description', ['items' => implode(', ', $duplicateAssistance)]),
             ];
         }
 
@@ -38,8 +38,11 @@ class HouseholdDuplicateService
             $warnings[] = [
                 'type' => 'duplicate_address',
                 'severity' => 'low',
-                'title' => 'Alamat Sama Dikesan',
-                'description' => 'Alamat ini juga digunakan oleh '.count($duplicateAddress).' isi rumah lain: '.implode(', ', $duplicateAddress),
+                'title' => __('household.duplicates.address_title'),
+                'description' => __('household.duplicates.address_description', [
+                    'count' => count($duplicateAddress),
+                    'households' => implode(', ', $duplicateAddress),
+                ]),
             ];
         }
 
@@ -48,8 +51,8 @@ class HouseholdDuplicateService
             $warnings[] = [
                 'type' => 'active_application',
                 'severity' => 'medium',
-                'title' => 'Permohonan Aktif Sedia Ada',
-                'description' => 'Ahli keluarga berikut mempunyai permohonan aktif: '.implode(', ', $activeApplications),
+                'title' => __('household.duplicates.application_title'),
+                'description' => __('household.duplicates.application_description', ['names' => implode(', ', $activeApplications)]),
             ];
         }
 

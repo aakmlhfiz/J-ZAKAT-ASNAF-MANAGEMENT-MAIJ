@@ -44,8 +44,11 @@ class ProfilAsnafController extends Controller
         NotificationService::notifyRoles(
             ['admin', 'pegawai'],
             'application_new',
-            'Pemohonan baharu didaftarkan',
-            "{$profil->nama} · ".now()->subMinutes(rand(0, 5))->diffForHumans(),
+            __('asnaf.notifications.application_new_title'),
+            __('asnaf.notifications.application_new_body', [
+                'name' => $profil->nama,
+                'time' => now()->subMinutes(rand(0, 5))->locale(app()->getLocale())->diffForHumans(),
+            ]),
             'fa-solid fa-user-plus',
             'success',
             route('viewprofile', $profil->ic)
@@ -53,7 +56,10 @@ class ProfilAsnafController extends Controller
 
         return redirect()
             ->route('viewprofile', $profil->ic)
-            ->with('success', "Permohonan berjaya disimpan. Keputusan: {$profil->status_kelayakan} (skor AI: {$profil->ai_score}%).");
+            ->with('success', __('asnaf.flash.created', [
+                'status' => $this->statusLabel($profil),
+                'score' => $profil->ai_score,
+            ]));
     }
 
     public function edit(string $ic): View
@@ -79,7 +85,10 @@ class ProfilAsnafController extends Controller
 
         return redirect()
             ->route('viewprofile', $profil->ic)
-            ->with('success', "Profil dikemas kini. Keputusan: {$profil->status_kelayakan} (skor AI: {$profil->ai_score}%).");
+            ->with('success', __('asnaf.flash.updated', [
+                'status' => $this->statusLabel($profil),
+                'score' => $profil->ai_score,
+            ]));
     }
 
     public function destroy(string $ic): RedirectResponse
@@ -89,7 +98,7 @@ class ProfilAsnafController extends Controller
 
         return redirect()
             ->route('viewprofile.index')
-            ->with('success', "Profil {$profil->nama} telah dipadam.");
+            ->with('success', __('asnaf.flash.deleted', ['name' => $profil->nama]));
     }
 
     public function bulkDestroy(Request $request): RedirectResponse
@@ -97,12 +106,12 @@ class ProfilAsnafController extends Controller
         $ids = $request->input('ids', []);
 
         if (empty($ids)) {
-            return redirect()->route('viewprofile.index')->with('error', 'Tiada profil dipilih.');
+            return redirect()->route('viewprofile.index')->with('error', __('asnaf.flash.no_selection'));
         }
 
         $count = ProfilAsnaf::destroy($ids);
 
-        return redirect()->route('viewprofile.index')->with('success', "{$count} profil telah berjaya dipadam.");
+        return redirect()->route('viewprofile.index')->with('success', __('asnaf.flash.bulk_deleted', ['count' => $count]));
     }
 
     public function requestDocuments(Request $request, string $ic): RedirectResponse
@@ -153,8 +162,8 @@ class ProfilAsnafController extends Controller
             NotificationService::notifyUsers(
                 [$portalUser->id],
                 'documents_requested_user',
-                'Dokumen Tambahan Diminta',
-                'Sila muat naik dokumen yang diminta untuk meneruskan permohonan anda.',
+                __('asnaf.notifications.documents_requested_title'),
+                __('asnaf.notifications.documents_requested_user_body'),
                 'fa-solid fa-file-circle-plus',
                 'warning',
                 route('user.applications.index'),
@@ -166,14 +175,24 @@ class ProfilAsnafController extends Controller
         NotificationService::notifyRoles(
             ['admin', 'pegawai'],
             'documents_requested',
-            'Dokumen Tambahan Diminta',
-            "Untuk {$profil->nama} · ".count($request->documents).' dokumen',
+            __('asnaf.notifications.documents_requested_title'),
+            __('asnaf.notifications.documents_requested_roles_body', [
+                'name' => $profil->nama,
+                'count' => count($request->documents),
+            ]),
             'fa-solid fa-file-circle-plus',
             'warning',
             route('viewprofile', $profil->ic)
         );
 
-        return back()->with('success', 'Permohonan dokumen tambahan telah dihantar kepada pemohon.');
+        return back()->with('success', __('asnaf.flash.documents_requested'));
+    }
+
+    private function statusLabel(ProfilAsnaf $profil): string
+    {
+        $key = 'common.status.'.str_replace('-', '_', $profil->statusSlug());
+
+        return trans()->has($key) ? __($key) : (string) $profil->status_kelayakan;
     }
 
     private function rulesForProfil(?int $excludeId = null): array

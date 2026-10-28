@@ -3,10 +3,10 @@
 @endphp
 
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Had Al-Kifayah — J-ZAKAT</title>
+    <title>{{ __('hadkifayah.print.title') }}</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -44,18 +44,18 @@
 <body onload="window.print()">
     <div class="no-print" style="position: fixed; top: 16px; right: 16px;">
         <button onclick="window.print()" style="padding: 8px 16px; background: #0066CC; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px;">
-            <i style="font-style: normal;">🖨</i> Cetak
+            <i style="font-style: normal;">🖨</i> {{ __('hadkifayah.print.button') }}
         </button>
     </div>
 
     <div class="header">
         <div>
-            <h1>Laporan Had Al-Kifayah</h1>
+            <h1>{{ __('hadkifayah.print.heading') }}</h1>
             <p class="meta">J-ZAKAT — Smart Asnaf Eligibility System</p>
         </div>
         <div class="meta">
-            <p>Tarikh: {{ now()->format('d F Y, H:i') }}</p>
-            <p>Metodologi: MAIDAM Had Al-Kifayah</p>
+            <p>{{ __('hadkifayah.print.date') }}: {{ now()->locale(app()->getLocale())->translatedFormat('d F Y, H:i') }}</p>
+            <p>{{ __('hadkifayah.print.methodology') }}: {{ __('hadkifayah.print.methodology_value') }}</p>
         </div>
     </div>
 
@@ -63,45 +63,45 @@
 
     <div class="summary">
         <div class="card">
-            <div class="label">Jumlah Pendapatan (A)</div>
+            <div class="label">{{ __('hadkifayah.print.income_total') }}</div>
             <div class="value">RM {{ number_format($r['pendapatan_total'], 2) }}</div>
         </div>
         <div class="card">
-            <div class="label">Jumlah Had Kifayah (C)</div>
+            <div class="label">{{ __('hadkifayah.print.threshold_total') }}</div>
             <div class="value">RM {{ number_format($r['had_kifayah_total'], 2) }}</div>
         </div>
         <div class="card">
-            <div class="label">Perbezaan (A − C)</div>
+            <div class="label">{{ __('hadkifayah.print.difference') }}</div>
             <div class="value">RM {{ number_format($r['baki'], 2) }}</div>
         </div>
     </div>
 
     <p>
-        Status:
+        {{ __('hadkifayah.print.status') }}:
         <span class="status {{ $r['status'] === 'Layak' ? 'layak' : 'tidak-layak' }}">
-            {{ $r['status'] }}
+            {{ $r['status'] === 'Layak' ? __('common.status.layak') : __('common.status.tidak_layak') }}
         </span>
         &nbsp;&nbsp;
-        Keyakinan AI: <strong>{{ $r['confidence'] }}%</strong>
+        {{ __('hadkifayah.print.confidence') }}: <strong>{{ $r['confidence'] }}%</strong>
     </p>
 
-    <h2>Cadangan</h2>
+    <h2>{{ __('hadkifayah.print.recommendation') }}</h2>
     <p style="font-size: 14px;">{{ $r['recommendation'] }}</p>
 
-    <h2>Sebab Penilaian</h2>
+    <h2>{{ __('hadkifayah.print.reasoning') }}</h2>
     <ul class="reasoning">
         @foreach($r['reasoning'] as $line)
             <li>{{ $line }}</li>
         @endforeach
     </ul>
 
-    <h2>Pecahan Keperluan</h2>
+    <h2>{{ __('hadkifayah.print.breakdown') }}</h2>
     <table>
         <thead>
             <tr>
-                <th>Komponen</th>
-                <th class="num">Kadar (RM)</th>
-                <th class="num">Subtotal (RM)</th>
+                <th>{{ __('hadkifayah.print.component') }}</th>
+                <th class="num">{{ __('hadkifayah.print.rate') }}</th>
+                <th class="num">{{ __('hadkifayah.print.subtotal') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -115,28 +115,28 @@
         </tbody>
     </table>
 
-    <h2>Input Pengguna</h2>
+    <h2>{{ __('hadkifayah.print.user_input') }}</h2>
     <table>
         <thead>
-            <tr><th>Medan</th><th class="num">Nilai</th></tr>
+            <tr><th>{{ __('hadkifayah.print.field') }}</th><th class="num">{{ __('hadkifayah.print.value') }}</th></tr>
         </thead>
         <tbody>
-            <tr><td>Pendapatan Pemohon</td><td class="num">RM {{ number_format((float)($input['pendapatan_pemohon'] ?? 0), 2) }}</td></tr>
-            <tr><td>Pendapatan Pasangan</td><td class="num">RM {{ number_format((float)($input['pendapatan_pasangan'] ?? 0), 2) }}</td></tr>
-            <tr><td>Pendapatan Anak</td><td class="num">RM {{ number_format((float)($input['pendapatan_anak'] ?? 0), 2) }}</td></tr>
-            <tr><td>Pendapatan Lain</td><td class="num">RM {{ number_format((float)($input['pendapatan_lain'] ?? 0), 2) }}</td></tr>
-            <tr><td>Isteri / Suami</td><td class="num">{{ (int)($input['n_isteri_suami'] ?? 0) }} orang</td></tr>
-            <tr><td>Ibu Bapa Tanggungan</td><td class="num">{{ (int)($input['n_ibu_bapa'] ?? 0) }} orang</td></tr>
-            <tr><td>Dewasa Tidak Bekerja</td><td class="num">{{ (int)($input['n_dewasa_tidak_bekerja'] ?? 0) }} orang</td></tr>
-            <tr><td>Dewasa Bekerja Ditanggung</td><td class="num">{{ (int)($input['n_dewasa_bekerja_tanggung'] ?? 0) }} orang</td></tr>
-            <tr><td>IPT</td><td class="num">{{ (int)($input['n_ipt'] ?? 0) }} orang</td></tr>
-            <tr><td>Remaja Sekolah Menengah</td><td class="num">{{ (int)($input['n_remaja'] ?? 0) }} orang</td></tr>
-            <tr><td>Kanak-Kanak Sekolah Rendah</td><td class="num">{{ (int)($input['n_kanak_rendah'] ?? 0) }} orang</td></tr>
-            <tr><td>Kanak-Kanak Tadika</td><td class="num">{{ (int)($input['n_kanak_tadika'] ?? 0) }} orang</td></tr>
-            <tr><td>Perumahan</td><td class="num">{{ $input['perumahan'] ?? 'sendiri' }}</td></tr>
-            <tr><td>Utiliti</td><td class="num">RM {{ number_format((float)($input['utiliti_input'] ?? 0), 2) }}</td></tr>
-            <tr><td>Pengangkutan</td><td class="num">RM {{ number_format((float)($input['pengangkutan_input'] ?? 0), 2) }}</td></tr>
-            <tr><td>Perubatan</td><td class="num">RM {{ number_format((float)($input['perubatan_input'] ?? 0), 2) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.applicant_income') }}</td><td class="num">RM {{ number_format((float)($input['pendapatan_pemohon'] ?? 0), 2) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.spouse_income') }}</td><td class="num">RM {{ number_format((float)($input['pendapatan_pasangan'] ?? 0), 2) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.child_income') }}</td><td class="num">RM {{ number_format((float)($input['pendapatan_anak'] ?? 0), 2) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.other_income') }}</td><td class="num">RM {{ number_format((float)($input['pendapatan_lain'] ?? 0), 2) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.spouse') }}</td><td class="num">{{ trans_choice('hadkifayah.print.person_count', (int)($input['n_isteri_suami'] ?? 0)) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.parents') }}</td><td class="num">{{ trans_choice('hadkifayah.print.person_count', (int)($input['n_ibu_bapa'] ?? 0)) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.adult_unemployed') }}</td><td class="num">{{ trans_choice('hadkifayah.print.person_count', (int)($input['n_dewasa_tidak_bekerja'] ?? 0)) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.adult_working_dependant') }}</td><td class="num">{{ trans_choice('hadkifayah.print.person_count', (int)($input['n_dewasa_bekerja_tanggung'] ?? 0)) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.higher_education') }}</td><td class="num">{{ trans_choice('hadkifayah.print.person_count', (int)($input['n_ipt'] ?? 0)) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.teenager') }}</td><td class="num">{{ trans_choice('hadkifayah.print.person_count', (int)($input['n_remaja'] ?? 0)) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.primary_school') }}</td><td class="num">{{ trans_choice('hadkifayah.print.person_count', (int)($input['n_kanak_rendah'] ?? 0)) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.kindergarten') }}</td><td class="num">{{ trans_choice('hadkifayah.print.person_count', (int)($input['n_kanak_tadika'] ?? 0)) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.housing') }}</td><td class="num">{{ ($input['perumahan'] ?? 'sendiri') === 'sewa' ? __('hadkifayah.housing.rent_value') : __('hadkifayah.housing.own_value') }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.utilities') }}</td><td class="num">RM {{ number_format((float)($input['utiliti_input'] ?? 0), 2) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.transport') }}</td><td class="num">RM {{ number_format((float)($input['pengangkutan_input'] ?? 0), 2) }}</td></tr>
+            <tr><td>{{ __('hadkifayah.fields.medical') }}</td><td class="num">RM {{ number_format((float)($input['perubatan_input'] ?? 0), 2) }}</td></tr>
         </tbody>
     </table>
 

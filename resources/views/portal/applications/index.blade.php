@@ -1,6 +1,6 @@
 @extends('portal.layouts.app')
-@section('title', 'Permohonan Saya — Portal Pemohon')
-@section('page-title', 'Permohonan Saya')
+@section('title', __('applications.index.title'))
+@section('page-title', __('applications.index.page_title'))
 
 @section('content')
 @php
@@ -8,12 +8,12 @@
     $hasDraft = ($stats['draft'] ?? 0) > 0;
 
     $statusMeta = [
-        'draft'        => ['label' => 'Draf',           'color' => 'warning', 'pct' => 25,  'bar' => 'bg-warning'],
-        'incomplete'   => ['label' => 'Tidak Lengkap',  'color' => 'warning', 'pct' => 50,  'bar' => 'bg-warning'],
-        'submitted'    => ['label' => 'Dihantar',       'color' => 'primary', 'pct' => 50,  'bar' => 'bg-primary'],
-        'under_review' => ['label' => 'Dalam Semakan',  'color' => 'info',    'pct' => 75,  'bar' => 'bg-info'],
-        'approved'     => ['label' => 'Diluluskan',     'color' => 'success', 'pct' => 100, 'bar' => 'bg-success'],
-        'rejected'     => ['label' => 'Ditolak',        'color' => 'danger',  'pct' => 100, 'bar' => 'bg-danger'],
+        'draft'        => ['label' => __('applications.status.draft'),          'color' => 'warning', 'pct' => 25,  'bar' => 'bg-warning'],
+        'incomplete'   => ['label' => __('applications.status.incomplete'),     'color' => 'warning', 'pct' => 50,  'bar' => 'bg-warning'],
+        'submitted'    => ['label' => __('applications.status.submitted'),      'color' => 'primary', 'pct' => 50,  'bar' => 'bg-primary'],
+        'under_review' => ['label' => __('applications.status.under_review'),   'color' => 'info',    'pct' => 75,  'bar' => 'bg-info'],
+        'approved'     => ['label' => __('applications.status.approved'),       'color' => 'success', 'pct' => 100, 'bar' => 'bg-success'],
+        'rejected'     => ['label' => __('applications.status.rejected'),       'color' => 'danger',  'pct' => 100, 'bar' => 'bg-danger'],
     ];
 
     $items = $applications->getCollection()->map(function ($app) use ($statusMeta) {
@@ -30,7 +30,7 @@
             'household_count' => $app->household_count,
             'occupation'     => $app->occupation,
             'full_name'      => $app->full_name,
-            'created_at'     => $app->created_at->format('d M Y'),
+            'created_at'     => $app->created_at->locale(app()->getLocale())->translatedFormat('d M Y'),
             'total_income'   => (float) $app->total_household_income,
             'submitted_human' => $app->submitted_at?->diffForHumans(),
             'show_url'       => route('user.applications.show', $app->id),
@@ -47,8 +47,8 @@
 
     {{-- Page Header --}}
     <x-page-header
-        title="Permohonan Saya"
-        subtitle="Senarai permohonan bantuan asnaf anda. Semak status, hantar draf, atau mohon baharu."
+        title="{{ __('applications.index.heading') }}"
+        subtitle="{{ __('applications.index.subtitle') }}"
     >
         <x-slot:actions>
             <x-app-button
@@ -57,7 +57,7 @@
                 icon="fa-file-contract"
                 :href="route('user.applications.scan.index')"
             >
-                Imbas Borang MAIJ
+                {{ __('applications.index.scan_form') }}
             </x-app-button>
             <x-app-button
                 variant="primary"
@@ -65,7 +65,7 @@
                 icon="fa-plus"
                 :href="route('user.applications.create')"
             >
-                Mohon Bantuan
+                {{ __('applications.index.apply') }}
             </x-app-button>
         </x-slot:actions>
     </x-page-header>
@@ -73,7 +73,7 @@
     {{-- Stat Row --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 stagger">
         <x-stat-card
-            label="Jumlah"
+            label="{{ __('applications.index.stats.total') }}"
             :value="$stats['total']"
             icon="fa-file-lines"
             iconBg="bg-primary-soft"
@@ -83,7 +83,7 @@
             @click.prevent="setStatus('all')"
         />
         <x-stat-card
-            label="Draf"
+            label="{{ __('applications.index.stats.draft') }}"
             :value="$stats['draft']"
             icon="fa-pen-to-square"
             iconBg="bg-warning-soft"
@@ -93,7 +93,7 @@
             @click.prevent="setStatus('draft')"
         />
         <x-stat-card
-            label="Dihantar / Semakan"
+            label="{{ __('applications.index.stats.submitted') }}"
             :value="$stats['submitted']"
             icon="fa-paper-plane"
             iconBg="bg-info-soft"
@@ -103,7 +103,7 @@
             @click.prevent="setStatus('submitted')"
         />
         <x-stat-card
-            label="Diluluskan"
+            label="{{ __('applications.index.stats.approved') }}"
             :value="$stats['approved']"
             icon="fa-circle-check"
             iconBg="bg-success-soft"
@@ -123,11 +123,11 @@
                 </div>
                 <div class="min-w-0 flex-1">
                     <p class="text-body text-text font-semibold">
-                        Anda ada {{ $stats['draft'] }} draf yang belum dihantar
+                        {{ trans_choice('applications.index.draft_banner.count', $stats['draft'], ['count' => $stats['draft']]) }}
                     </p>
                     <p class="text-small text-secondary mt-0.5">
-                        Draf terkini: <span class="font-medium text-text">{{ $latestDraft->application_no }}</span>
-                        · dicipta {{ $latestDraft->created_at->diffForHumans() }}
+                        {{ __('applications.index.draft_banner.latest') }} <span class="font-medium text-text">{{ $latestDraft->application_no }}</span>
+                        {{ __('applications.index.draft_banner.created', ['time' => $latestDraft->created_at->diffForHumans()]) }}
                     </p>
                 </div>
                 <x-app-button
@@ -136,7 +136,7 @@
                     icon="fa-arrow-right"
                     :href="route('user.applications.show', $latestDraft->id)"
                 >
-                    Sambung draf
+                    {{ __('applications.index.draft_banner.resume') }}
                 </x-app-button>
             </div>
         </x-app-card>
@@ -151,20 +151,20 @@
                     type="search"
                     x-model="q"
                     @input="visible = matches()"
-                    placeholder="Cari no. permohonan, nama, atau pekerjaan..."
+                    placeholder="{{ __('applications.index.search_placeholder') }}"
                     class="input-base w-full pl-10"
                 >
             </div>
             <div class="flex items-center gap-2 shrink-0">
                 <div class="relative">
                     <select x-model="status" @change="visible = matches()" class="input-base appearance-none pr-9 pl-9 min-w-[160px]">
-                        <option value="all">Semua Status</option>
-                        <option value="draft">Draf</option>
-                        <option value="submitted">Dihantar</option>
-                        <option value="under_review">Dalam Semakan</option>
-                        <option value="approved">Diluluskan</option>
-                        <option value="rejected">Ditolak</option>
-                        <option value="incomplete">Tidak Lengkap</option>
+                        <option value="all">{{ __('applications.index.filter_all') }}</option>
+                        <option value="draft">{{ __('applications.status.draft') }}</option>
+                        <option value="submitted">{{ __('applications.status.submitted') }}</option>
+                        <option value="under_review">{{ __('applications.status.under_review') }}</option>
+                        <option value="approved">{{ __('applications.status.approved') }}</option>
+                        <option value="rejected">{{ __('applications.status.rejected') }}</option>
+                        <option value="incomplete">{{ __('applications.status.incomplete') }}</option>
                     </select>
                     <i class="fa-solid fa-filter absolute left-3.5 top-1/2 -translate-y-1/2 text-tertiary text-[12px] pointer-events-none"></i>
                     <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-tertiary text-[11px] pointer-events-none"></i>
@@ -174,8 +174,8 @@
         <div class="mt-3 flex items-center justify-between gap-2 text-small text-secondary">
             <p>
                 <span x-text="visible.length"></span>
-                dipaparkan
-                <span class="text-tertiary">/ {{ $applications->total() }} jumlah</span>
+                {{ __('applications.index.shown') }}
+                <span class="text-tertiary"> {{ __('applications.index.of_total', ['count' => $applications->total()]) }}</span>
             </p>
             <button
                 type="button"
@@ -184,7 +184,7 @@
                 class="inline-flex items-center gap-1.5 text-primary hover:underline font-medium"
             >
                 <i class="fa-solid fa-xmark text-[10px]"></i>
-                Reset penapis
+                {{ __('applications.index.reset') }}
             </button>
         </div>
     </x-app-card>
@@ -205,7 +205,7 @@
                                     <p class="text-small text-secondary mt-0.5">
                                         <span x-text="item.created_at"></span>
                                         <template x-if="item.household_count">
-                                            <span> · <span x-text="item.household_count"></span> isi rumah</span>
+                                            <span> · <span x-text="item.household_count"></span> {{ __('applications.index.households') }}</span>
                                         </template>
                                         <template x-if="item.occupation">
                                             <span> · <span x-text="item.occupation"></span></span>
@@ -221,20 +221,20 @@
                             <div class="mt-3 flex items-center gap-3 text-small text-secondary">
                                 <span class="inline-flex items-center gap-1.5">
                                     <i class="fa-solid fa-coins text-tertiary text-[11px]"></i>
-                                    RM <span x-text="item.total_income.toLocaleString('en-MY', {maximumFractionDigits: 0})"></span> / bulan
+                                    RM <span x-text="item.total_income.toLocaleString('en-MY', {maximumFractionDigits: 0})"></span> {{ __('applications.index.per_month') }}
                                 </span>
                                 <template x-if="item.submitted_human">
                                     <span class="inline-flex items-center gap-1.5">
                                         <span class="text-tertiary">·</span>
                                         <i class="fa-solid fa-paper-plane text-tertiary text-[11px]"></i>
-                                        Dihantar <span x-text="item.submitted_human"></span>
+                                        {{ __('applications.index.submitted') }} <span x-text="item.submitted_human"></span>
                                     </span>
                                 </template>
                             </div>
 
                             <div class="mt-3">
                                 <div class="flex items-center justify-between text-[11px] text-secondary mb-1">
-                                    <span>Progress</span>
+                                    <span>{{ __('applications.index.progress') }}</span>
                                     <span class="font-medium" x-text="`${item.pct}%`"></span>
                                 </div>
                                 <div class="h-1.5 bg-muted rounded-full overflow-hidden">
@@ -246,7 +246,7 @@
                             <template x-if="item.can_download">
                                 <a :href="item.letter_url" @click.stop class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-primary/10 text-primary text-[11px] font-semibold hover:bg-primary/20 transition-colors">
                                     <i class="fa-solid fa-file-pdf text-[11px]"></i>
-                                    <span class="hidden lg:inline">Surat</span>
+                                    <span class="hidden lg:inline">{{ __('applications.index.letter') }}</span>
                                 </a>
                             </template>
                             <span class="text-tertiary group-hover:text-primary group-hover:translate-x-1 transition-all">
@@ -263,8 +263,8 @@
             <x-app-card>
                 <x-empty-state
                     icon="fa-magnifying-glass"
-                    title="Tiada padanan"
-                    description="Tiada permohonan yang sepadan dengan penapis semasa. Cuba ubah penapis atau reset untuk melihat semua permohonan."
+                    title="{{ __('applications.index.empty_filtered_title') }}"
+                    description="{{ __('applications.index.empty_filtered_desc') }}"
                 />
             </x-app-card>
         </template>
@@ -274,8 +274,8 @@
             <x-app-card>
                 <x-empty-state
                     icon="fa-folder-open"
-                    title="Tiada permohonan"
-                    description="Anda belum membuat sebarang permohonan bantuan asnaf. Mulakan permohonan pertama anda hari ini."
+                    title="{{ __('applications.index.empty_title') }}"
+                    description="{{ __('applications.index.empty_desc') }}"
                 >
                     <x-slot:action>
                         <x-app-button
@@ -284,7 +284,7 @@
                             icon="fa-plus"
                             :href="route('user.applications.create')"
                         >
-                            Mohon Bantuan Sekarang
+                            {{ __('applications.index.apply_now') }}
                         </x-app-button>
                     </x-slot:action>
                 </x-empty-state>

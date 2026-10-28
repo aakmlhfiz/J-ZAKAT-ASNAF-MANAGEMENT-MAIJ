@@ -28,8 +28,11 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'info',
                 'icon' => 'fa-lightbulb',
-                'title' => 'Bantuan Belum Diterima',
-                'description' => 'Isi rumah ini menerima bantuan '.implode(', ', $jenisBantuanDiterima).' tetapi belum pernah menerima bantuan '.implode(', ', array_slice($jenisTidakDiterima, 0, 3)).'.',
+                'title' => __('household.insights.missing_assistance_title'),
+                'description' => __('household.insights.missing_assistance_description', [
+                    'received' => implode(', ', $jenisBantuanDiterima),
+                    'missing' => implode(', ', array_slice($jenisTidakDiterima, 0, 3)),
+                ]),
             ];
         }
 
@@ -42,8 +45,8 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'warning',
                 'icon' => 'fa-heart-pulse',
-                'title' => 'Pesakit Dialisis',
-                'description' => $dialysisMember->nama.' sedang menerima bantuan dialisis. Perlu pemantauan berkala.',
+                'title' => __('household.insights.dialysis_title'),
+                'description' => __('household.insights.dialysis_description', ['name' => $dialysisMember->nama]),
             ];
         }
 
@@ -56,8 +59,8 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'primary',
                 'icon' => 'fa-graduation-cap',
-                'title' => 'Bantuan IPT Aktif',
-                'description' => $iptMember->nama.' sedang menerima bantuan IPT. Semak status pengajian setiap semester.',
+                'title' => __('household.insights.ipt_title'),
+                'description' => __('household.insights.ipt_description', ['name' => $iptMember->nama]),
             ];
         }
 
@@ -66,8 +69,12 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'danger',
                 'icon' => 'fa-circle-exclamation',
-                'title' => 'Perbelanjaan Melebihi Pendapatan',
-                'description' => 'Perbelanjaan bulanan (RM '.number_format($totalExpenses, 2).') melebihi pendapatan (RM '.number_format($totalIncome, 2).') sebanyak RM '.number_format($defisit, 2).'. Isi rumah ini memerlukan bantuan segera.',
+                'title' => __('household.insights.expenses_title'),
+                'description' => __('household.insights.expenses_description', [
+                    'expenses' => number_format($totalExpenses, 2),
+                    'income' => number_format($totalIncome, 2),
+                    'deficit' => number_format($defisit, 2),
+                ]),
             ];
         }
 
@@ -76,8 +83,8 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'warning',
                 'icon' => 'fa-person',
-                'title' => 'Ibu Tunggal',
-                'description' => 'Isi rumah ini diketuai oleh ibu tunggal. Keutamaan tinggi untuk bantuan sara hidup.',
+                'title' => __('household.insights.single_mother_title'),
+                'description' => __('household.insights.single_mother_description'),
             ];
         }
 
@@ -86,8 +93,8 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'info',
                 'icon' => 'fa-user-clock',
-                'title' => 'Warga Emas',
-                'description' => $elderlyCount.' orang warga emas dalam isi rumah ini. Pertimbangkan bantuan warga emas.',
+                'title' => __('household.insights.elderly_title'),
+                'description' => __('household.insights.elderly_description', ['count' => $elderlyCount]),
             ];
         }
 
@@ -96,8 +103,8 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'warning',
                 'icon' => 'fa-wheelchair',
-                'title' => 'Orang Kurang Upaya (OKU)',
-                'description' => $okuCount.' orang OKU dalam isi rumah. Layak untuk bantuan khas OKU.',
+                'title' => __('household.insights.oku_title'),
+                'description' => __('household.insights.oku_description', ['count' => $okuCount]),
             ];
         }
 
@@ -105,8 +112,8 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'success',
                 'icon' => 'fa-star',
-                'title' => 'Isi Rumah Keutamaan',
-                'description' => 'Skor AI tinggi ('.round($household->ai_score).'%). Isi rumah ini disyorkan sebagai keutamaan untuk bantuan.',
+                'title' => __('household.insights.priority_title'),
+                'description' => __('household.insights.priority_description', ['score' => round($household->ai_score)]),
             ];
         }
 
@@ -123,8 +130,11 @@ class HouseholdInsightService
             $insights[] = [
                 'tone' => 'primary',
                 'icon' => 'fa-money-bill-wave',
-                'title' => 'Bantuan Bulanan Aktif',
-                'description' => $monthlyAssistanceEnabled.' bantuan bulanan aktif berjumlah RM '.number_format($totalMonthly, 2).'/bulan.',
+                'title' => __('household.insights.monthly_title'),
+                'description' => __('household.insights.monthly_description', [
+                    'count' => $monthlyAssistanceEnabled,
+                    'amount' => number_format($totalMonthly, 2),
+                ]),
             ];
         }
 

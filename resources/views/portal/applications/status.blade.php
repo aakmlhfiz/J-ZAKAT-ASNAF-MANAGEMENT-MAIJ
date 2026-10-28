@@ -1,23 +1,23 @@
 @extends('portal.layouts.app')
-@section('title', 'Status Permohonan — Portal Pemohon')
-@section('page-title', 'Status Permohonan')
+@section('title', __('applications.tracking.title'))
+@section('page-title', __('applications.tracking.page_title'))
 
 @section('content')
 <x-page-header
-    title="Status Permohonan"
-    subtitle="Jejak kemajuan setiap permohonan bantuan anda."
+    title="{{ __('applications.tracking.heading') }}"
+    subtitle="{{ __('applications.tracking.subtitle') }}"
 />
 
 @if($applications->isEmpty())
     <x-app-card>
         <x-empty-state
             icon="fa-magnifying-glass-chart"
-            title="Tiada permohonan"
-            description="Mulakan permohonan bantuan untuk melihat status di sini."
+            title="{{ __('applications.tracking.empty_title') }}"
+            description="{{ __('applications.tracking.empty_desc') }}"
         >
             <x-slot:action>
                 <x-app-button variant="primary" size="md" icon="fa-plus" :href="route('user.applications.create')">
-                    Mohon Bantuan
+                    {{ __('applications.tracking.apply') }}
                 </x-app-button>
             </x-slot:action>
         </x-empty-state>
@@ -27,8 +27,12 @@
         @foreach($applications as $app)
             @php
                 $statusLabel = match($app->status) {
-                    'draft' => 'Draf', 'submitted' => 'Dihantar', 'under_review' => 'Dalam Semakan',
-                    'approved' => 'Diluluskan', 'rejected' => 'Ditolak', 'incomplete' => 'Tidak Lengkap',
+                    'draft' => __('applications.status.draft'),
+                    'submitted' => __('applications.status.submitted'),
+                    'under_review' => __('applications.status.under_review'),
+                    'approved' => __('applications.status.approved'),
+                    'rejected' => __('applications.status.rejected'),
+                    'incomplete' => __('applications.status.incomplete'),
                     default => ucfirst($app->status),
                 };
                 $statusTone = match($app->status) {
@@ -47,14 +51,14 @@
                         <div>
                             <p class="text-body text-text font-semibold">{{ $app->application_no }}</p>
                             <p class="text-small text-secondary">
-                                {{ $app->assistance_type ?: 'Permohonan Bantuan' }}
-                                · {{ $app->submitted_at?->format('d M Y') ?: 'Belum dihantar' }}
+                                {{ $app->assistance_type ?: __('applications.tracking.default_type') }}
+                                · {{ $app->submitted_at?->locale(app()->getLocale())->translatedFormat('d M Y') ?: __('applications.status.not_submitted') }}
                             </p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
                         <x-status-badge :status="$statusTone">{{ $statusLabel }}</x-status-badge>
-                        <a href="{{ route('user.applications.show', $app->id) }}" class="btn btn-sm btn-ghost">
+                        <a href="{{ route('user.applications.show', $app->id) }}" class="btn btn-sm btn-ghost" aria-label="{{ __('applications.tracking.view_details') }}">
                             <i class="fa-solid fa-arrow-right text-[11px]"></i>
                         </a>
                     </div>
@@ -66,10 +70,10 @@
                     <div class="mt-5 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 flex items-start gap-3">
                         <i class="fa-solid fa-triangle-exclamation text-warning mt-0.5"></i>
                         <div class="flex-1">
-                            <p class="text-body font-semibold text-text">Dokumen tambahan diperlukan</p>
-                            <p class="text-small text-secondary mt-0.5">Sila muat naik dokumen yang diminta untuk meneruskan semakan.</p>
+                            <p class="text-body font-semibold text-text">{{ __('applications.tracking.documents_requested_title') }}</p>
+                            <p class="text-small text-secondary mt-0.5">{{ __('applications.tracking.documents_requested_desc') }}</p>
                             <a href="{{ route('user.documents.index') }}" class="btn btn-sm btn-primary mt-2">
-                                <i class="fa-solid fa-cloud-arrow-up text-[11px]"></i> Muat Naik Dokumen
+                                <i class="fa-solid fa-cloud-arrow-up text-[11px]"></i> {{ __('applications.tracking.upload_documents') }}
                             </a>
                         </div>
                     </div>

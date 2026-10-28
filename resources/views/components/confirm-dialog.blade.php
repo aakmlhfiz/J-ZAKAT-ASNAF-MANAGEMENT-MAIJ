@@ -1,10 +1,10 @@
-<div x-data="{ open: false, title: '', message: '', confirmText: 'Teruskan', cancelText: 'Batal', variant: 'primary', action: null }"
+<div x-data="{ open: false, title: '', message: '', confirmText: @js(__('common.actions.continue')), cancelText: @js(__('common.actions.cancel')), variant: 'primary', action: null }"
      x-show="open"
      @open-confirm.window="
         title = $event.detail.title;
         message = $event.detail.message;
-        confirmText = $event.detail.confirmText || 'Teruskan';
-        cancelText = $event.detail.cancelText || 'Batal';
+        confirmText = $event.detail.confirmText || @js(__('common.actions.continue'));
+        cancelText = $event.detail.cancelText || @js(__('common.actions.cancel'));
         variant = $event.detail.variant || 'primary';
         action = $event.detail.action || null;
         open = true;

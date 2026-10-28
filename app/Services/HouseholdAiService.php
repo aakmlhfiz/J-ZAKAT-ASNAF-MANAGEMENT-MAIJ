@@ -23,69 +23,87 @@ class HouseholdAiService
 
         if ($totalIncome < $hadKifayahTotal) {
             $score += 15;
-            $reasons[] = '✓ Pendapatan isi rumah di bawah Had Kifayah';
-            $eligibilityChecks[] = ['label' => 'Pendapatan Isi Rumah Di Bawah Had Kifayah', 'passed' => true, 'detail' => 'RM '.number_format($totalIncome, 2).' < RM '.number_format($hadKifayahTotal, 2)];
+            $reasons[] = __('household.ai_service.reason_income_below');
+            $eligibilityChecks[] = [
+                'label' => __('household.ai_service.check_income_below'),
+                'passed' => true,
+                'detail' => __('household.ai_service.detail_income_below', [
+                    'income' => number_format($totalIncome, 2),
+                    'kifayah' => number_format($hadKifayahTotal, 2),
+                ]),
+            ];
         } else {
             $score -= 10;
-            $reasons[] = '✗ Pendapatan isi rumah melebihi Had Kifayah';
-            $eligibilityChecks[] = ['label' => 'Pendapatan Isi Rumah Di Bawah Had Kifayah', 'passed' => false, 'detail' => 'RM '.number_format($totalIncome, 2).' ≥ RM '.number_format($hadKifayahTotal, 2)];
+            $reasons[] = __('household.ai_service.reason_income_above');
+            $eligibilityChecks[] = [
+                'label' => __('household.ai_service.check_income_below'),
+                'passed' => false,
+                'detail' => __('household.ai_service.detail_income_above', [
+                    'income' => number_format($totalIncome, 2),
+                    'kifayah' => number_format($hadKifayahTotal, 2),
+                ]),
+            ];
         }
 
         if ($dependentsCount >= 5) {
             $score += 10;
-            $reasons[] = '✓ 5 atau lebih tanggungan';
-            $eligibilityChecks[] = ['label' => 'Bilangan Tanggungan', 'passed' => true, 'detail' => $dependentsCount.' orang tanggungan'];
+            $reasons[] = __('household.ai_service.reason_dependents_high');
+            $eligibilityChecks[] = ['label' => __('household.ai_service.check_dependents'), 'passed' => true, 'detail' => __('household.ai_service.detail_dependents', ['count' => $dependentsCount])];
         } elseif ($dependentsCount >= 3) {
             $score += 5;
-            $reasons[] = '○ 3-4 tanggungan';
-            $eligibilityChecks[] = ['label' => 'Bilangan Tanggungan', 'passed' => true, 'detail' => $dependentsCount.' orang tanggungan'];
+            $reasons[] = __('household.ai_service.reason_dependents_mid');
+            $eligibilityChecks[] = ['label' => __('household.ai_service.check_dependents'), 'passed' => true, 'detail' => __('household.ai_service.detail_dependents', ['count' => $dependentsCount])];
         } else {
-            $eligibilityChecks[] = ['label' => 'Bilangan Tanggungan', 'passed' => true, 'detail' => $dependentsCount.' orang tanggungan'];
+            $eligibilityChecks[] = ['label' => __('household.ai_service.check_dependents'), 'passed' => true, 'detail' => __('household.ai_service.detail_dependents', ['count' => $dependentsCount])];
         }
 
         if ($totalExpenses > $totalIncome) {
             $score += 10;
-            $reasons[] = '✓ Perbelanjaan bulanan melebihi pendapatan';
-            $eligibilityChecks[] = ['label' => 'Perbelanjaan Melebihi Pendapatan', 'passed' => true, 'detail' => 'Defisit RM '.number_format($totalExpenses - $totalIncome, 2)];
+            $reasons[] = __('household.ai_service.reason_expenses_exceed');
+            $eligibilityChecks[] = ['label' => __('household.ai_service.check_expenses'), 'passed' => true, 'detail' => __('household.ai_service.detail_deficit', ['amount' => number_format($totalExpenses - $totalIncome, 2)])];
         }
 
         if ($members->contains(fn ($m) => str_contains(strtolower($m->status_kesihatan ?? ''), 'kronik'))) {
             $score += 8;
-            $reasons[] = '✓ Ahli keluarga mempunyai penyakit kronik';
-            $eligibilityChecks[] = ['label' => 'Penyakit Kronik', 'passed' => true, 'detail' => 'Ahli memerlukan rawatan berterusan'];
+            $reasons[] = __('household.ai_service.reason_chronic');
+            $eligibilityChecks[] = ['label' => __('household.ai_service.check_chronic'), 'passed' => true, 'detail' => __('household.ai_service.detail_chronic')];
         }
 
         if (str_contains(strtolower($household->alamat ?? ''), 'sewa')) {
             $score += 5;
-            $reasons[] = '✓ Rumah sewa';
+            $reasons[] = __('household.ai_service.reason_rental');
         }
 
         $iptCount = $members->where('pendidikan', 'IPT')->count();
         if ($iptCount > 0) {
             $score += 8;
-            $reasons[] = '✓ '.$iptCount.' anak sedang belajar di IPT';
-            $eligibilityChecks[] = ['label' => 'Anak Belajar di IPT', 'passed' => true, 'detail' => $iptCount.' orang di IPT'];
+            $reasons[] = __('household.ai_service.reason_ipt', ['count' => $iptCount]);
+            $eligibilityChecks[] = ['label' => __('household.ai_service.check_ipt'), 'passed' => true, 'detail' => __('household.ai_service.detail_ipt', ['count' => $iptCount])];
         }
 
         $score += min(10, $assistanceCount * 2);
         if ($assistanceCount > 0) {
-            $reasons[] = '○ Sejarah bantuan zakat yang positif';
+            $reasons[] = __('household.ai_service.reason_history');
         }
 
         $eligibilityChecks = array_merge($eligibilityChecks, [
-            ['label' => 'Muslim', 'passed' => true, 'detail' => 'Disahkan Muslim'],
-            ['label' => 'Warganegara Malaysia', 'passed' => true, 'detail' => 'Pemegang MyKad'],
-            ['label' => 'Pemastautin Johor', 'passed' => true, 'detail' => 'Beralamat di Johor'],
-            ['label' => 'Dokumen Lengkap', 'passed' => $assistanceCount > 0, 'detail' => $assistanceCount > 0 ? 'Dokumen telah disahkan' : 'Perlu semakan dokumen'],
-            ['label' => 'Tiada Penipuan', 'passed' => true, 'detail' => 'Tiada rekod penipuan'],
-            ['label' => 'Tiada Permohonan Berganda', 'passed' => true, 'detail' => 'Semakan duplikasi lulus'],
-            ['label' => 'Tiada Senarai Hitam', 'passed' => true, 'detail' => 'Tiada dalam senarai hitam MAIJ'],
+            ['label' => __('household.ai_service.check_muslim'), 'passed' => true, 'detail' => __('household.ai_service.detail_muslim')],
+            ['label' => __('household.ai_service.check_citizen'), 'passed' => true, 'detail' => __('household.ai_service.detail_citizen')],
+            ['label' => __('household.ai_service.check_johor'), 'passed' => true, 'detail' => __('household.ai_service.detail_johor')],
+            ['label' => __('household.ai_service.check_documents'), 'passed' => $assistanceCount > 0, 'detail' => $assistanceCount > 0 ? __('household.ai_service.detail_documents_ok') : __('household.ai_service.detail_documents_pending')],
+            ['label' => __('household.ai_service.check_fraud'), 'passed' => true, 'detail' => __('household.ai_service.detail_fraud')],
+            ['label' => __('household.ai_service.check_duplicate'), 'passed' => true, 'detail' => __('household.ai_service.detail_duplicate')],
+            ['label' => __('household.ai_service.check_blacklist'), 'passed' => true, 'detail' => __('household.ai_service.detail_blacklist')],
         ]);
 
         $score = max(0, min(99, $score));
 
         $confidence = $score >= 90 ? 98 : ($score >= 75 ? 85 : ($score >= 50 ? 70 : 50));
-        $recommendation = $score >= 90 ? 'Highly Recommended' : ($score >= 75 ? 'Recommended' : ($score >= 50 ? 'Needs Review' : 'Not Recommended'));
+        $recommendation = $score >= 90
+            ? __('household.ai.recommendation.highly_recommended')
+            : ($score >= 75
+                ? __('household.ai.recommendation.recommended')
+                : ($score >= 50 ? __('household.ai.recommendation.needs_review') : __('household.ai.recommendation.not_recommended')));
 
         $household->ai_score = $score;
         $household->eligibility_status = $score >= 75 ? 'Layak' : ($score >= 50 ? 'Dalam Semakan' : 'Tidak Layak');

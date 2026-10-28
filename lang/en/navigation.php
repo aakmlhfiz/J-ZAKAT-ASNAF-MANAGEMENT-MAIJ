@@ -3,6 +3,8 @@
 return [
     'sidebar' => [
         'dashboard' => 'Dashboard',
+        'open' => 'Open sidebar',
+        'close' => 'Close sidebar',
         'groups' => [
             'household' => 'Household',
             'asnaf' => 'Asnaf',
@@ -72,9 +74,20 @@ return [
         'toggle_theme' => 'Toggle theme',
     ],
 
+    'notifications' => [
+        'aria' => 'Notifications',
+        'title' => 'Notifications',
+        'unread_count' => ':count new',
+        'mark_read' => 'Mark as read',
+        'empty' => 'No notifications at the moment',
+    ],
+
     'breadcrumbs' => [
         'home' => 'Home',
         'dashboard' => 'Dashboard',
+        'household_intelligence' => 'Household Intelligence',
+        'household_search' => 'Household Search',
+        'household_profile' => 'Household Profile',
         'asnaf_profile' => 'Asnaf Profile',
         'asnaf_list' => 'Asnaf List',
         'profile' => 'Profile',
@@ -91,8 +104,15 @@ return [
         'history' => 'History',
         'reports' => 'Reports',
         'my_profile' => 'My Profile',
+        'my_household' => 'My Household',
+        'my_finances' => 'My Finances',
+        'my_assistance' => 'My Assistance',
         'settings' => 'Settings',
         'my_applications' => 'My Applications',
+        'application_status' => 'Application Status',
+        'my_documents' => 'My Documents',
+        'letters_receipts' => 'Letters & Receipts',
+        'notifications' => 'Notifications',
         'new_application' => 'New Application',
         'details' => 'Details',
         'create' => 'Create',

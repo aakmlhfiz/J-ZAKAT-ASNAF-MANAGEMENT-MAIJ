@@ -1,23 +1,23 @@
 @extends('portal.layouts.app')
-@section('title', 'Bantuan Saya — Portal Pemohon')
-@section('page-title', 'Bantuan Saya')
+@section('title', __('portal_household.assistance.title').' — '.__('navigation.brand.portal'))
+@section('page-title', __('portal_household.assistance.title'))
 
 @section('content')
 <x-page-header
-    title="Bantuan Saya"
-    subtitle="Semua bantuan yang diterima oleh ahli isi rumah anda."
+    title="{{ __('portal_household.assistance.title') }}"
+    subtitle="{{ __('portal_household.assistance.subtitle') }}"
 />
 
 @if(!$household)
     <x-app-card>
-        <x-empty-state icon="fa-hand-holding-heart" title="Tiada rekod bantuan" description="Bantuan yang diterima oleh isi rumah anda akan dipaparkan di sini selepas kelulusan MAIJ." />
+        <x-empty-state icon="fa-hand-holding-heart" title="{{ __('portal_household.assistance.empty.title') }}" description="{{ __('portal_household.assistance.empty.description') }}" />
     </x-app-card>
 @else
     {{-- Totals --}}
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 stagger">
-        <x-stat-card label="Bantuan Bulanan" :value="'RM '.number_format($totals['monthly'], 2)" icon="fa-calendar-check" icon-bg="bg-primary-soft" icon-color="text-primary" accent="primary" />
-        <x-stat-card label="Bantuan One-Off" :value="'RM '.number_format($totals['one_off'], 2)" icon="fa-gift" icon-bg="bg-info-soft" icon-color="text-info" accent="info" />
-        <x-stat-card label="Jumlah Keseluruhan" :value="'RM '.number_format($totals['total'], 2)" icon="fa-coins" icon-bg="bg-success-soft" icon-color="text-success" accent="success" />
+        <x-stat-card :label="__('portal_household.assistance.totals.monthly')" :value="'RM '.number_format($totals['monthly'], 2)" icon="fa-calendar-check" icon-bg="bg-primary-soft" icon-color="text-primary" accent="primary" />
+        <x-stat-card :label="__('portal_household.assistance.totals.one_off')" :value="'RM '.number_format($totals['one_off'], 2)" icon="fa-gift" icon-bg="bg-info-soft" icon-color="text-info" accent="info" />
+        <x-stat-card :label="__('portal_household.assistance.totals.total')" :value="'RM '.number_format($totals['total'], 2)" icon="fa-coins" icon-bg="bg-success-soft" icon-color="text-success" accent="success" />
     </div>
 
     @forelse($members as $member)
@@ -40,16 +40,16 @@
                         <p class="text-body text-text font-medium">{{ $item->jenis_bantuan }}</p>
                         <p class="text-small text-secondary mt-0.5">
                             RM {{ number_format((float) $item->amount, 2) }}
-                            {{ $item->frequency === 'monthly' ? '/ bulan' : '' }}
+                            {{ $item->frequency === 'monthly' ? __('portal_household.assistance.per_month') : '' }}
                         </p>
                         @if($item->reference_number)
-                            <p class="text-eyebrow text-tertiary mt-1">No. Rujukan: {{ $item->reference_number }}</p>
+                            <p class="text-eyebrow text-tertiary mt-1">{{ __('portal_household.assistance.reference', ['reference' => $item->reference_number]) }}</p>
                         @endif
                     </div>
                     <div class="text-right">
-                        <x-status-badge status="success">Aktif</x-status-badge>
+                        <x-status-badge status="success">{{ __('common.status.active') }}</x-status-badge>
                         @if($item->approved_date)
-                            <p class="text-eyebrow text-tertiary mt-1">{{ $item->approved_date->format('d M Y') }}</p>
+                            <p class="text-eyebrow text-tertiary mt-1">{{ $item->approved_date->locale(app()->getLocale())->translatedFormat('d M Y') }}</p>
                         @endif
                     </div>
                 </div>
@@ -59,13 +59,13 @@
         @endif
     @empty
         <x-app-card>
-            <x-empty-state icon="fa-hand-holding-heart" title="Tiada bantuan direkodkan" description="Bantuan yang diluluskan akan dipaparkan di sini." />
+            <x-empty-state icon="fa-hand-holding-heart" title="{{ __('portal_household.assistance.empty.recorded_title') }}" description="{{ __('portal_household.assistance.empty.recorded_description') }}" />
         </x-app-card>
     @endforelse
 
     @if($members->isNotEmpty() && $assistanceByMember->isEmpty())
         <x-app-card>
-            <x-empty-state icon="fa-hand-holding-heart" title="Tiada bantuan direkodkan" description="Bantuan yang diluluskan untuk isi rumah anda akan dipaparkan di sini." />
+            <x-empty-state icon="fa-hand-holding-heart" title="{{ __('portal_household.assistance.empty.recorded_title') }}" description="{{ __('portal_household.assistance.empty.household_description') }}" />
         </x-app-card>
     @endif
 @endif

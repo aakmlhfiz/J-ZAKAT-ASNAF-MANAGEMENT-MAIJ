@@ -45,8 +45,8 @@ class DocumentController extends Controller
         NotificationService::notifyUsers(
             [$user->id],
             'document_uploaded_user',
-            'Dokumen Dimuat Naik',
-            'Dokumen anda telah berjaya dimuat naik.',
+            __('portal_documents.notifications.uploaded_title'),
+            __('portal_documents.notifications.uploaded_body'),
             'fa-solid fa-cloud-arrow-up',
             'success',
             route('user.documents.index'),
@@ -54,7 +54,7 @@ class DocumentController extends Controller
 
         return redirect()
             ->route('user.documents.index')
-            ->with('success', 'Dokumen berjaya dimuat naik.');
+            ->with('success', __('portal_documents.flash.uploaded'));
     }
 
     public function download(string $id): StreamedResponse|RedirectResponse
@@ -65,7 +65,7 @@ class DocumentController extends Controller
         $path = PortalDocumentService::path($import);
 
         if (! file_exists($path)) {
-            return back()->with('error', 'Fail tidak dijumpai pada storan.');
+            return back()->with('error', __('portal_documents.flash.file_not_found'));
         }
 
         return Storage::disk(config('ocr.disk', 'local'))->download($import->stored_path, $import->original_filename);
@@ -77,11 +77,11 @@ class DocumentController extends Controller
         $import = DocumentImport::where('portal_user_id', $user->id)->findOrFail($id);
 
         if ($import->document_type !== OcrService::DOC_TYPE_BORANG_BANTUAN) {
-            return back()->with('error', 'Hanya Borang Bantuan MAIJ boleh diproses semula.');
+            return back()->with('error', __('portal_documents.flash.reprocess_only_borang'));
         }
 
         if ($import->status === 'committed') {
-            return back()->with('info', 'Rekod ini telah dihantar — tidak perlu diproses semula.');
+            return back()->with('info', __('portal_documents.flash.already_committed'));
         }
 
         $import->update([
@@ -93,6 +93,6 @@ class DocumentController extends Controller
 
         ProcessDocumentImport::dispatch($import->id);
 
-        return back()->with('success', 'Dokumen sedang diproses semula.');
+        return back()->with('success', __('portal_documents.flash.reprocessing'));
     }
 }

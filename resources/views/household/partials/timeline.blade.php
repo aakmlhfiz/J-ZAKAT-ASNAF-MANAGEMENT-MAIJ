@@ -1,4 +1,4 @@
-<x-section-header title="Garis Masa Isi Rumah" icon="fa-timeline" description="Perjalanan bantuan isi rumah dari masa ke masa" />
+<x-section-header :title="__('household.timeline.title')" icon="fa-timeline" :description="__('household.timeline.description')" />
 
 @php
     $allHistory = $household->assistanceHistories()
@@ -15,7 +15,7 @@
 @endphp
 
 @if(empty($timelineItems))
-    <x-empty-state icon="fa-timeline" title="Tiada Garis Masa" description="Isi rumah ini belum mempunyai sejarah bantuan." />
+    <x-empty-state icon="fa-timeline" :title="__('household.timeline.empty_title')" :description="__('household.timeline.empty_description')" />
 @else
     <div class="relative">
         <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/40 to-transparent"></div>
@@ -23,10 +23,10 @@
             @foreach($timelineItems as $year => $items)
                 <div class="relative pl-16 pb-8 group">
                     <div class="absolute left-2 top-0.5 w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center shadow-sm z-10 ring-4 ring-card">
-                        <span class="text-[10px] font-bold">{{ substr($year, 2) }}</span>
+                        <span class="text-[10px] font-bold">{{ is_numeric($year) ? substr($year, 2) : '—' }}</span>
                     </div>
                     <div class="surface p-4 shadow-xs">
-                        <p class="text-small font-bold text-text mb-3">{{ $year }}</p>
+                        <p class="text-small font-bold text-text mb-3">{{ is_numeric($year) ? $year : __('household.common.no_year') }}</p>
                         <div class="space-y-2.5">
                             @foreach($items as $item)
                                 <div class="flex items-start gap-2">
@@ -37,12 +37,12 @@
                                             <span class="text-secondary"> — {{ $item->jenis_bantuan }}</span>
                                         </p>
                                         <p class="text-[11px] text-secondary mt-0.5">
-                                            RM {{ number_format($item->amount, 2) }}{{ $item->frequency === 'monthly' ? '/bln' : '' }}
+                                            RM {{ number_format($item->amount, 2) }}{{ $item->frequency === 'monthly' ? __('household.common.per_month_short') : '' }}
                                             @if($item->description) <span class="text-tertiary">· {{ $item->description }}</span> @endif
                                         </p>
                                         <div class="mt-1">
                                             <x-status-badge :status="$item->status === 'approved' ? 'success' : ($item->status === 'rejected' ? 'danger' : 'warning')" size="sm" :dot="true">
-                                                {{ $item->status === 'approved' ? 'Lulus' : ($item->status === 'rejected' ? 'Tolak' : 'Pending') }}
+                                                {{ $item->status === 'approved' ? __('household.status.approved') : ($item->status === 'rejected' ? __('household.status.rejected') : __('household.status.pending')) }}
                                             </x-status-badge>
                                         </div>
                                     </div>

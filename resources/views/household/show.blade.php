@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Isi Rumah - ' . ($household->ketua?->nama ?? 'N/A') . ' - J-ZAKAT')
+@section('title', __('household.profile_page_title', ['name' => $household->ketua?->nama ?? 'N/A']))
 
 @php
-    $title = 'Profil Isi Rumah';
+    $title = __('household.profile_title');
     $subtitle = $household->household_id . ' - ' . ($household->ketua?->nama ?? 'N/A');
     $ketua = $household->ketua;
 @endphp
@@ -29,7 +29,7 @@
 @section('content')
 <div x-data="householdProfile">
 
-    <x-page-header title="{{ $ketua?->nama ?? 'N/A' }}" subtitle="{{ $household->household_id }} · {{ $household->daerah ?? '' }}" icon="fa-house-chimney-user" eyebrow="Profil Isi Rumah" />
+    <x-page-header :title="$ketua?->nama ?? 'N/A'" :subtitle="$household->household_id . ' · ' . ($household->daerah ?? '')" icon="fa-house-chimney-user" :eyebrow="__('household.profile_title')" />
 
     {{-- Hero + AI gauge --}}
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
@@ -42,21 +42,21 @@
                 <p class="text-body text-primary font-semibold mt-0.5">{{ $household->household_id }}</p>
                 <p class="text-small text-secondary mt-1">
                     <i class="fa-solid fa-location-dot text-[11px] mr-1"></i>
-                    {{ $household->alamat ?? 'Alamat tidak direkodkan' }}
+                    {{ $household->alamat ?? __('household.common.address_missing') }}
                 </p>
                 <div class="flex flex-wrap gap-2 mt-3">
                     <x-status-badge :status="strtolower(str_replace(' ', '-', $household->eligibility_status))" />
                     <span class="inline-flex items-center gap-1 px-2.5 py-1 text-[12px] font-semibold rounded-pill bg-info-soft text-info">
-                        <i class="fa-solid fa-users text-[10px]"></i> {{ $household->total_members }} Ahli
+                        <i class="fa-solid fa-users text-[10px]"></i> {{ $household->total_members }} {{ __('household.common.members_unit') }}
                     </span>
                     @if($household->status === 'active')
                         <span class="inline-flex items-center gap-1 px-2.5 py-1 text-[12px] font-semibold rounded-pill bg-success-soft text-success">
-                            <i class="fa-solid fa-circle-check text-[10px]"></i> Aktif
+                            <i class="fa-solid fa-circle-check text-[10px]"></i> {{ __('common.status.active') }}
                         </span>
                     @endif
                     @if($household->total_monthly_assistance > 0)
                         <span class="inline-flex items-center gap-1 px-2.5 py-1 text-[12px] font-semibold rounded-pill bg-success-soft text-success">
-                            RM {{ number_format($household->total_monthly_assistance, 0) }}/bln
+                            RM {{ number_format($household->total_monthly_assistance, 0) }}{{ __('household.common.per_month_short') }}
                         </span>
                     @endif
                 </div>
@@ -71,10 +71,10 @@
 
     {{-- 4 key stats --}}
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <x-stat-card label="Ahli" :value="$household->total_members" icon="fa-users" accent="primary" iconBg="bg-primary/10" iconColor="text-primary" />
-        <x-stat-card label="Pendapatan" value="RM {{ number_format($household->total_income, 2) }}" icon="fa-money-bill-wave" accent="info" iconBg="bg-info/10" iconColor="text-info" />
-        <x-stat-card label="Perbelanjaan" value="RM {{ number_format($household->total_expenses, 2) }}" icon="fa-receipt" accent="warning" iconBg="bg-warning/10" iconColor="text-warning" />
-        <x-stat-card label="Bantuan" value="RM {{ number_format($household->total_assistance_received, 2) }}" icon="fa-hand-holding-heart" accent="success" iconBg="bg-success/10" iconColor="text-success" />
+        <x-stat-card :label="__('household.labels.members')" :value="$household->total_members" icon="fa-users" accent="primary" iconBg="bg-primary/10" iconColor="text-primary" />
+        <x-stat-card :label="__('household.labels.income')" value="RM {{ number_format($household->total_income, 2) }}" icon="fa-money-bill-wave" accent="info" iconBg="bg-info/10" iconColor="text-info" />
+        <x-stat-card :label="__('household.labels.expenses')" value="RM {{ number_format($household->total_expenses, 2) }}" icon="fa-receipt" accent="warning" iconBg="bg-warning/10" iconColor="text-warning" />
+        <x-stat-card :label="__('household.labels.assistance')" value="RM {{ number_format($household->total_assistance_received, 2) }}" icon="fa-hand-holding-heart" accent="success" iconBg="bg-success/10" iconColor="text-success" />
     </div>
 
     {{-- Duplicate warnings --}}
@@ -105,11 +105,11 @@
         <div class="flex flex-wrap gap-1">
             @php
                 $sections = [
-                    ['id' => 'section-members', 'label' => 'Ahli', 'icon' => 'fa-users'],
-                    ['id' => 'section-matrix', 'label' => 'Matriks', 'icon' => 'fa-table'],
-                    ['id' => 'section-history', 'label' => 'Sejarah', 'icon' => 'fa-clock-rotate-left'],
-                    ['id' => 'section-ai', 'label' => 'AI', 'icon' => 'fa-brain'],
-                    ['id' => 'section-timeline', 'label' => 'Garis Masa', 'icon' => 'fa-timeline'],
+                    ['id' => 'section-members', 'label' => __('household.sections.members'), 'icon' => 'fa-users'],
+                    ['id' => 'section-matrix', 'label' => __('household.sections.matrix'), 'icon' => 'fa-table'],
+                    ['id' => 'section-history', 'label' => __('household.sections.history'), 'icon' => 'fa-clock-rotate-left'],
+                    ['id' => 'section-ai', 'label' => __('household.sections.ai'), 'icon' => 'fa-brain'],
+                    ['id' => 'section-timeline', 'label' => __('household.sections.timeline'), 'icon' => 'fa-timeline'],
                 ];
             @endphp
             @foreach($sections as $s)

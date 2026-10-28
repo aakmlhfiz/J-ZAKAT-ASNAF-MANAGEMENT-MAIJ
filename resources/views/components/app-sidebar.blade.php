@@ -182,9 +182,9 @@
         <div class="p-3 border-t border-white/10 shrink-0">
             <button @click="toggle()"
                 class="w-full flex items-center gap-3 px-3 py-2 rounded-[12px] text-white/60 hover:bg-white/10 hover:text-white text-[13px] font-medium transition-apple"
-                :aria-label="collapsed ? 'Buka sidebar' : 'Tutup sidebar'">
+                :aria-label="collapsed ? '{{ __('navigation.sidebar.open') }}' : '{{ __('navigation.sidebar.close') }}'">
                 <x-icon :name="'chevrons-left'" :size="17" class="shrink-0" x-bind:class="collapsed ? 'rotate-180' : ''" />
-                <span x-show="!collapsed" x-cloak>Tutup Sidebar</span>
+                <span x-show="!collapsed" x-cloak>{{ __('navigation.sidebar.close') }}</span>
             </button>
         </div>
     </div>

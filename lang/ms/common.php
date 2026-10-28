@@ -24,6 +24,7 @@ return [
         'view_all' => 'Lihat semua',
         'processing' => 'Memproses...',
         'select' => 'Pilih',
+        'continue' => 'Teruskan',
     ],
 
     'status' => [

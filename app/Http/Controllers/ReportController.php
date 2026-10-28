@@ -24,14 +24,14 @@ class ReportController extends Controller
         for ($i = 11; $i >= 0; $i--) {
             $key = now()->subMonths($i)->format('Y-m');
             $monthly[$key] = [
-                'bulan' => now()->subMonths($i)->format('M Y'),
+                'bulan' => now()->subMonths($i)->locale(app()->getLocale())->translatedFormat('M Y'),
                 'jumlah' => 0,
                 'layak' => 0,
                 'tidak_layak' => 0,
                 'semakan' => 0,
                 'pct_layak' => 0,
             ];
-            $trendLabels[] = now()->subMonths($i)->format('M');
+            $trendLabels[] = now()->subMonths($i)->locale(app()->getLocale())->translatedFormat('M');
             $trendValues[] = 0;
             $trendLayak[] = 0;
             $trendTidak[] = 0;
@@ -77,7 +77,7 @@ class ReportController extends Controller
         for ($i = 11; $i >= 0; $i--) {
             $key = now()->subMonths($i)->format('Y-m');
             $monthly[$key] = [
-                'bulan' => now()->subMonths($i)->format('M Y'),
+                'bulan' => now()->subMonths($i)->locale(app()->getLocale())->translatedFormat('M Y'),
                 'jumlah' => 0,
                 'layak' => 0,
                 'tidak' => 0,

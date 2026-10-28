@@ -7,7 +7,7 @@
 >
     <button @click="open = !open"
             :aria-expanded="open"
-            aria-label="Notifikasi"
+            aria-label="{{ __('navigation.notifications.aria') }}"
             class="relative w-10 h-10 rounded-[12px] hover:bg-muted transition-fast flex items-center justify-center text-secondary hover:text-text">
         <x-icon name="bell" :size="19" />
         <span
@@ -27,16 +27,16 @@
          class="absolute right-0 top-full mt-2 w-[380px] max-w-[calc(100vw-2rem)] surface-elevated z-50 overflow-hidden">
         <div class="px-4 py-3 flex items-center justify-between border-b border-divider">
             <div>
-                <h3 class="text-body text-text font-semibold">Notifikasi</h3>
+                <h3 class="text-body text-text font-semibold">{{ __('navigation.notifications.title') }}</h3>
                 <p class="text-eyebrow text-tertiary mt-0.5">
-                    <span x-show="unreadCount > 0" x-text="unreadCount + ' yang baru'"></span>
-                    <span x-show="unreadCount === 0">Tiada notifikasi baharu</span>
+                    <span x-show="unreadCount > 0" x-text="@js(__('navigation.notifications.unread_count')).replace(':count', unreadCount)"></span>
+                    <span x-show="unreadCount === 0">{{ __('navigation.notifications.empty') }}</span>
                 </p>
             </div>
             <button
                 x-show="unreadCount > 0"
                 @click="markAllRead()"
-                class="text-small text-primary font-medium hover:underline">Tandai dibaca</button>
+                class="text-small text-primary font-medium hover:underline">{{ __('navigation.notifications.mark_read') }}</button>
         </div>
 
         <ul class="max-h-[400px] overflow-y-auto p-2" x-show="notifications.length > 0">
@@ -64,7 +64,7 @@
 
         <div x-show="notifications.length === 0" class="px-4 py-12 text-center text-tertiary">
             <x-icon name="bell" :size="30" class="opacity-30 mb-2 mx-auto" />
-            <p class="text-small">Tiada notifikasi buat masa ini</p>
+            <p class="text-small">{{ __('navigation.notifications.empty') }}</p>
         </div>
     </div>
 </div>

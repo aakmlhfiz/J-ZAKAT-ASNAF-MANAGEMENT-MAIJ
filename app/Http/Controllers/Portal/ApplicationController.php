@@ -84,7 +84,7 @@ class ApplicationController extends Controller
         $application = Application::create($validated);
 
         return redirect()->route('user.applications.show', $application->id)
-            ->with('success', 'Permohonan baru berjaya dicipta sebagai draf.');
+            ->with('success', __('applications.messages.created'));
     }
 
     private function storeUpload(Request $request, string $key): ?string
@@ -118,7 +118,7 @@ class ApplicationController extends Controller
         $application = $user->applications()->findOrFail($id);
 
         if ($application->status !== 'draft') {
-            return back()->with('error', 'Hanya permohonan draf boleh dihantar.');
+            return back()->with('error', __('applications.messages.only_draft_submit'));
         }
 
         $application->update([
@@ -184,8 +184,8 @@ class ApplicationController extends Controller
         NotificationService::notifyUsers(
             [$user->id],
             'application_submitted_user',
-            'Permohonan Dihantar',
-            'Permohonan anda telah dihantar dan sedang menunggu semakan.',
+            __('applications.notifications.submitted_user_title'),
+            __('applications.notifications.submitted_user_body'),
             'fa-solid fa-file-import',
             'success',
             route('user.applications.show', $application->id),
@@ -194,7 +194,7 @@ class ApplicationController extends Controller
         NotificationService::notifyRoles(
             ['admin', 'pegawai'],
             'application_submitted',
-            'Permohonan Zakat Baharu Dihantar',
+            __('applications.notifications.submitted_admin_title'),
             "{$application->full_name} ({$application->ic_no}) · ".now()->diffForHumans(),
             'fa-solid fa-file-import',
             'success',
@@ -202,7 +202,7 @@ class ApplicationController extends Controller
         );
 
         return redirect()->route('user.applications.show', $application->id)
-            ->with('success', 'Permohonan berjaya dihantar untuk semakan.');
+            ->with('success', __('applications.messages.submitted'));
     }
 
     public function downloadLetter($id)
@@ -213,7 +213,7 @@ class ApplicationController extends Controller
         $profil = ProfilAsnaf::where('ic', $application->ic_no)->first();
 
         if (! $profil || ! $profil->letter_path || ! Storage::disk('local')->exists($profil->letter_path)) {
-            return back()->with('error', 'Surat tidak dijumpai. Sila hubungi pentadbir.');
+            return back()->with('error', __('applications.messages.letter_missing'));
         }
 
         $filename = $profil->letter_type === 'approved'
@@ -229,7 +229,7 @@ class ApplicationController extends Controller
         $application = $user->applications()->findOrFail($id);
 
         if (! $application->submitted_at) {
-            return back()->with('error', 'Resit hanya tersedia untuk permohonan yang telah dihantar.');
+            return back()->with('error', __('applications.messages.receipt_requires_submitted'));
         }
 
         $data = [

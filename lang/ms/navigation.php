@@ -3,6 +3,8 @@
 return [
     'sidebar' => [
         'dashboard' => 'Dashboard',
+        'open' => 'Buka sidebar',
+        'close' => 'Tutup Sidebar',
         'groups' => [
             'household' => 'Isi Rumah',
             'asnaf' => 'Asnaf',
@@ -72,9 +74,20 @@ return [
         'toggle_theme' => 'Tukar tema',
     ],
 
+    'notifications' => [
+        'aria' => 'Notifikasi',
+        'title' => 'Notifikasi',
+        'unread_count' => ':count yang baru',
+        'mark_read' => 'Tandai dibaca',
+        'empty' => 'Tiada notifikasi buat masa ini',
+    ],
+
     'breadcrumbs' => [
         'home' => 'Utama',
         'dashboard' => 'Dashboard',
+        'household_intelligence' => 'Analisis Isi Rumah',
+        'household_search' => 'Carian Isi Rumah',
+        'household_profile' => 'Profil Isi Rumah',
         'asnaf_profile' => 'Profil Asnaf',
         'asnaf_list' => 'Senarai Asnaf',
         'profile' => 'Profil',
@@ -91,8 +104,15 @@ return [
         'history' => 'Sejarah',
         'reports' => 'Laporan',
         'my_profile' => 'Profil Saya',
+        'my_household' => 'Isi Rumah Saya',
+        'my_finances' => 'Kewangan Saya',
+        'my_assistance' => 'Bantuan Saya',
         'settings' => 'Tetapan',
         'my_applications' => 'Permohonan Saya',
+        'application_status' => 'Status Permohonan',
+        'my_documents' => 'Dokumen Saya',
+        'letters_receipts' => 'Surat & Resit',
+        'notifications' => 'Notifikasi',
         'new_application' => 'Mohon Baharu',
         'details' => 'Butiran',
         'create' => 'Cipta',

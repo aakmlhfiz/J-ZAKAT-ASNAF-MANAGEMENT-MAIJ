@@ -1,36 +1,36 @@
 @extends('portal.layouts.app')
-@section('title', 'Dokumen Saya — Portal Pemohon')
-@section('page-title', 'Dokumen Saya')
+@section('title', __('portal_documents.documents.title').' — '.__('navigation.brand.portal'))
+@section('page-title', __('portal_documents.documents.title'))
 
 @section('content')
 <x-page-header
-    title="Dokumen Saya"
-    subtitle="Muat naik dan urus dokumen sokongan permohonan anda."
+    title="{{ __('portal_documents.documents.title') }}"
+    subtitle="{{ __('portal_documents.documents.subtitle') }}"
 />
 
 {{-- Upload --}}
 <x-app-card class="p-6 mb-6" :hover="false">
-    <x-section-header title="Muat Naik Dokumen" description="Format PDF, JPG atau PNG. Maksimum 10MB." icon="fa-cloud-arrow-up" />
+    <x-section-header :title="__('portal_documents.documents.upload.title')" :description="__('portal_documents.documents.upload.description')" icon="fa-cloud-arrow-up" />
     <form method="POST" action="{{ route('user.documents.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-                <label class="block text-small font-medium text-text mb-1.5">Jenis Dokumen <span class="text-danger">*</span></label>
+                <label class="block text-small font-medium text-text mb-1.5">{{ __('portal_documents.documents.upload.type') }} <span class="text-danger">*</span></label>
                 <select name="document_type" class="input-base w-full">
                     @foreach(App\Services\PortalDocumentService::typeOptions() as $key => $label)
-                        <option value="{{ $key }}" {{ old('document_type') === $key ? 'selected' : '' }}>{{ $label }}</option>
+                        <option value="{{ $key }}" {{ old('document_type') === $key ? 'selected' : '' }}>{{ Lang::has('portal_documents.documents.types.'.$key) ? __('portal_documents.documents.types.'.$key) : $label }}</option>
                     @endforeach
                 </select>
                 @error('document_type') <p class="text-small text-danger mt-1">{{ $message }}</p> @enderror
             </div>
             <div class="sm:col-span-2">
-                <label class="block text-small font-medium text-text mb-1.5">Fail <span class="text-danger">*</span></label>
+                <label class="block text-small font-medium text-text mb-1.5">{{ __('portal_documents.documents.upload.file') }} <span class="text-danger">*</span></label>
                 <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" class="input-base w-full">
                 @error('file') <p class="text-small text-danger mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
         <div class="mt-4">
-            <x-app-button type="submit" variant="primary" size="md" icon="fa-cloud-arrow-up">Muat Naik</x-app-button>
+            <x-app-button type="submit" variant="primary" size="md" icon="fa-cloud-arrow-up">{{ __('portal_documents.documents.upload.submit') }}</x-app-button>
         </div>
     </form>
 </x-app-card>
@@ -38,19 +38,19 @@
 {{-- List --}}
 @if($documents->count() === 0)
     <x-app-card>
-        <x-empty-state icon="fa-folder-open" title="Tiada dokumen" description="Muat naik dokumen sokongan anda menggunakan borang di atas." />
+        <x-empty-state icon="fa-folder-open" title="{{ __('portal_documents.documents.empty.title') }}" description="{{ __('portal_documents.documents.empty.description') }}" />
     </x-app-card>
 @else
     <div class="space-y-3">
         @foreach($documents as $doc)
             @php
                 $statusMap = [
-                    'uploaded'     => ['label' => 'Dimuat Naik',  'tone' => 'info'],
-                    'processing'   => ['label' => 'Memproses',    'tone' => 'warning'],
-                    'extracted'    => ['label' => 'Diekstrak',    'tone' => 'info'],
-                    'needs_review' => ['label' => 'Perlu Semakan', 'tone' => 'warning'],
-                    'committed'    => ['label' => 'Disahkan',     'tone' => 'success'],
-                    'failed'       => ['label' => 'Ditolak',      'tone' => 'danger'],
+                    'uploaded'     => ['label' => __('portal_documents.documents.status.uploaded'),     'tone' => 'info'],
+                    'processing'   => ['label' => __('portal_documents.documents.status.processing'),   'tone' => 'warning'],
+                    'extracted'    => ['label' => __('portal_documents.documents.status.extracted'),    'tone' => 'info'],
+                    'needs_review' => ['label' => __('portal_documents.documents.status.needs_review'), 'tone' => 'warning'],
+                    'committed'    => ['label' => __('portal_documents.documents.status.committed'),    'tone' => 'success'],
+                    'failed'       => ['label' => __('portal_documents.documents.status.failed'),       'tone' => 'danger'],
                 ];
                 $meta = $statusMap[$doc->status] ?? ['label' => ucfirst($doc->status), 'tone' => 'secondary'];
                 $isBorang = $doc->document_type === App\Services\Ocr\OcrService::DOC_TYPE_BORANG_BANTUAN;
@@ -64,27 +64,27 @@
                         <div class="flex items-start justify-between gap-3 flex-wrap">
                             <div class="min-w-0">
                                 <p class="text-body text-text font-semibold truncate">{{ $doc->original_filename }}</p>
-                                <p class="text-small text-secondary mt-0.5">{{ $doc->template ?: 'Dokumen Sokongan' }} · {{ $doc->created_at->format('d M Y, h:i A') }}</p>
+                                <p class="text-small text-secondary mt-0.5">{{ $doc->template ?: __('portal_documents.documents.fallback_type') }} · {{ $doc->created_at->locale(app()->getLocale())->translatedFormat('d M Y, h:i A') }}</p>
                                 @if($doc->overall_confidence !== null)
-                                    <p class="text-eyebrow text-tertiary mt-1">Keyakinan OCR: {{ number_format($doc->overall_confidence, 1) }}%</p>
+                                    <p class="text-eyebrow text-tertiary mt-1">{{ __('portal_documents.documents.ocr_confidence', ['value' => number_format($doc->overall_confidence, 1)]) }}</p>
                                 @endif
                             </div>
                             <x-status-badge :status="$meta['tone']">{{ $meta['label'] }}</x-status-badge>
                         </div>
                         <div class="mt-3 flex items-center gap-2 flex-wrap">
                             <a href="{{ route('user.documents.download', $doc->id) }}" class="btn btn-sm btn-outline">
-                                <i class="fa-solid fa-download text-[11px]"></i> Muat Turun
+                                <i class="fa-solid fa-download text-[11px]"></i> {{ __('portal_documents.documents.download') }}
                             </a>
                             @if($isBorang && !in_array($doc->status, ['committed']))
                                 @if(in_array($doc->status, ['extracted', 'needs_review', 'failed']))
                                 <a href="{{ route('user.applications.scan.preview', $doc->id) }}" class="btn btn-sm btn-outline">
-                                    <i class="fa-solid fa-eye text-[11px]"></i> Semak
+                                    <i class="fa-solid fa-eye text-[11px]"></i> {{ __('portal_documents.documents.review') }}
                                 </a>
                                 @endif
                                 <form method="POST" action="{{ route('user.documents.reprocess', $doc->id) }}" class="inline">
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-ghost">
-                                        <i class="fa-solid fa-rotate text-[11px]"></i> Proses Semula
+                                        <i class="fa-solid fa-rotate text-[11px]"></i> {{ __('portal_documents.documents.reprocess') }}
                                     </button>
                                 </form>
                             @endif
