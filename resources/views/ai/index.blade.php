@@ -1,17 +1,17 @@
 @extends('layouts.app', [
-    'title' => 'AI Assistant',
-    'subtitle' => 'Pembantu pintar data asnaf MAIJ',
+    'title' => __('ai.page.title'),
+    'subtitle' => __('ai.page.subtitle'),
 ])
-@section('title', 'Ustaz Danial — J-ZAKAT')
+@section('title', __('ai.page.tab_title'))
 @section('content')
 <div x-data="aiChatWidget" class="max-w-3xl mx-auto">
     <div class="mb-5 flex items-center gap-3">
         <div class="w-11 h-11 rounded-[14px] text-white flex items-center justify-center font-bold text-[16px] shrink-0" style="background: var(--gradient-royal);">UD</div>
         <div class="min-w-0">
             <h1 class="text-title text-text">Ustaz Danial</h1>
-            <p class="text-small text-secondary">Pembantu pintar data asnaf MAIJ</p>
+            <p class="text-small text-secondary">{{ __('ai.page.role') }}</p>
         </div>
-        <button @click="clear()" type="button" class="ml-auto w-9 h-9 rounded-[10px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-text transition-fast shrink-0" aria-label="Kosongkan sejarah">
+        <button @click="clear()" type="button" class="ml-auto w-9 h-9 rounded-[10px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-text transition-fast shrink-0" aria-label="{{ __('ai.page.clear_history') }}">
             <x-icon name="trash" :size="16" />
         </button>
     </div>
@@ -32,24 +32,24 @@
                 <div class="w-16 h-16 rounded-[20px] mx-auto flex items-center justify-center mb-4" style="background: var(--gradient-royal);">
                     <span class="text-white font-bold text-[22px]">UD</span>
                 </div>
-                <h3 class="text-h3 text-text">Ustaz Danial sedia membantu</h3>
-                <p class="text-body text-secondary mt-2 max-w-sm mx-auto">Cuba tanya saya tentang pemohon, statistik, atau Had Kifayah.</p>
+                <h3 class="text-h3 text-text">{{ __('ai.page.empty_title') }}</h3>
+                <p class="text-body text-secondary mt-2 max-w-sm mx-auto">{{ __('ai.page.empty_body') }}</p>
                 <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-md mx-auto">
-                    <button @click="draft = 'Berapa ramai pemohon yang layak bulan ini?'; $dispatch('ai-send')" type="button" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
+                    <button @click="draft = @js(__('ai.suggestions.prompt_eligibility_stats')); $dispatch('ai-send')" type="button" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
                         <x-icon name="chart-pie" :size="15" class="text-primary" />
-                        <p class="text-small font-medium text-text mt-1.5">Statistik kelayakan</p>
+                        <p class="text-small font-medium text-text mt-1.5">{{ __('ai.suggestions.eligibility_stats') }}</p>
                     </button>
-                    <button @click="draft = 'Jana penilaian untuk pemohon terkini'; $dispatch('ai-send')" type="button" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
+                    <button @click="draft = @js(__('ai.suggestions.prompt_generate_assessment')); $dispatch('ai-send')" type="button" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
                         <x-icon name="activity" :size="15" class="text-primary" />
-                        <p class="text-small font-medium text-text mt-1.5">Jana penilaian AI</p>
+                        <p class="text-small font-medium text-text mt-1.5">{{ __('ai.suggestions.generate_assessment') }}</p>
                     </button>
-                    <button @click="draft = 'Cari pemohon bernama Ahmad'; $dispatch('ai-send')" type="button" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
+                    <button @click="draft = @js(__('ai.suggestions.prompt_search_applicant')); $dispatch('ai-send')" type="button" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
                         <x-icon name="search" :size="15" class="text-primary" />
-                        <p class="text-small font-medium text-text mt-1.5">Cari pemohon</p>
+                        <p class="text-small font-medium text-text mt-1.5">{{ __('ai.suggestions.search_applicant') }}</p>
                     </button>
-                    <button @click="draft = 'Apakah kadar Had Kifayah semasa?'; $dispatch('ai-send')" type="button" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
+                    <button @click="draft = @js(__('ai.suggestions.prompt_kifayah_rate')); $dispatch('ai-send')" type="button" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
                         <x-icon name="calculator" :size="15" class="text-primary" />
-                        <p class="text-small font-medium text-text mt-1.5">Kadar Had Kifayah</p>
+                        <p class="text-small font-medium text-text mt-1.5">{{ __('ai.suggestions.kifayah_rate') }}</p>
                     </button>
                 </div>
             </div>
@@ -68,6 +68,6 @@
         <x-ai-input />
     </x-app-card>
 
-    <p class="text-[11px] text-tertiary mt-3 text-center">Ustaz Danial memberi analisis berdasarkan data sistem. Keputusan muktamad tertakluk kepada penilaian rasmi MAIJ.</p>
+    <p class="text-[11px] text-tertiary mt-3 text-center">{{ __('ai.page.disclaimer') }}</p>
 </div>
 @endsection

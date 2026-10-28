@@ -9,7 +9,7 @@
                 <i x-bind:class="t.type === 'error' ? 'fa-solid fa-circle-exclamation' : t.type === 'warning' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-circle-check'" class="text-[14px]"></i>
             </div>
             <div class="flex-1 min-w-0">
-                <p class="text-small text-text font-semibold" x-text="t.title || 'Berjaya'"></p>
+                <p class="text-small text-text font-semibold" x-text="t.title || @js(__('profile.toast.success'))"></p>
                 <p class="text-small text-secondary mt-0.5" x-text="t.message"></p>
             </div>
             <button @click="dismiss(t.id)" class="text-tertiary hover:text-text transition-fast shrink-0">

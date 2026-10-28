@@ -1,7 +1,31 @@
+@php
+    $aiStrings = [
+        'locale' => app()->getLocale(),
+        'error' => __('ai.errors.connection'),
+        'no_reply' => __('ai.errors.no_reply'),
+        'card_stats' => __('ai.card.stats'),
+        'card_profile' => __('ai.card.profile'),
+        'card_explanation' => __('ai.card.explanation'),
+        'card_result' => __('ai.card.result'),
+        'card_search_results' => __('ai.card.search_results'),
+        'card_suggestions' => __('ai.card.suggestions'),
+        'card_ai_score' => __('ai.card.ai_score'),
+        'status_layak' => __('common.status.layak'),
+        'status_tidak_layak' => __('common.status.tidak_layak'),
+        'status_dalam_semakan' => __('common.status.dalam_semakan'),
+        'providers' => [
+            'mock' => __('ai.providers.labels.mock'),
+            'groq' => __('ai.providers.labels.groq'),
+            'openai' => __('ai.providers.labels.openai'),
+            'gemini' => __('ai.providers.labels.gemini'),
+            'ollama' => __('ai.providers.labels.ollama'),
+        ],
+    ];
+@endphp
 <div x-data="aiChatWidget" class="fixed bottom-5 right-5 z-40">
     <button @click="open = !open"
             :aria-expanded="open"
-            aria-label="Buka Ustaz Danial"
+            aria-label="{{ __('ai.widget.open') }}"
             class="relative w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-[15px] tracking-tight shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-apple"
             style="background: var(--gradient-royal); box-shadow: 0 12px 28px -10px rgba(37,99,235,0.7);">
         <span>UD</span>
@@ -24,10 +48,10 @@
                 <p class="text-small font-semibold leading-none">Ustaz Danial</p>
                 <p class="text-[10px] opacity-90 mt-1 flex items-center gap-1.5">
                     <span class="w-1.5 h-1.5 rounded-full bg-success animate-pulse-soft"></span>
-                    <span x-text="provider"></span> · dalam talian
+                    <span x-text="providerLabel()"></span> · {{ __('ai.widget.online') }}
                 </p>
             </div>
-            <button @click="open = false" class="w-8 h-8 rounded-[8px] hover:bg-white/15 transition-fast flex items-center justify-center text-white/85" aria-label="Tutup">
+            <button @click="open = false" class="w-8 h-8 rounded-[8px] hover:bg-white/15 transition-fast flex items-center justify-center text-white/85" aria-label="{{ __('ai.widget.close') }}">
                 <x-icon name="x" :size="15" />
             </button>
         </div>
@@ -46,8 +70,8 @@
                 <div class="w-12 h-12 rounded-[14px] mx-auto flex items-center justify-center mb-3" style="background: var(--gradient-royal);">
                     <span class="text-white font-bold text-[16px]">UD</span>
                 </div>
-                <p class="text-body text-text font-semibold">Hai! Saya Ustaz Danial</p>
-                <p class="text-small text-secondary mt-1">Tanya saya tentang pemohon, statistik atau Had Kifayah.</p>
+                <p class="text-body text-text font-semibold">{{ __('ai.widget.greeting') }}</p>
+                <p class="text-small text-secondary mt-1">{{ __('ai.widget.greeting_body') }}</p>
             </div>
             <div x-show="loading" class="flex justify-start">
                 <div class="bg-card border border-divider rounded-[18px] rounded-bl-md px-3.5 py-2.5 shadow-sm">
@@ -62,11 +86,14 @@
 
         <div class="border-t border-divider p-3 bg-card">
             <form @submit.prevent="send()" class="flex items-center gap-2">
-                <input x-model="draft" type="text" placeholder="Tanya apa-apa..." class="input-base flex-1 py-2.5 text-[13px]">
-                <button type="submit" :disabled="!draft.trim() || loading" class="btn btn-primary btn-icon btn-sm" aria-label="Hantar">
+                <input x-model="draft" type="text" placeholder="{{ __('ai.widget.placeholder') }}" class="input-base flex-1 py-2.5 text-[13px]">
+                <button type="submit" :disabled="!draft.trim() || loading" class="btn btn-primary btn-icon btn-sm" aria-label="{{ __('ai.widget.send') }}">
                     <x-icon name="send" :size="15" />
                 </button>
             </form>
         </div>
     </div>
 </div>
+<script>
+    window.aiChatStrings = Object.assign(window.aiChatStrings || {}, @json($aiStrings));
+</script>

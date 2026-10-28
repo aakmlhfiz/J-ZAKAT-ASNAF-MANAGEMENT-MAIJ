@@ -60,9 +60,9 @@ class BantuanScanController extends Controller
                 'max:'.$maxSize,
             ],
         ], [
-            'file.required' => 'Sila pilih fail Borang Bantuan MAIJ.',
-            'file.mimes' => 'Format fail tidak disokong. Sila muat naik PDF, JPG, atau PNG.',
-            'file.max' => 'Saiz fail melebihi had maksimum '.($maxSize / 1024).'MB.',
+            'file.required' => __('ocr.messages.file_required'),
+            'file.mimes' => __('ocr.messages.file_mimes'),
+            'file.max' => __('ocr.messages.file_max', ['size' => $maxSize / 1024]),
         ]);
 
         if ($validator->fails()) {
@@ -80,7 +80,7 @@ class BantuanScanController extends Controller
         if ($duplicate) {
             $route = route('user.applications.scan.preview', $duplicate->id);
 
-            return back()->with('info', "Fail ini pernah dimuat naik sebelum ini. <a href=\"{$route}\" class=\"underline\">Lihat keputusan</a>.");
+            return back()->with('info', __('ocr.messages.duplicate', ['url' => $route]));
         }
 
         $ext = $file->getClientOriginalExtension();
@@ -111,7 +111,7 @@ class BantuanScanController extends Controller
 
         return redirect()
             ->route('user.applications.scan.preview', $import->id)
-            ->with('success', 'Borang sedang diimbas. AI sedang mengekstrak maklumat...');
+            ->with('success', __('ocr.messages.scan_started'));
     }
 
     public function preview(string $id): View
@@ -174,7 +174,14 @@ class BantuanScanController extends Controller
         }
 
         if (! in_array($import->status, ['extracted', 'needs_review'])) {
-            return back()->with('error', 'Data belum bersedia untuk disimpan. Status: '.$import->status);
+            return back()->with('error', __('ocr.messages.not_ready', ['status' => match ($import->status) {
+                'extracted' => __('imports.status.extracted'),
+                'needs_review' => __('imports.status.needs_review'),
+                'committed' => __('imports.status.sent'),
+                'failed' => __('imports.status.failed'),
+                'processing' => __('imports.status.processing'),
+                default => $import->status,
+            }]));
         }
 
         $data = $request->validate([
@@ -198,21 +205,21 @@ class BantuanScanController extends Controller
         $data['ic_no'] = $ic;
 
         if (strlen($ic) !== 12) {
-            return back()->with('error', 'No. Kad Pengenalan mesti mengandungi 12 digit.');
+            return back()->with('error', __('ocr.messages.invalid_ic_length'));
         }
 
         $existingProfil = ProfilAsnaf::where('ic', $ic)->first();
 
         if ($existingProfil && $user->ic_no !== $ic) {
-            return back()->with('error', 'No. IC ini telah digunakan oleh pemohon lain. Sila hubungi pentadbir.');
+            return back()->with('error', __('ocr.messages.ic_used_by_other'));
         }
 
         if ($user->ic_no && $user->ic_no !== $ic) {
-            return back()->with('error', 'No. IC tidak sepadan dengan akaun anda. Sila semak semula.');
+            return back()->with('error', __('ocr.messages.ic_mismatch'));
         }
 
         if ($existingProfil && $existingProfil->approval_status === 'approved') {
-            return back()->with('error', 'No. IC ini sudah diluluskan. Hubungi pentadbir untuk kemas kini.');
+            return back()->with('error', __('ocr.messages.already_approved'));
         }
 
         try {
@@ -288,14 +295,14 @@ class BantuanScanController extends Controller
             DB::rollBack();
             report($e);
 
-            return back()->with('error', 'Ralat semasa menyimpan borang: '.$e->getMessage())->withInput();
+            return back()->with('error', __('ocr.messages.save_failed', ['error' => $e->getMessage()]))->withInput();
         }
 
         AuditLogger::borangScanCommitted($user, $import, $application, $profil, $request);
 
         foreach (Admin::all() as $admin) {
             try {
-                Mail::to($admin->email)->send(new ApplicationSubmittedMail($user, $application));
+                Mail::to($admin->email)->send(new ApplicationSubmittedMail($user, $application, $admin->language));
             } catch (\Throwable $e) {
                 Log::warning('Gagal menghantar emel borang Bantuan MAIJ baharu.', [
                     'admin_id' => $admin->id,
@@ -307,8 +314,8 @@ class BantuanScanController extends Controller
         NotificationService::notifyRoles(
             ['admin', 'pegawai'],
             'application_submitted',
-            'Permohonan Borang Bantuan MAIJ Dihantar',
-            "{$profil->nama} ({$profil->ic}) · Skor AI: {$profil->ai_score}%",
+            __('ocr.messages.notification_title'),
+            __('ocr.messages.notification_body', ['name' => $profil->nama, 'ic' => $profil->ic, 'score' => $profil->ai_score]),
             'fa-solid fa-file-contract',
             'success',
             route('viewprofile', $profil->ic)
@@ -326,8 +333,8 @@ class BantuanScanController extends Controller
         NotificationService::notifyUsers(
             [$user->id],
             'application_submitted_user',
-            'Permohonan Dihantar',
-            'Borang Bantuan MAIJ anda telah dihantar dan sedang menunggu semakan.',
+            __('ocr.messages.user_notification_title'),
+            __('ocr.messages.user_notification_body'),
             'fa-solid fa-file-contract',
             'success',
             route('user.applications.show', $application->id),
@@ -335,7 +342,7 @@ class BantuanScanController extends Controller
 
         return redirect()
             ->route('user.applications.show', $application->id)
-            ->with('success', "Borang Bantuan MAIJ berjaya dihantar. Skor AI: {$profil->ai_score}%. Status: {$profil->status_kelayakan}.");
+            ->with('success', __('ocr.messages.success', ['score' => $profil->ai_score, 'status' => $profil->status_kelayakan]));
     }
 
     public function reprocess(Request $request, string $id): RedirectResponse
@@ -348,7 +355,7 @@ class BantuanScanController extends Controller
             ->findOrFail($id);
 
         if ($import->status === 'committed') {
-            return back()->with('info', 'Rekod ini telah dihantar — tidak perlu diproses semula.');
+            return back()->with('info', __('ocr.messages.already_submitted'));
         }
 
         $import->update([
@@ -362,7 +369,7 @@ class BantuanScanController extends Controller
 
         return redirect()
             ->route('user.applications.scan.preview', $import->id)
-            ->with('success', 'Pemprosesan semula selesai.');
+            ->with('success', __('ocr.messages.reprocessed'));
     }
 
     public function status(string $id): JsonResponse

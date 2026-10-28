@@ -11,6 +11,9 @@ use App\Services\Ai\Tools\SearchApplicantsTool;
 /**
  * OpenAI-compatible function definitions for the J-ZAKAT assistant,
  * plus the local dispatch layer that executes them safely.
+ *
+ * Function names, parameter keys and enums are stable API surface and must
+ * never be translated. Only descriptions are localized.
  */
 class ToolRegistry
 {
@@ -26,13 +29,13 @@ class ToolRegistry
                 'type' => 'function',
                 'function' => [
                     'name' => 'get_applicant',
-                    'description' => 'Get the full asnaf applicant profile by 12-digit Malaysian IC number.',
+                    'description' => __('ai.tools.get_applicant.description'),
                     'parameters' => [
                         'type' => 'object',
                         'properties' => [
                             'ic' => [
                                 'type' => 'string',
-                                'description' => '12-digit IC number without hyphens.',
+                                'description' => __('ai.tools.get_applicant.ic_description'),
                             ],
                         ],
                         'required' => ['ic'],
@@ -44,13 +47,13 @@ class ToolRegistry
                 'type' => 'function',
                 'function' => [
                     'name' => 'search_applicants',
-                    'description' => 'Search asnaf applicants by full or partial name, or by IC number.',
+                    'description' => __('ai.tools.search_applicants.description'),
                     'parameters' => [
                         'type' => 'object',
                         'properties' => [
                             'query' => [
                                 'type' => 'string',
-                                'description' => 'Applicant name or IC number to search for.',
+                                'description' => __('ai.tools.search_applicants.query_description'),
                             ],
                         ],
                         'required' => ['query'],
@@ -62,7 +65,7 @@ class ToolRegistry
                 'type' => 'function',
                 'function' => [
                     'name' => 'get_dashboard_stats',
-                    'description' => 'Get current applicant counts and eligibility statistics.',
+                    'description' => __('ai.tools.dashboard_stats.description'),
                     'parameters' => [
                         'type' => 'object',
                         'properties' => (object) [],
@@ -74,17 +77,17 @@ class ToolRegistry
                 'type' => 'function',
                 'function' => [
                     'name' => 'explain_eligibility',
-                    'description' => 'Explain an applicant eligibility decision using their IC number or full name.',
+                    'description' => __('ai.tools.explain_eligibility.description'),
                     'parameters' => [
                         'type' => 'object',
                         'properties' => [
                             'ic' => [
                                 'type' => 'string',
-                                'description' => '12-digit IC number, if known.',
+                                'description' => __('ai.tools.explain_eligibility.ic_description'),
                             ],
                             'name' => [
                                 'type' => 'string',
-                                'description' => 'Applicant full name, if the IC is unknown.',
+                                'description' => __('ai.tools.explain_eligibility.name_description'),
                             ],
                         ],
                         'additionalProperties' => false,
@@ -95,14 +98,14 @@ class ToolRegistry
                 'type' => 'function',
                 'function' => [
                     'name' => 'calculate_kifayah',
-                    'description' => 'Calculate Had Kifayah and eligibility from household income and composition. Use only values supplied by the user or found through another tool.',
+                    'description' => __('ai.tools.calculate_kifayah.description'),
                     'parameters' => [
                         'type' => 'object',
                         'properties' => [
-                            'pendapatan_pemohon' => ['type' => 'number', 'minimum' => 0, 'description' => 'Applicant monthly income (RM).'],
-                            'pendapatan_pasangan' => ['type' => 'number', 'minimum' => 0, 'description' => 'Spouse monthly income (RM).'],
-                            'pendapatan_anak' => ['type' => 'number', 'minimum' => 0, 'description' => 'Children monthly income (RM).'],
-                            'pendapatan_lain' => ['type' => 'number', 'minimum' => 0, 'description' => 'Other monthly income (RM).'],
+                            'pendapatan_pemohon' => ['type' => 'number', 'minimum' => 0, 'description' => __('ai.tools.calculate_kifayah.applicant_income')],
+                            'pendapatan_pasangan' => ['type' => 'number', 'minimum' => 0, 'description' => __('ai.tools.calculate_kifayah.spouse_income')],
+                            'pendapatan_anak' => ['type' => 'number', 'minimum' => 0, 'description' => __('ai.tools.calculate_kifayah.children_income')],
+                            'pendapatan_lain' => ['type' => 'number', 'minimum' => 0, 'description' => __('ai.tools.calculate_kifayah.other_income')],
                             'n_isteri_suami' => ['type' => 'integer', 'minimum' => 0, 'maximum' => 20],
                             'n_ibu_bapa' => ['type' => 'integer', 'minimum' => 0, 'maximum' => 20],
                             'n_dewasa_tidak_bekerja' => ['type' => 'integer', 'minimum' => 0, 'maximum' => 20],
@@ -112,9 +115,9 @@ class ToolRegistry
                             'n_kanak_rendah' => ['type' => 'integer', 'minimum' => 0, 'maximum' => 20],
                             'n_kanak_tadika' => ['type' => 'integer', 'minimum' => 0, 'maximum' => 20],
                             'perumahan' => ['type' => 'string', 'enum' => ['sendiri', 'sewa']],
-                            'utiliti_input' => ['type' => 'number', 'minimum' => 0, 'description' => 'Monthly utility cost (RM).'],
-                            'pengangkutan_input' => ['type' => 'number', 'minimum' => 0, 'description' => 'Monthly transport cost (RM).'],
-                            'perubatan_input' => ['type' => 'number', 'minimum' => 0, 'description' => 'Monthly medical cost (RM).'],
+                            'utiliti_input' => ['type' => 'number', 'minimum' => 0, 'description' => __('ai.tools.calculate_kifayah.utilities_description')],
+                            'pengangkutan_input' => ['type' => 'number', 'minimum' => 0, 'description' => __('ai.tools.calculate_kifayah.transport_description')],
+                            'perubatan_input' => ['type' => 'number', 'minimum' => 0, 'description' => __('ai.tools.calculate_kifayah.medical_description')],
                         ],
                         'additionalProperties' => false,
                     ],
@@ -136,7 +139,7 @@ class ToolRegistry
             'get_dashboard_stats' => (new GetDashboardStatsTool)->handle('statistik'),
             'explain_eligibility' => $this->explainEligibility($arguments),
             'calculate_kifayah' => $this->calculateKifayah($arguments),
-            default => $this->toolError("Tool tidak dikenali: {$name}"),
+            default => $this->toolError(__('ai.errors.unknown_tool', ['name' => $name])),
         };
     }
 
@@ -145,7 +148,7 @@ class ToolRegistry
         $ic = preg_replace('/\D+/', '', (string) ($arguments['ic'] ?? ''));
 
         if ($ic === '') {
-            return $this->toolError('No. IC diperlukan untuk mendapatkan profil pemohon.');
+            return $this->toolError(__('ai.tools.get_applicant.missing_ic'));
         }
 
         return (new GetApplicantTool)->handle($ic);
@@ -157,7 +160,7 @@ class ToolRegistry
         $query = trim((string) preg_replace('/^(cari|find|search)\s+/i', '', $query));
 
         if ($query === '') {
-            return $this->toolError('Nama atau No. IC diperlukan untuk carian pemohon.');
+            return $this->toolError(__('ai.tools.search_applicants.missing_query'));
         }
 
         return (new SearchApplicantsTool)->handle('cari '.$query);
@@ -179,7 +182,7 @@ class ToolRegistry
             return (new ExplainEligibilityTool)->handle('adakah '.$name.' layak');
         }
 
-        return $this->toolError('No. IC atau nama penuh diperlukan untuk menjelaskan kelayakan.');
+        return $this->toolError(__('ai.tools.explain_eligibility.missing_input'));
     }
 
     private function calculateKifayah(array $arguments): array
@@ -201,7 +204,7 @@ class ToolRegistry
         }
 
         if (! $hasValue) {
-            return $this->toolError('Sila berikan sekurang-kurangnya pendapatan atau maklumat isi rumah untuk pengiraan Had Kifayah.');
+            return $this->toolError(__('ai.tools.calculate_kifayah.missing_input'));
         }
 
         return (new CalculateKifayahTool)->calculate($arguments);

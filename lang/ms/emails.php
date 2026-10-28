@@ -1,0 +1,158 @@
+<?php
+
+return [
+    'common' => [
+        'greeting' => 'Salam :name,',
+        'org' => 'Majlis Agama Islam Johor',
+        'org_full' => 'Majlis Agama Islam Johor (MAIJ)',
+        'footer' => '© :year J-ZAKAT · Majlis Agama Islam Johor',
+        'footer_full' => '© :year J-ZAKAT · Majlis Agama Islam Johor (MAIJ)',
+        'support' => 'Sekiranya anda mempunyai sebarang pertanyaan, hubungi Bahagian Pengurusan Zakat MAIJ di talian <strong>:phone</strong>.',
+    ],
+
+    'documents' => [
+        'ic' => 'Kad Pengenalan',
+        'salary_slip' => 'Slip Gaji',
+        'bank_statement' => 'Penyata Bank',
+        'utility_bill' => 'Bil Utiliti',
+        'rental_agreement' => 'Perjanjian Sewa',
+        'income_verification_letter' => 'Surat Pengesahan Pendapatan',
+        'divorce_certificate' => 'Surat Cerai',
+        'death_certificate' => 'Sijil Kematian',
+        'oku_card' => 'Kad OKU',
+        'student_verification_letter' => 'Surat Pengesahan Pelajar IPT',
+        'other' => 'Dokumen Lain',
+    ],
+
+    'additional_documents' => [
+        'subject' => 'Dokumen Tambahan Diperlukan — J-ZAKAT',
+        'title' => 'Dokumen Tambahan Diperlukan',
+        'header' => 'Dokumen Tambahan Diperlukan',
+        'intro' => 'Pihak <strong>Majlis Agama Islam Johor (MAIJ)</strong> memerlukan dokumen tambahan berikut untuk meneruskan semakan permohonan zakat anda (No. K/P: <strong>:ic</strong>).',
+        'list_title' => 'Dokumen yang diperlukan',
+        'note_title' => 'Catatan Pentadbir',
+        'body' => 'Sila log masuk ke portal pemohon untuk memuat naik dokumen yang diperlukan.',
+    ],
+
+    'application_approved' => [
+        'subject' => 'Tahniah! Permohonan Zakat Diluluskan — J-ZAKAT',
+        'title' => 'Permohonan Diluluskan',
+        'header' => 'DILULUSKAN',
+        'subtitle' => 'J-ZAKAT · Majlis Agama Islam Johor',
+        'intro' => 'Tahniah! Permohonan bantuan zakat anda telah <strong style="color:#34C759;">DILULUSKAN</strong> oleh pihak Majlis Agama Islam Johor (MAIJ).',
+        'label_name' => 'Nama',
+        'label_ic' => 'No. K/P',
+        'label_status' => 'Status Kelayakan',
+        'label_date' => 'Tarikh Diluluskan',
+        'body' => 'Surat kelulusan rasmi MAIJ dilampirkan bersama emel ini. Sila bawa surat ini beserta dokumen asal (Kad Pengenalan, slip gaji) ke Pejabat MAIJ untuk proses pengesahan selanjutnya.',
+        'checklist_title' => 'Sediakan dokumen berikut:',
+        'checklist_ic' => 'Kad Pengenalan (asal & salinan)',
+        'checklist_salary' => 'Slip gaji terkini',
+        'checklist_letter' => 'Surat kelulusan ini (cetakan)',
+    ],
+
+    'application_received' => [
+        'subject' => 'Permohonan Diterima — J-ZAKAT',
+        'title' => 'Permohonan Diterima',
+        'header' => 'Pengesahan Permohonan',
+        'heading' => 'Permohonan Anda Telah Diterima',
+        'intro' => 'Salam sejahtera <strong>:name</strong>, permohonan bantuan zakat anda telah berjaya dihantar dan sedang menunggu semakan pihak Majlis Agama Islam Johor (MAIJ).',
+        'reference_label' => 'No. Rujukan Permohonan',
+        'body' => 'Anda boleh menyemak status permohonan anda pada bila-bila masa melalui portal pemohon.',
+        'button' => 'Semak Status Permohonan',
+    ],
+
+    'application_rejected' => [
+        'subject' => 'Keputusan Permohonan Zakat — J-ZAKAT',
+        'title' => 'Permohonan Ditolak',
+        'header' => 'DITOLAK',
+        'subtitle' => 'J-ZAKAT · Majlis Agama Islam Johor',
+        'intro' => 'Kami memaklumkan bahawa permohonan bantuan zakat anda telah <strong style="color:#EF4444;">DITOLAK</strong> selepas semakan oleh pihak Majlis Agama Islam Johor (MAIJ).',
+        'label_name' => 'Nama',
+        'label_ic' => 'No. K/P',
+        'label_status' => 'Status',
+        'status_rejected' => 'Ditolak',
+        'label_date' => 'Tarikh',
+        'reason_title' => 'Sebab Penolakan',
+        'body' => 'Anda boleh mengemukakan rayuan atau permohonan baharu dengan dokumen yang lebih lengkap. Sila rujuk notis rasmi yang dilampirkan untuk maklumat lanjut.',
+    ],
+
+    'application_submitted' => [
+        'subject' => 'Permohonan Zakat Baru Dihantar — J-ZAKAT',
+        'title' => 'Permohonan Baharu',
+        'header' => 'Permohonan Zakat Baharu',
+        'heading' => 'Permohonan Telah Dihantar',
+        'intro' => 'Pemohon <strong>:name</strong> (:ic) telah menghantar permohonan zakat baharu untuk semakan.',
+        'reference_label' => 'No. Rujukan Permohonan',
+        'body' => 'Sila log masuk ke panel pentadbir untuk menyemak dan memproses permohonan ini.',
+    ],
+
+    'new_applicant' => [
+        'subject' => 'Pemohon Baru Berdaftar — J-ZAKAT',
+        'title' => 'Pemohon Baru Berdaftar',
+        'header' => 'Pemohon Baru Berdaftar',
+        'heading' => 'Pemohon Baharu',
+        'intro' => 'Seorang pemohon baharu telah berjaya mendaftar di portal <strong>J-ZAKAT</strong>.',
+        'label_name' => 'Nama',
+        'label_ic' => 'No. K/P',
+        'label_email' => 'Emel',
+        'label_phone' => 'Telefon',
+    ],
+
+    'portal_user_welcome' => [
+        'subject' => 'Selamat Datang ke J-ZAKAT — Akaun Pemohon Anda',
+        'title' => 'Selamat Datang ke J-ZAKAT',
+        'header' => 'Akaun Pemohon Anda',
+        'intro' => 'Tahniah! Akaun pemohon anda di <strong>J-ZAKAT</strong> telah berjaya dicipta. Anda kini boleh memohon bantuan zakat secara online di bawah <strong>Majlis Agama Islam Johor (MAIJ)</strong>.',
+        'details_title' => 'Butiran Akaun',
+        'label_name' => 'Nama',
+        'label_ic' => 'No. K/P',
+        'label_email' => 'Emel',
+        'benefits_title' => 'Anda boleh log masuk ke portal pemohon untuk:',
+        'benefits' => [
+            'Mengira kelayakan Had Kifayah anda',
+            'Memohon bantuan zakat secara online',
+            'Menyemak status permohonan',
+            'Memuat naik dokumen sokongan',
+        ],
+        'button' => 'Log Masuk Portal',
+        'disclaimer' => 'Sekiranya anda tidak mendaftar untuk akaun ini, sila abaikan emel ini atau hubungi Bahagian Pengurusan Zakat MAIJ di talian <strong>:phone</strong>.',
+    ],
+
+    'reset_password' => [
+        'subject' => 'Set Semula Kata Laluan — J-ZAKAT',
+        'title' => 'Set Semula Kata Laluan',
+        'intro' => 'Anda menerima emel ini kerana kami menerima permintaan tetapan semula kata laluan untuk akaun anda.',
+        'button' => 'Set Semula Kata Laluan',
+        'expiry' => 'Pautan ini akan luput dalam <strong>:minutes minit</strong>. Jika anda tidak meminta tetapan semula kata laluan, sila abaikan emel ini.',
+    ],
+
+    'salary_update' => [
+        'subject' => 'Kemas Kini Maklumat Gaji Anda — J-ZAKAT',
+        'title' => 'Kemas Kini Maklumat Gaji',
+        'header' => 'Kemas Kini Maklumat Gaji',
+        'intro' => 'Pihak <strong>Majlis Agama Islam Johor (MAIJ)</strong> memohon kerjasama anda untuk mengemas kini <strong>status gaji terkini</strong> bagi permohonan bantuan zakat anda (No. K/P: <strong>:ic</strong>).',
+        'why_title' => 'Kenapa anda menerima emel ini?',
+        'why_body' => 'Permohonan anda telah diluluskan melebihi <strong>:months bulan</strong> yang lalu. Bagi memastikan penilaian kelayakan sentiasa tepat, pemohon perlu mengemas kini maklumat pendapatan terkini secara berkala.',
+        'body' => 'Sila log masuk ke portal pemohon untuk mengemas kini maklumat gaji anda.',
+        'button' => 'Log Masuk Portal',
+    ],
+
+    'setup_password' => [
+        'subject' => 'Selamat Datang ke J-ZAKAT — Sila Tetapkan Kata Laluan Anda',
+        'title' => 'Selamat Datang ke J-ZAKAT',
+        'intro' => 'Selamat datang ke <strong>J-ZAKAT</strong>. Akaun pentadbir anda telah berjaya dicipta. Sila tetapkan kata laluan anda dengan menekan butang di bawah untuk mengaktifkan akaun.',
+        'button' => 'Tetapkan Kata Laluan',
+        'expiry' => 'Pautan ini akan luput dalam <strong>:minutes minit</strong>. Sekiranya anda tidak mendaftar untuk akaun ini, sila abaikan emel ini.',
+    ],
+
+    'welcome_admin' => [
+        'subject' => 'Selamat Datang ke J-ZAKAT — Akaun Pentadbir Anda',
+        'title' => 'Selamat Datang',
+        'header' => 'Akaun Pentadbir Anda',
+        'intro' => 'Tahniah! Akaun pentadbir anda di <strong>J-ZAKAT</strong> telah berjaya dicipta. Anda boleh log masuk menggunakan emel <strong>:email</strong>.',
+        'password_label' => 'Kata Laluan Sementara',
+        'password_hint' => 'Sila log masuk dan tukar kata laluan ini dengan segera.',
+        'button' => 'Log Masuk Sekarang',
+    ],
+];

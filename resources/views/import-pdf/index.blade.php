@@ -1,28 +1,28 @@
 @extends('layouts.app', [
-    'title' => 'Import PDF / OCR',
-    'subtitle' => 'Muat naik borang permohonan & AI pengekstrakan pintar',
+    'title' => __('imports.pdf.meta_title'),
+    'subtitle' => __('imports.pdf.meta_subtitle'),
 ])
 @section('content')
 
-<x-page-header title="Import PDF / OCR" subtitle="Muat naik borang permohonan (PDF, JPG, PNG) & AI akan mengekstrak maklumat secara automatik" eyebrow="Pemprosesan Dokumen AI" icon="fa-file-pdf">
+<x-page-header :title="__('imports.pdf.title')" :subtitle="__('imports.pdf.subtitle')" :eyebrow="__('imports.pdf.eyebrow')" icon="fa-file-pdf">
     <x-slot:actions>
-        <x-app-button variant="outline" size="md" icon="fa-file-pdf" href="{{ route('import-pdf.template') }}">Muat Turun Borang Kosong</x-app-button>
-        <x-app-button variant="outline" size="md" icon="fa-clock-rotate-left" href="{{ route('import-pdf.history') }}">Sejarah</x-app-button>
+        <x-app-button variant="outline" size="md" icon="fa-file-pdf" href="{{ route('import-pdf.template') }}">{{ __('imports.pdf.download_blank_form') }}</x-app-button>
+        <x-app-button variant="outline" size="md" icon="fa-clock-rotate-left" href="{{ route('import-pdf.history') }}">{{ __('imports.pdf.history_button') }}</x-app-button>
     </x-slot:actions>
 </x-page-header>
 
 <x-app-card class="p-6 mb-6" :hover="false" elevated>
-    <x-stepper :steps="['Muat Naik', 'OCR Pemprosesan', 'Pratinjau & Semakan', 'Pengesahan AI', 'Pengesahan', 'Diimport']" :current="1" />
+    <x-stepper :steps="__('imports.steps.pdf')" :current="1" />
 </x-app-card>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2 space-y-6">
         <x-app-card class="p-6" :hover="false">
-            <x-section-header title="Import CSV (Pukal)" description="Muat naik data pemohon secara pukal melalui fail CSV" icon="fa-file-csv" />
+            <x-section-header :title="__('imports.pdf.csv_import_title')" :description="__('imports.pdf.csv_import_description')" icon="fa-file-csv" />
 
             <form method="POST" action="{{ route('importcsv.store') }}" enctype="multipart/form-data">
                 @csrf
-                <x-file-dropzone name="csv" accept=".csv" label="Tarik fail CSV ke sini atau klik untuk muat naik" hint="Saiz maksimum: 10MB" />
+                <x-file-dropzone name="csv" accept=".csv" :label="__('imports.csv.dropzone_label')" :hint="__('imports.csv.dropzone_hint')" />
 
                 @error('csv')
                     <p class="text-eyebrow text-danger mt-3">{{ $message }}</p>
@@ -30,17 +30,17 @@
 
                 <div class="flex items-center gap-3 mt-6 flex-wrap">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fa-solid fa-upload mr-1.5 text-[12px]"></i> Muat Naik & Import
+                        <i class="fa-solid fa-upload mr-1.5 text-[12px]"></i> {{ __('imports.csv.upload_import') }}
                     </button>
                     <a href="{{ route('importcsv.template') }}" class="btn btn-outline">
-                        <i class="fa-solid fa-download mr-1.5 text-[12px]"></i> Muat Turun Templat
+                        <i class="fa-solid fa-download mr-1.5 text-[12px]"></i> {{ __('imports.csv.download_template') }}
                     </a>
                 </div>
             </form>
         </x-app-card>
 
         <x-app-card class="p-6" :hover="false">
-            <x-section-header title="Muat Naik Borang Permohonan" description="Pilih atau tarik fail borang permohonan (PDF, JPG, PNG) ke kawasan di bawah" icon="fa-cloud-arrow-up" />
+            <x-section-header :title="__('imports.pdf.upload_form_title')" :description="__('imports.pdf.upload_form_description')" icon="fa-cloud-arrow-up" />
 
             <div x-data="ocrScanner()" class="space-y-5" @dragover.prevent="dragging = true" @dragleave.prevent="dragging = false" @drop.prevent="handleDrop($event)">
                 <form id="upload-form" enctype="multipart/form-data" @submit.prevent="submitUpload()">
@@ -53,7 +53,7 @@
                     <div class="mb-5">
                         <label for="document_type" class="block text-small font-semibold text-text mb-2">
                             <i class="fa-solid fa-file-circle-check text-primary text-[13px] mr-1.5"></i>
-                            Jenis Borang
+                            {{ __('imports.pdf.document_type') }}
                         </label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label class="relative cursor-pointer">
@@ -64,8 +64,8 @@
                                             <i class="fa-solid fa-file-contract text-primary text-[14px]"></i>
                                         </div>
                                         <div>
-                                            <p class="text-small font-semibold text-text">Borang Bantuan MAIJ</p>
-                                            <p class="text-eyebrow text-tertiary mt-1">Borang Agihan Zakat rasmi MAIJ (Bahagian 1-12)</p>
+                                            <p class="text-small font-semibold text-text">{{ __('imports.pdf.doc_type_maij') }}</p>
+                                            <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.pdf.doc_type_maij_description') }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -78,8 +78,8 @@
                                             <i class="fa-solid fa-file-lines text-secondary text-[14px]"></i>
                                         </div>
                                         <div>
-                                            <p class="text-small font-semibold text-text">Borang Generik</p>
-                                            <p class="text-eyebrow text-tertiary mt-1">Borang bukan rasmi / pemohon (OCR standard)</p>
+                                            <p class="text-small font-semibold text-text">{{ __('imports.pdf.doc_type_generic') }}</p>
+                                            <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.pdf.doc_type_generic_description') }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -101,9 +101,9 @@
                             <i class="fa-solid fa-cloud-arrow-up text-primary text-[26px]"></i>
                         </div>
 
-                        <p class="text-h3 text-text" x-text="fileName || 'Tarik fail ke sini atau klik'"></p>
-                        <p class="text-small text-secondary mt-2">Format disokong: PDF, JPG, PNG</p>
-                        <p class="text-eyebrow text-tertiary mt-3">Saiz maksimum: 10MB</p>
+                        <p class="text-h3 text-text" x-text="fileName || @js(__('imports.pdf.drop_title'))"></p>
+                        <p class="text-small text-secondary mt-2">{{ __('imports.pdf.formats') }}</p>
+                        <p class="text-eyebrow text-tertiary mt-3">{{ __('imports.pdf.max_size') }}</p>
 
                         <div x-show="fileName" x-cloak class="mt-5 soft-panel inline-flex items-center gap-2 px-4 py-2 rounded-pill">
                             <i class="fa-solid fa-file text-primary text-[13px]"></i>
@@ -140,17 +140,17 @@
                             <template x-if="!uploading">
                                 <span class="inline-flex items-center gap-2">
                                     <i class="fa-solid fa-upload text-[14px]"></i>
-                                    <span>Muat Naik & Ekstrak</span>
+                                    <span>{{ __('imports.pdf.upload_extract') }}</span>
                                 </span>
                             </template>
                             <template x-if="uploading">
                                 <span class="inline-flex items-center gap-2">
                                     <i class="fa-solid fa-spinner fa-spin text-[14px]"></i>
-                                    <span>AI sedang memproses...</span>
+                                    <span>{{ __('imports.pdf.ai_processing') }}</span>
                                 </span>
                             </template>
                         </button>
-                        <x-app-button variant="outline" size="lg" icon="fa-clock-rotate-left" x-bind:disabled="uploading" href="{{ route('import-pdf.history') }}">Lihat Sejarah</x-app-button>
+                        <x-app-button variant="outline" size="lg" icon="fa-clock-rotate-left" x-bind:disabled="uploading" href="{{ route('import-pdf.history') }}">{{ __('imports.pdf.view_history') }}</x-app-button>
                     </div>
 
                     <div x-show="uploading" x-cloak class="mt-5 p-4 rounded-[14px] bg-primary-soft/40 border border-primary/15 text-small text-text">
@@ -160,27 +160,24 @@
 
                     <div x-show="stalled" x-cloak class="mt-5 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 text-small text-text">
                         <i class="fa-solid fa-triangle-exclamation text-warning mr-2"></i>
-                        Pemprosesan mengambil masa lama. Semak enjin OCR atau pekerja queue.
-                        <button type="button" class="ml-2 btn btn-warning btn-xs" @click="startPolling()">Cuba Semula</button>
+                        {{ __('imports.pdf.stalled_message') }}
+                        <button type="button" class="ml-2 btn btn-warning btn-xs" @click="startPolling()">{{ __('imports.pdf.retry') }}</button>
                     </div>
 
                     <div x-show="failed" x-cloak class="mt-5 p-4 rounded-[14px] bg-danger-soft/40 border border-danger/20 text-small text-text">
                         <i class="fa-solid fa-circle-xmark text-danger mr-2"></i>
-                        <span x-text="errorMessage || 'Pemprosesan gagal. Sila cuba lagi.'"></span>
+                        <span x-text="errorMessage || @js(__('imports.pdf.processing_failed_retry'))"></span>
                     </div>
                 </form>
 
                 <div class="soft-panel p-4 flex items-start gap-3">
                     <i class="fa-solid fa-circle-info text-primary text-[14px] mt-0.5"></i>
                     <div class="text-small text-text leading-relaxed">
-                        <p class="font-semibold mb-1">Bagaimana ia berfungsi?</p>
+                        <p class="font-semibold mb-1">{{ __('imports.pdf.how_title') }}</p>
                         <ol class="list-decimal ml-4 space-y-0.5 text-secondary">
-                            <li>Muat naik borang MAIJ (PDF, JPG, atau PNG)</li>
-                            <li>AI mengekstrak teks dari setiap halaman dokumen</li>
-                            <li>Sistem mengesan & memetakan medan secara pintar</li>
-                            <li>Semak keyakinan AI & data yang diekstrak dalam pratinjau</li>
-                            <li>AI mengesahkan format IC, telefon, pendapatan, dan medan lain</li>
-                            <li>Sahkan & simpan data ke dalam pangkalan data</li>
+                            @foreach(__('imports.pdf.how_steps') as $step)
+                                <li>{{ $step }}</li>
+                            @endforeach
                         </ol>
                     </div>
                 </div>
@@ -188,26 +185,26 @@
         </x-app-card>
 
         <x-app-card class="p-6" :hover="false">
-            <x-section-header title="Medan Borang MAIJ yang Dikesan" description="Sistem akan mengecam medan berikut secara automatik dari borang permohonan MAIJ" icon="fa-magnifying-glass" />
+            <x-section-header :title="__('imports.pdf.detected_title')" :description="__('imports.pdf.detected_description')" icon="fa-magnifying-glass" />
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 @php
                     $detectedFields = [
-                        ['label' => 'Nama Pemohon', 'aliases' => 'Nama Penuh, Full Name, Applicant Name', 'icon' => 'fa-user', 'section' => 'Pemohon'],
-                        ['label' => 'No. IC', 'aliases' => 'No Kad Pengenalan, NRIC, MyKad', 'icon' => 'fa-id-card', 'section' => 'Pemohon'],
-                        ['label' => 'Status Perkahwinan', 'aliases' => 'Marital Status, Berkahwin/Bujang', 'icon' => 'fa-ring', 'section' => 'Pemohon'],
-                        ['label' => 'Merokok', 'aliases' => 'Smoking, Perokok', 'icon' => 'fa-smoking', 'section' => 'Pemohon'],
-                        ['label' => 'No Telefon Bimbit', 'aliases' => 'Mobile, No. HP, Phone', 'icon' => 'fa-mobile-screen', 'section' => 'Hubungi'],
-                        ['label' => 'No Telefon Rumah', 'aliases' => 'Home Phone, Telefon Rumah', 'icon' => 'fa-phone', 'section' => 'Hubungi'],
-                        ['label' => 'Alamat', 'aliases' => 'Address, Alamat Surat Menyurat', 'icon' => 'fa-location-dot', 'section' => 'Alamat'],
-                        ['label' => 'Daerah', 'aliases' => 'District', 'icon' => 'fa-map', 'section' => 'Alamat'],
-                        ['label' => 'Poskod', 'aliases' => 'Postcode, Postal Code', 'icon' => 'fa-hashtag', 'section' => 'Alamat'],
-                        ['label' => 'DUN / Parlimen', 'aliases' => 'State Constituency, Parliament', 'icon' => 'fa-landmark', 'section' => 'Alamat'],
-                        ['label' => 'Kesihatan', 'aliases' => 'Health Condition, Penyakit', 'icon' => 'fa-heart-pulse', 'section' => 'Kesihatan'],
-                        ['label' => 'Pendapatan', 'aliases' => 'Income, Monthly Salary, Gaji', 'icon' => 'fa-money-bill', 'section' => 'Kewangan'],
-                        ['label' => 'Sewa / Utiliti', 'aliases' => 'Rent, Utilities', 'icon' => 'fa-house', 'section' => 'Kewangan'],
-                        ['label' => 'Pengangkutan / Perubatan', 'aliases' => 'Transport, Medical Expenses', 'icon' => 'fa-car-side', 'section' => 'Kewangan'],
-                        ['label' => 'Jenis Bantuan', 'aliases' => 'Sara Hidup, Perubatan, Berdikari...', 'icon' => 'fa-hand-holding-heart', 'section' => 'Bantuan'],
-                        ['label' => 'Ahli Isi Rumah', 'aliases' => 'Household Members (Jadual)', 'icon' => 'fa-people-group', 'section' => 'Isi Rumah'],
+                        ['label' => __('imports.maij_detected.name'), 'aliases' => 'Nama Penuh, Full Name, Applicant Name', 'icon' => 'fa-user'],
+                        ['label' => __('imports.maij_detected.ic'), 'aliases' => 'No Kad Pengenalan, NRIC, MyKad', 'icon' => 'fa-id-card'],
+                        ['label' => __('imports.maij_detected.marital'), 'aliases' => 'Marital Status, Berkahwin/Bujang', 'icon' => 'fa-ring'],
+                        ['label' => __('imports.maij_detected.smoking'), 'aliases' => 'Smoking, Perokok', 'icon' => 'fa-smoking'],
+                        ['label' => __('imports.maij_detected.mobile'), 'aliases' => 'Mobile, No. HP, Phone', 'icon' => 'fa-mobile-screen'],
+                        ['label' => __('imports.maij_detected.home_phone'), 'aliases' => 'Home Phone, Telefon Rumah', 'icon' => 'fa-phone'],
+                        ['label' => __('imports.maij_detected.address'), 'aliases' => 'Address, Alamat Surat Menyurat', 'icon' => 'fa-location-dot'],
+                        ['label' => __('imports.maij_detected.district'), 'aliases' => 'District', 'icon' => 'fa-map'],
+                        ['label' => __('imports.maij_detected.postcode'), 'aliases' => 'Postcode, Postal Code', 'icon' => 'fa-hashtag'],
+                        ['label' => __('imports.maij_detected.dun'), 'aliases' => 'State Constituency, Parliament', 'icon' => 'fa-landmark'],
+                        ['label' => __('imports.maij_detected.health'), 'aliases' => 'Health Condition, Penyakit', 'icon' => 'fa-heart-pulse'],
+                        ['label' => __('imports.maij_detected.income'), 'aliases' => 'Income, Monthly Salary, Gaji', 'icon' => 'fa-money-bill'],
+                        ['label' => __('imports.maij_detected.rent_utilities'), 'aliases' => 'Rent, Utilities', 'icon' => 'fa-house'],
+                        ['label' => __('imports.maij_detected.transport_medical'), 'aliases' => 'Transport, Medical Expenses', 'icon' => 'fa-car-side'],
+                        ['label' => __('imports.maij_detected.assistance_type'), 'aliases' => 'Sara Hidup, Perubatan, Berdikari...', 'icon' => 'fa-hand-holding-heart'],
+                        ['label' => __('imports.maij_detected.household_members'), 'aliases' => 'Household Members (Jadual)', 'icon' => 'fa-people-group'],
                     ];
                 @endphp
                 @foreach($detectedFields as $field)
@@ -227,27 +224,27 @@
 
     <div class="space-y-6">
         <x-app-card class="p-6" :hover="false" elevated>
-            <x-section-header title="Sejarah Import" description="5 CSV + 5 PDF terkini" icon="fa-clock-rotate-left" />
+            <x-section-header :title="__('imports.pdf.history_title')" :description="__('imports.pdf.history_description')" icon="fa-clock-rotate-left" />
 
             <div class="mb-4">
                 <p class="text-eyebrow text-tertiary uppercase tracking-wide font-semibold mb-2"><i class="fa-solid fa-file-csv text-[10px] mr-1"></i> CSV</p>
                 @if($csvHistory->isEmpty())
-                    <p class="text-small text-tertiary italic">Belum ada import CSV.</p>
+                    <p class="text-small text-tertiary italic">{{ __('imports.pdf.empty_csv_history') }}</p>
                 @else
                     <ul class="space-y-2">
                         @foreach($csvHistory->take(5) as $h)
                             <li class="p-3 rounded-[12px] hover:bg-muted transition-apple">
                                 <div class="flex items-center justify-between gap-2">
                                     <p class="text-body text-text font-medium truncate flex-1" title="{{ $h->nama_fail }}">{{ $h->nama_fail }}</p>
-                                    <span class="text-eyebrow text-tertiary shrink-0">{{ $h->created_at->format('d M Y') }}</span>
+                                    <span class="text-eyebrow text-tertiary shrink-0">{{ $h->created_at->locale(app()->getLocale())->translatedFormat('d M Y') }}</span>
                                 </div>
                                 <div class="mt-1.5 flex items-center gap-2 text-small">
-                                    <span class="text-secondary tabular-nums">{{ $h->jumlah_rekod }} rekod</span>
+                                    <span class="text-secondary tabular-nums">{{ __('imports.records', ['count' => $h->jumlah_rekod]) }}</span>
                                     <span class="text-tertiary">·</span>
-                                    <span class="text-success font-semibold">{{ $h->berjaya }} ok</span>
+                                    <span class="text-success font-semibold">{{ __('imports.ok', ['count' => $h->berjaya]) }}</span>
                                     @if($h->gagal > 0)
                                         <span class="text-tertiary">·</span>
-                                        <span class="text-danger font-semibold">{{ $h->gagal }} gagal</span>
+                                        <span class="text-danger font-semibold">{{ __('imports.failed_count', ['count' => $h->gagal]) }}</span>
                                     @endif
                                 </div>
                             </li>
@@ -259,7 +256,7 @@
             <div class="pt-4 border-t border-divider">
                 <p class="text-eyebrow text-tertiary uppercase tracking-wide font-semibold mb-2"><i class="fa-solid fa-file-pdf text-[10px] mr-1"></i> PDF / OCR</p>
                 @if($history->isEmpty())
-                    <p class="text-small text-tertiary italic">Belum ada import PDF.</p>
+                    <p class="text-small text-tertiary italic">{{ __('imports.pdf.empty_pdf_history') }}</p>
                 @else
                     <ul class="space-y-2">
                         @foreach($history->take(5) as $h)
@@ -274,49 +271,50 @@
                                             'processing' => 'warning',
                                             default => 'warning',
                                         };
+                                        $statusLabel = match($h->status) {
+                                            'extracted' => __('imports.status.extracted'),
+                                            'needs_review' => __('imports.status.needs_review'),
+                                            'committed' => __('imports.status.committed'),
+                                            'failed' => __('imports.status.failed'),
+                                            'processing' => __('imports.status.processing'),
+                                            default => $h->status,
+                                        };
                                     @endphp
                                     <x-status-badge :status="$statusTone" size="sm">
-                                        {{ match($h->status) {
-                                            'extracted' => 'Diekstrak',
-                                            'needs_review' => 'Perlu Semakan',
-                                            'committed' => 'Disimpan',
-                                            'failed' => 'Gagal',
-                                            'processing' => 'Memproses',
-                                            default => $h->status,
-                                        } }}
+                                        {{ $statusLabel }}
                                     </x-status-badge>
                                 </div>
-                                <p class="text-eyebrow text-tertiary mt-1.5 tabular-nums">{{ $h->created_at->format('d M Y, h:i A') }}</p>
+                                <p class="text-eyebrow text-tertiary mt-1.5 tabular-nums">{{ $h->created_at->locale(app()->getLocale())->translatedFormat('d M Y, h:i A') }}</p>
                             </li>
                         @endforeach
                     </ul>
                     <div class="mt-4 pt-3 border-t border-divider">
-                        <x-app-button variant="ghost" size="sm" block icon="fa-arrow-right" href="{{ route('import-pdf.history') }}">Lihat Semua</x-app-button>
+                        <x-app-button variant="ghost" size="sm" block icon="fa-arrow-right" href="{{ route('import-pdf.history') }}">{{ __('imports.csv.view_all') }}</x-app-button>
                     </div>
                 @endif
             </div>
         </x-app-card>
 
         <x-app-card class="p-6" :hover="false" elevated>
-            <x-section-header title="Statistik Import" icon="fa-chart-simple" />
+            <x-section-header :title="__('imports.pdf.stats_title')" icon="fa-chart-simple" />
 
             <p class="text-eyebrow text-tertiary uppercase tracking-wide font-semibold mb-2"><i class="fa-solid fa-file-pdf text-[10px] mr-1"></i> PDF / OCR</p>
             <div class="grid grid-cols-2 gap-3 mb-5">
                 <div class="text-center p-3 soft-panel">
                     <p class="text-metric-sm text-text tabular-nums">{{ $stats['total'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">Jumlah</p>
+                    <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.total') }}</p>
                 </div>
                 <div class="text-center p-3 soft-panel">
                     <p class="text-metric-sm text-success tabular-nums">{{ $stats['committed'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">Disimpan</p>
+                    <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.committed') }}</p>
                 </div>
                 <div class="text-center p-3 soft-panel">
                     <p class="text-metric-sm text-warning tabular-nums">{{ $stats['extracted'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">Diekstrak</p>
+                    <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.extracted') }}</p>
                 </div>
                 <div class="text-center p-3 soft-panel">
                     <p class="text-metric-sm text-danger tabular-nums">{{ $stats['failed'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">Gagal</p>
+                    <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.failed') }}</p>
                 </div>
             </div>
 
@@ -324,15 +322,15 @@
             <div class="grid grid-cols-3 gap-3">
                 <div class="text-center p-3 soft-panel">
                     <p class="text-metric-sm text-text tabular-nums">{{ $csvStats['total'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">Rekod</p>
+                    <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.pdf.records_label') }}</p>
                 </div>
                 <div class="text-center p-3 soft-panel">
                     <p class="text-metric-sm text-success tabular-nums">{{ $csvStats['berjaya'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">Berjaya</p>
+                    <p class="text-eyebrow text-tertiary mt-1">{{ __('common.status.success') }}</p>
                 </div>
                 <div class="text-center p-3 soft-panel">
                     <p class="text-metric-sm text-danger tabular-nums">{{ $csvStats['gagal'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">Gagal</p>
+                    <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.failed') }}</p>
                 </div>
             </div>
         </x-app-card>
@@ -361,12 +359,12 @@
             healthWarning: '',
 
             stageDefs: [
-                { pct: 10, label: 'Mula' },
-                { pct: 25, label: 'Analisis' },
-                { pct: 30, label: 'Ekstrak' },
-                { pct: 70, label: 'Teks' },
-                { pct: 85, label: 'Medan' },
-                { pct: 100, label: 'Siap' },
+                { pct: 10, label: @js(__('imports.pdf.stage_start')) },
+                { pct: 25, label: @js(__('imports.pdf.stage_analyze')) },
+                { pct: 30, label: @js(__('imports.pdf.stage_extract')) },
+                { pct: 70, label: @js(__('imports.pdf.stage_text')) },
+                { pct: 85, label: @js(__('imports.pdf.stage_fields')) },
+                { pct: 100, label: @js(__('imports.pdf.stage_done')) },
             ],
 
             init() {
@@ -377,12 +375,21 @@
             },
 
             get stageLabel() {
-                const stages = { queued: 'Dalam Barisan', started: 'Mula Diproses', analyzing: 'Menganalisis Dokumen', extracting: 'Mengekstrak Teks', extracted: 'Teks Diekstrak', recognizing: 'Mengenali Medan', done: 'Selesai', failed: 'Gagal' };
+                const stages = {
+                    queued: @js(__('imports.pdf.stage_statuses.queued')),
+                    started: @js(__('imports.pdf.stage_statuses.started')),
+                    analyzing: @js(__('imports.pdf.stage_statuses.analyzing')),
+                    extracting: @js(__('imports.pdf.stage_statuses.extracting')),
+                    extracted: @js(__('imports.pdf.stage_statuses.extracted')),
+                    recognizing: @js(__('imports.pdf.stage_statuses.recognizing')),
+                    done: @js(__('imports.pdf.stage_statuses.done')),
+                    failed: @js(__('imports.pdf.stage_statuses.failed')),
+                };
                 return stages[this.stage] || this.stage;
             },
 
             get processingHint() {
-                return 'Pemprosesan boleh mengambil masa 10–60 saat. Jangan tutup tetingkap ini.';
+                return @js(__('imports.pdf.processing_hint'));
             },
 
             checkHealth() {
@@ -390,11 +397,11 @@
                     .then(r => r.json())
                     .then(d => {
                         if (!d.any_engine_ready) {
-                            this.healthWarning = 'Semua enjin OCR tidak tersedia. Sila periksa pemasangan Tesseract/ImageMagick sebelum memuat naik.';
+                            this.healthWarning = @js(__('imports.pdf.health_no_engine'));
                         } else if (d.stalled_count > 0) {
-                            this.healthWarning = `${d.stalled_count} kerja terdahulu tersekat. Sebaiknya proses semula sebelum muat naik baharu.`;
+                            this.healthWarning = @js(__('imports.pdf.health_stalled')).replace(':count', d.stalled_count);
                         } else if (d.pending_queue > 0) {
-                            this.healthWarning = `Barisan pemprosesan ada ${d.pending_queue} kerja. Muat naik mungkin mengambil masa lebih lama.`;
+                            this.healthWarning = @js(__('imports.pdf.health_pending')).replace(':count', d.pending_queue);
                         }
                     })
                     .catch(() => {});
@@ -469,7 +476,7 @@
                     .catch(() => {
                         this.uploading = false;
                         this.failed = true;
-                        this.errorMessage = 'Gagal memuat naik fail.';
+                        this.errorMessage = @js(__('imports.pdf.upload_failed'));
                     });
             },
 
@@ -497,7 +504,7 @@
                         } else if (d.status === 'failed') {
                             this.uploading = false;
                             this.failed = true;
-                            this.errorMessage = d.error_message || 'Pemprosesan gagal.';
+                            this.errorMessage = d.error_message || @js(__('imports.pdf.processing_failed'));
                             this.stopPolling();
                         }
                     })

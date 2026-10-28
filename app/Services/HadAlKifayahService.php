@@ -161,43 +161,49 @@ class HadAlKifayahService
         $confidence = (int) max(50, min(99, round(50 + $gapPct * 0.5)));
 
         $recommendation = ($status === self::STATUS_LAYAK)
-            ? 'Pemohon disyorkan layak menerima bantuan zakat.'
-            : 'Pendapatan melebihi garis Had Kifayah. Pemohon belum layak pada masa ini.';
+            ? __('service.hadkifayah.recommendation.eligible')
+            : __('service.hadkifayah.recommendation.not_eligible');
 
         $totalTanggungan = $nIs + $nIbuBapa + $nDewasaTk + $nDewasaBk + $nIpt + $nRemaja + $nKanakRendah + $nKanakTadika;
         $totalPerbelanjaan = $utilitiIn + $pengangkutanIn + $perubatanIn;
 
         $reasoning = [];
         $reasoning[] = ($baki < 0)
-            ? '✓ Pendapatan isi rumah (RM '.number_format($pendapatanTotal, 2).') lebih rendah daripada Had Kifayah (RM '.number_format($hadKifayahTotal, 2).')'
-            : '✗ Pendapatan isi rumah (RM '.number_format($pendapatanTotal, 2).') melebihi atau sama dengan Had Kifayah (RM '.number_format($hadKifayahTotal, 2).')';
+            ? __('service.hadkifayah.reasoning.income_below', [
+                'income' => number_format($pendapatanTotal, 2),
+                'threshold' => number_format($hadKifayahTotal, 2),
+            ])
+            : __('service.hadkifayah.reasoning.income_not_below', [
+                'income' => number_format($pendapatanTotal, 2),
+                'threshold' => number_format($hadKifayahTotal, 2),
+            ]);
         $reasoning[] = ($totalTanggungan >= 3)
-            ? "✓ Bilangan tanggungan tinggi ({$totalTanggungan} orang)"
-            : "○ Bilangan tanggungan sederhana/rendah ({$totalTanggungan} orang)";
+            ? __('service.hadkifayah.reasoning.dependants_high', ['count' => $totalTanggungan])
+            : __('service.hadkifayah.reasoning.dependants_low', ['count' => $totalTanggungan]);
         if ($baki < 0) {
             $gapStr = number_format($gapPct, 1).'%';
             $reasoning[] = ($gapPct >= 30)
-                ? "✓ Jurang keperluan besar (-{$gapStr})"
-                : "○ Jurang keperluan kecil (-{$gapStr})";
+                ? __('service.hadkifayah.reasoning.gap_large', ['gap' => $gapStr])
+                : __('service.hadkifayah.reasoning.gap_small', ['gap' => $gapStr]);
         }
         $reasoning[] = ($totalPerbelanjaan > 0)
-            ? '✓ Perbelanjaan tetap direkodkan (RM '.number_format($totalPerbelanjaan, 2).')'
-            : '○ Tiada perbelanjaan tetap direkodkan';
+            ? __('service.hadkifayah.reasoning.expenses_recorded', ['amount' => number_format($totalPerbelanjaan, 2)])
+            : __('service.hadkifayah.reasoning.expenses_none');
 
         $breakdown = [
-            ['label' => 'Ketua Keluarga',                                'nilai' => $rKetua,        'subtotal' => $subtotalKetua],
-            ['label' => 'Isteri / Suami × '.$nIs,                      'nilai' => $rIs,           'subtotal' => $subtotalIs],
-            ['label' => 'Ibu Bapa Tanggungan × '.$nIbuBapa,            'nilai' => $rIbuBapa,      'subtotal' => $subtotalIbuBapa],
-            ['label' => 'Dewasa Tidak Bekerja × '.$nDewasaTk,          'nilai' => $rDewasaTk,     'subtotal' => $subtotalDewasaTk],
-            ['label' => 'Dewasa Bekerja Ditanggung × '.$nDewasaBk,    'nilai' => $rDewasaBk,     'subtotal' => $subtotalDewasaBk],
-            ['label' => 'IPT × '.$nIpt,                                'nilai' => $rIpt,          'subtotal' => $subtotalIpt],
-            ['label' => 'Remaja × '.$nRemaja,                          'nilai' => $rRemaja,       'subtotal' => $subtotalRemaja],
-            ['label' => 'Sekolah Rendah × '.$nKanakRendah,             'nilai' => $rKanakRendah,  'subtotal' => $subtotalKanakRendah],
-            ['label' => 'Tadika × '.$nKanakTadika,                     'nilai' => $rKanakTadika,  'subtotal' => $subtotalKanakTadika],
-            ['label' => ($perumahan === 'sewa') ? 'Rumah Sewa (dipilih)' : 'Rumah Sewa (tidak dipilih)', 'nilai' => $rRumahSewa, 'subtotal' => $subtotalRumahSewa],
-            ['label' => 'Utiliti (input)',                               'nilai' => $utilitiIn,     'subtotal' => $subtotalUtiliti],
-            ['label' => 'Pengangkutan (input)',                          'nilai' => $pengangkutanIn, 'subtotal' => $subtotalPengangkutan],
-            ['label' => 'Perubatan (input)',                             'nilai' => $perubatanIn,   'subtotal' => $subtotalPerubatan],
+            ['label' => __('service.hadkifayah.breakdown.head'),                                                    'nilai' => $rKetua,        'subtotal' => $subtotalKetua],
+            ['label' => __('service.hadkifayah.breakdown.spouse', ['count' => $nIs]),                                'nilai' => $rIs,           'subtotal' => $subtotalIs],
+            ['label' => __('service.hadkifayah.breakdown.parents', ['count' => $nIbuBapa]),                          'nilai' => $rIbuBapa,      'subtotal' => $subtotalIbuBapa],
+            ['label' => __('service.hadkifayah.breakdown.adult_unemployed', ['count' => $nDewasaTk]),               'nilai' => $rDewasaTk,     'subtotal' => $subtotalDewasaTk],
+            ['label' => __('service.hadkifayah.breakdown.adult_working_dependant', ['count' => $nDewasaBk]),         'nilai' => $rDewasaBk,     'subtotal' => $subtotalDewasaBk],
+            ['label' => __('service.hadkifayah.breakdown.higher_education', ['count' => $nIpt]),                     'nilai' => $rIpt,          'subtotal' => $subtotalIpt],
+            ['label' => __('service.hadkifayah.breakdown.teenager', ['count' => $nRemaja]),                          'nilai' => $rRemaja,       'subtotal' => $subtotalRemaja],
+            ['label' => __('service.hadkifayah.breakdown.primary_school', ['count' => $nKanakRendah]),               'nilai' => $rKanakRendah,  'subtotal' => $subtotalKanakRendah],
+            ['label' => __('service.hadkifayah.breakdown.kindergarten', ['count' => $nKanakTadika]),                 'nilai' => $rKanakTadika,  'subtotal' => $subtotalKanakTadika],
+            ['label' => ($perumahan === 'sewa') ? __('service.hadkifayah.breakdown.rented_selected') : __('service.hadkifayah.breakdown.rented_not_selected'), 'nilai' => $rRumahSewa, 'subtotal' => $subtotalRumahSewa],
+            ['label' => __('service.hadkifayah.breakdown.utilities'),                                                'nilai' => $utilitiIn,     'subtotal' => $subtotalUtiliti],
+            ['label' => __('service.hadkifayah.breakdown.transport'),                                                'nilai' => $pengangkutanIn, 'subtotal' => $subtotalPengangkutan],
+            ['label' => __('service.hadkifayah.breakdown.medical'),                                                  'nilai' => $perubatanIn,   'subtotal' => $subtotalPerubatan],
         ];
 
         return [

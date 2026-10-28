@@ -16,12 +16,17 @@ class SalaryUpdateReminderMail extends Mailable
     public function __construct(
         public Application $application,
         public int $months = 12,
-    ) {}
+        ?string $locale = null,
+    ) {
+        $locale ??= $this->application->user?->language;
+
+        $this->locale($locale ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Kemas Kini Maklumat Gaji Anda — J-ZAKAT',
+            subject: __('emails.salary_update.subject'),
         );
     }
 

@@ -24,7 +24,7 @@ class SearchApplicantsTool extends AbstractTool
 
         if ($query === '' || mb_strlen($query) < 2) {
             return [
-                'reply' => 'Sila berikan nama atau sebahagian nama untuk dicari. Contoh: *cari Ahmad*.',
+                'reply' => __('ai.tools.search_applicants.empty_query'),
                 'data' => ['type' => 'text'],
             ];
         }
@@ -36,7 +36,7 @@ class SearchApplicantsTool extends AbstractTool
 
         if ($results->isEmpty()) {
             return [
-                'reply' => "Tiada pemohon dijumpai untuk carian **{$query}**.",
+                'reply' => __('ai.tools.search_applicants.not_found', ['query' => $query]),
                 'data' => ['type' => 'text', 'query' => $query, 'not_found' => true],
             ];
         }
@@ -49,7 +49,12 @@ class SearchApplicantsTool extends AbstractTool
         ])->values()->all();
 
         return [
-            'reply' => "Ditemui **{$results->count()}** pemohon untuk carian **{$query}**:",
+            'reply' => __($results->count() === 1
+                ? 'ai.tools.search_applicants.reply_one'
+                : 'ai.tools.search_applicants.reply', [
+                    'count' => $results->count(),
+                    'query' => $query,
+                ]),
             'data' => [
                 'type' => 'search_results',
                 'query' => $query,
@@ -61,7 +66,7 @@ class SearchApplicantsTool extends AbstractTool
 
     public function label(): string
     {
-        return 'Cari rekod pemohon';
+        return __('ai.tools.search_applicants.label');
     }
 
     public function icon(): string

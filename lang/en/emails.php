@@ -1,0 +1,158 @@
+<?php
+
+return [
+    'common' => [
+        'greeting' => 'Greetings :name,',
+        'org' => 'Majlis Agama Islam Johor',
+        'org_full' => 'Majlis Agama Islam Johor (MAIJ)',
+        'footer' => '© :year J-ZAKAT · Majlis Agama Islam Johor',
+        'footer_full' => '© :year J-ZAKAT · Majlis Agama Islam Johor (MAIJ)',
+        'support' => 'If you have any questions, please contact the MAIJ Zakat Management Division at <strong>:phone</strong>.',
+    ],
+
+    'documents' => [
+        'ic' => 'Identity Card',
+        'salary_slip' => 'Salary Slip',
+        'bank_statement' => 'Bank Statement',
+        'utility_bill' => 'Utility Bill',
+        'rental_agreement' => 'Rental Agreement',
+        'income_verification_letter' => 'Income Verification Letter',
+        'divorce_certificate' => 'Divorce Certificate',
+        'death_certificate' => 'Death Certificate',
+        'oku_card' => 'OKU Card',
+        'student_verification_letter' => 'Higher Education Student Verification Letter',
+        'other' => 'Other Document',
+    ],
+
+    'additional_documents' => [
+        'subject' => 'Additional Documents Required — J-ZAKAT',
+        'title' => 'Additional Documents Required',
+        'header' => 'Additional Documents Required',
+        'intro' => '<strong>Majlis Agama Islam Johor (MAIJ)</strong> requires the following additional documents to continue reviewing your zakat application (IC No.: <strong>:ic</strong>).',
+        'list_title' => 'Required documents',
+        'note_title' => 'Administrator Note',
+        'body' => 'Please log in to the applicant portal to upload the required documents.',
+    ],
+
+    'application_approved' => [
+        'subject' => 'Congratulations! Your Zakat Application Has Been Approved — J-ZAKAT',
+        'title' => 'Application Approved',
+        'header' => 'APPROVED',
+        'subtitle' => 'J-ZAKAT · Majlis Agama Islam Johor',
+        'intro' => 'Congratulations! Your zakat assistance application has been <strong style="color:#34C759;">APPROVED</strong> by Majlis Agama Islam Johor (MAIJ).',
+        'label_name' => 'Name',
+        'label_ic' => 'IC No.',
+        'label_status' => 'Eligibility Status',
+        'label_date' => 'Approval Date',
+        'body' => 'The official MAIJ approval letter is attached to this email. Please bring this letter together with the original documents (Identity Card, salary slips) to the MAIJ office for further verification.',
+        'checklist_title' => 'Prepare the following documents:',
+        'checklist_ic' => 'Identity Card (original & copy)',
+        'checklist_salary' => 'Latest salary slips',
+        'checklist_letter' => 'This approval letter (printed copy)',
+    ],
+
+    'application_received' => [
+        'subject' => 'Application Received — J-ZAKAT',
+        'title' => 'Application Received',
+        'header' => 'Application Confirmation',
+        'heading' => 'Your Application Has Been Received',
+        'intro' => 'Greetings <strong>:name</strong>, your zakat assistance application has been submitted successfully and is awaiting review by Majlis Agama Islam Johor (MAIJ).',
+        'reference_label' => 'Application Reference No.',
+        'body' => 'You can check the status of your application at any time through the applicant portal.',
+        'button' => 'Check Application Status',
+    ],
+
+    'application_rejected' => [
+        'subject' => 'Zakat Application Decision — J-ZAKAT',
+        'title' => 'Application Rejected',
+        'header' => 'REJECTED',
+        'subtitle' => 'J-ZAKAT · Majlis Agama Islam Johor',
+        'intro' => 'We regret to inform you that your zakat assistance application has been <strong style="color:#EF4444;">REJECTED</strong> after review by Majlis Agama Islam Johor (MAIJ).',
+        'label_name' => 'Name',
+        'label_ic' => 'IC No.',
+        'label_status' => 'Status',
+        'status_rejected' => 'Rejected',
+        'label_date' => 'Date',
+        'reason_title' => 'Reason for Rejection',
+        'body' => 'You may submit an appeal or a new application with more complete documents. Please refer to the attached official notice for further information.',
+    ],
+
+    'application_submitted' => [
+        'subject' => 'New Zakat Application Submitted — J-ZAKAT',
+        'title' => 'New Application',
+        'header' => 'New Zakat Application',
+        'heading' => 'Application Submitted',
+        'intro' => 'Applicant <strong>:name</strong> (:ic) has submitted a new zakat application for review.',
+        'reference_label' => 'Application Reference No.',
+        'body' => 'Please log in to the administrator panel to review and process this application.',
+    ],
+
+    'new_applicant' => [
+        'subject' => 'New Applicant Registered — J-ZAKAT',
+        'title' => 'New Applicant Registered',
+        'header' => 'New Applicant Registered',
+        'heading' => 'New Applicant',
+        'intro' => 'A new applicant has successfully registered on the <strong>J-ZAKAT</strong> portal.',
+        'label_name' => 'Name',
+        'label_ic' => 'IC No.',
+        'label_email' => 'Email',
+        'label_phone' => 'Phone',
+    ],
+
+    'portal_user_welcome' => [
+        'subject' => 'Welcome to J-ZAKAT — Your Applicant Account',
+        'title' => 'Welcome to J-ZAKAT',
+        'header' => 'Your Applicant Account',
+        'intro' => 'Congratulations! Your applicant account on <strong>J-ZAKAT</strong> has been created successfully. You can now apply for zakat assistance online under <strong>Majlis Agama Islam Johor (MAIJ)</strong>.',
+        'details_title' => 'Account Details',
+        'label_name' => 'Name',
+        'label_ic' => 'IC No.',
+        'label_email' => 'Email',
+        'benefits_title' => 'You can log in to the applicant portal to:',
+        'benefits' => [
+            'Calculate your Had Kifayah eligibility',
+            'Apply for zakat assistance online',
+            'Check your application status',
+            'Upload supporting documents',
+        ],
+        'button' => 'Log In to Portal',
+        'disclaimer' => 'If you did not register for this account, please ignore this email or contact the MAIJ Zakat Management Division at <strong>:phone</strong>.',
+    ],
+
+    'reset_password' => [
+        'subject' => 'Reset Password — J-ZAKAT',
+        'title' => 'Reset Password',
+        'intro' => 'You are receiving this email because we received a password reset request for your account.',
+        'button' => 'Reset Password',
+        'expiry' => 'This link will expire in <strong>:minutes minutes</strong>. If you did not request a password reset, please ignore this email.',
+    ],
+
+    'salary_update' => [
+        'subject' => 'Update Your Salary Information — J-ZAKAT',
+        'title' => 'Salary Information Update',
+        'header' => 'Salary Information Update',
+        'intro' => '<strong>Majlis Agama Islam Johor (MAIJ)</strong> requests your cooperation to update your <strong>current salary status</strong> for your zakat assistance application (IC No.: <strong>:ic</strong>).',
+        'why_title' => 'Why are you receiving this email?',
+        'why_body' => 'Your application was approved more than <strong>:months months</strong> ago. To ensure eligibility assessments remain accurate, applicants are required to update their current income information periodically.',
+        'body' => 'Please log in to the applicant portal to update your salary information.',
+        'button' => 'Log In to Portal',
+    ],
+
+    'setup_password' => [
+        'subject' => 'Welcome to J-ZAKAT — Please Set Your Password',
+        'title' => 'Welcome to J-ZAKAT',
+        'intro' => 'Welcome to <strong>J-ZAKAT</strong>. Your administrator account has been created successfully. Please set your password by clicking the button below to activate your account.',
+        'button' => 'Set Password',
+        'expiry' => 'This link will expire in <strong>:minutes minutes</strong>. If you did not register for this account, please ignore this email.',
+    ],
+
+    'welcome_admin' => [
+        'subject' => 'Welcome to J-ZAKAT — Your Administrator Account',
+        'title' => 'Welcome',
+        'header' => 'Your Administrator Account',
+        'intro' => 'Congratulations! Your administrator account on <strong>J-ZAKAT</strong> has been created successfully. You can log in using the email <strong>:email</strong>.',
+        'password_label' => 'Temporary Password',
+        'password_hint' => 'Please log in and change this password immediately.',
+        'button' => 'Log In Now',
+    ],
+];

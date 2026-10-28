@@ -40,8 +40,8 @@ class FinancialAudit
         $expenseTotal = $this->total($expenses, self::EXPENSE_TOTAL);
 
         $checks = [
-            $this->checkTotal('Jumlah Pendapatan', $incomeTotal, $incomeSum, count($incomeRows)),
-            $this->checkTotal('Jumlah Perbelanjaan', $expenseTotal, $expenseSum, count($expenseRows)),
+            $this->checkTotal(__('ocr.audit.income_total'), $incomeTotal, $incomeSum, count($incomeRows)),
+            $this->checkTotal(__('ocr.audit.expense_total'), $expenseTotal, $expenseSum, count($expenseRows)),
             $this->checkBalance($incomeSum, $expenseSum),
             $this->checkMainIncome($applicant, $income),
         ];
@@ -96,7 +96,7 @@ class FinancialAudit
         if ($total === null && $sum > 0) {
             return [
                 'status' => 'warn',
-                'message' => "{$label} tidak dikesan, tetapi butiran berjumlah RM ".number_format($sum, 2).'.',
+                'message' => __('ocr.audit.total_not_detected', ['label' => $label, 'sum' => number_format($sum, 2)]),
                 'expected' => $sum,
                 'actual' => null,
             ];
@@ -105,7 +105,7 @@ class FinancialAudit
         if ($total === null && $sum == 0) {
             return [
                 'status' => 'skip',
-                'message' => "Tiada data untuk semakan {$label}.",
+                'message' => __('ocr.audit.no_data_total', ['label' => $label]),
                 'expected' => null,
                 'actual' => null,
             ];
@@ -114,7 +114,7 @@ class FinancialAudit
         if ($total !== null && $sum == 0 && $rowCount === 0) {
             return [
                 'status' => 'warn',
-                'message' => "{$label} dikesan (RM ".number_format($total, 2).') tetapi butiran tidak lengkap.',
+                'message' => __('ocr.audit.total_incomplete', ['label' => $label, 'total' => number_format($total, 2)]),
                 'expected' => $total,
                 'actual' => null,
             ];
@@ -124,7 +124,7 @@ class FinancialAudit
         if ($diff <= self::TOLERANCE) {
             return [
                 'status' => 'pass',
-                'message' => "{$label} sepadan dengan butiran (RM ".number_format($sum, 2).').',
+                'message' => __('ocr.audit.total_matches', ['label' => $label, 'sum' => number_format($sum, 2)]),
                 'expected' => $total,
                 'actual' => $sum,
             ];
@@ -132,7 +132,7 @@ class FinancialAudit
 
         return [
             'status' => 'fail',
-            'message' => "{$label} (RM ".number_format($total, 2).') tidak sepadan dengan jumlah butiran (RM '.number_format($sum, 2).').',
+            'message' => __('ocr.audit.total_mismatch', ['label' => $label, 'total' => number_format($total, 2), 'sum' => number_format($sum, 2)]),
             'expected' => $total,
             'actual' => $sum,
         ];
@@ -141,13 +141,13 @@ class FinancialAudit
     private function checkBalance(float $incomeSum, float $expenseSum): array
     {
         if ($incomeSum <= 0 && $expenseSum <= 0) {
-            return ['status' => 'skip', 'message' => 'Tiada data untuk semakan baki.', 'expected' => null, 'actual' => null];
+            return ['status' => 'skip', 'message' => __('ocr.audit.no_data_balance'), 'expected' => null, 'actual' => null];
         }
 
         if ($expenseSum > 0 && $incomeSum > 0 && $expenseSum > ($incomeSum * 1.2)) {
             return [
                 'status' => 'warn',
-                'message' => 'Perbelanjaan melebihi pendapatan (belanja RM '.number_format($expenseSum, 2).' vs pendapatan RM '.number_format($incomeSum, 2).').',
+                'message' => __('ocr.audit.expense_exceeds_income', ['expense' => number_format($expenseSum, 2), 'income' => number_format($incomeSum, 2)]),
                 'expected' => $incomeSum,
                 'actual' => $expenseSum,
             ];
@@ -155,7 +155,7 @@ class FinancialAudit
 
         return [
             'status' => 'pass',
-            'message' => 'Pendapatan '.number_format($incomeSum, 2).' / Perbelanjaan '.number_format($expenseSum, 2).' — tiada ketidakseimbangan ketara.',
+            'message' => __('ocr.audit.balance_ok', ['income' => number_format($incomeSum, 2), 'expense' => number_format($expenseSum, 2)]),
             'expected' => $incomeSum,
             'actual' => $expenseSum,
         ];
@@ -179,18 +179,18 @@ class FinancialAudit
         }
 
         if ($main === null || $diriValue === null) {
-            return ['status' => 'skip', 'message' => 'Pendapatan utama tidak dapat disemak.', 'expected' => null, 'actual' => null];
+            return ['status' => 'skip', 'message' => __('ocr.audit.main_income_unverified'), 'expected' => null, 'actual' => null];
         }
 
         if (abs($main - $diriValue) > self::TOLERANCE) {
             return [
                 'status' => 'warn',
-                'message' => 'Pendapatan pemohon (RM '.number_format($main, 2).') berbeza dengan pendapatan diri (RM '.number_format($diriValue, 2).').',
+                'message' => __('ocr.audit.main_income_mismatch', ['main' => number_format($main, 2), 'self' => number_format($diriValue, 2)]),
                 'expected' => $main,
                 'actual' => $diriValue,
             ];
         }
 
-        return ['status' => 'pass', 'message' => 'Pendapatan utama sepadan dengan butiran diri.', 'expected' => $main, 'actual' => $diriValue];
+        return ['status' => 'pass', 'message' => __('ocr.audit.main_income_matches'), 'expected' => $main, 'actual' => $diriValue];
     }
 }

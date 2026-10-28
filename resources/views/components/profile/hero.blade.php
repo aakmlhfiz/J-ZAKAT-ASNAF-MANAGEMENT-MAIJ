@@ -1,4 +1,8 @@
-@props(['name', 'email', 'photoUrl', 'initials', 'role' => 'Pentadbir Sistem', 'status' => 'Aktif', 'department' => null, 'accountId' => null, 'verified' => false])
+@props(['name', 'email', 'photoUrl', 'initials', 'role' => null, 'status' => null, 'department' => null, 'accountId' => null, 'verified' => false])
+@php
+    $role = $role ?? __('profile.hero.role_admin');
+    $status = $status ?? __('profile.status.active');
+@endphp
 <div
     x-data="avatarUploader('{{ route('profile.update') }}')"
     class="profile-hero rounded-[24px] px-6 md:px-12 pt-10 pb-24 mb-6 text-white relative overflow-hidden">
@@ -16,7 +20,7 @@
                     class="text-[48px] font-bold text-white/80">{{ $initials }}</span>
             </div>
             <span class="avatar-online-dot"></span>
-            <button @click="$refs.photoInput.click()"
+            <button @click="$refs.photoInput.click()" aria-label="{{ __('profile.hero.camera_aria') }}"
                 class="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-white/90 text-primary flex items-center justify-center shadow-md hover:bg-white transition-fast cursor-pointer">
                 <i class="fa-solid fa-camera text-[13px]"></i>
             </button>
@@ -59,17 +63,17 @@
             <a href="#maklumat" @click.prevent="$dispatch('profile-tab', 'maklumat')"
                 class="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-white text-primary text-[14px] font-semibold hover:bg-white/95 transition-fast shadow-md">
                 <i class="fa-solid fa-pen-to-square text-[13px]"></i>
-                Edit Profil
+                {{ __('profile.hero.edit_profile') }}
             </a>
             <button @click="$refs.photoInput.click()"
                 class="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-white/15 text-white text-[14px] font-semibold hover:bg-white/25 transition-fast">
                 <i class="fa-solid fa-image text-[13px]"></i>
-                Tukar Gambar
+                {{ __('profile.hero.change_photo') }}
             </button>
             <a href="#keselamatan" @click.prevent="$dispatch('profile-tab', 'keselamatan')"
                 class="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-white/15 text-white text-[14px] font-semibold hover:bg-white/25 transition-fast">
                 <i class="fa-solid fa-key text-[13px]"></i>
-                Tukar K/L
+                {{ __('profile.hero.change_password_short') }}
             </a>
         </div>
     </div>
@@ -80,8 +84,8 @@
     <div x-show="cropperOpen" x-cloak class="cropper-modal-backdrop" @click.self="closeCropper()" @keydown.escape.window="closeCropper()">
         <div class="cropper-modal-card">
             <div class="flex items-center justify-between px-6 py-4 border-b border-divider">
-                <h3 class="text-h3 text-text">Laras Gambar Profil</h3>
-                <button @click="closeCropper()" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-text transition-fast">
+                <h3 class="text-h3 text-text">{{ __('profile.hero.crop_title') }}</h3>
+                <button @click="closeCropper()" aria-label="{{ __('profile.hero.close') }}" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-text transition-fast">
                     <i class="fa-solid fa-xmark text-[14px]"></i>
                 </button>
             </div>
@@ -89,9 +93,9 @@
                 <img x-ref="cropperImage" src="" alt="" class="max-w-full">
             </div>
             <div class="flex items-center justify-end gap-2 px-6 py-4 border-t border-divider">
-                <button @click="closeCropper()" class="btn btn-secondary btn-sm">Batal</button>
+                <button @click="closeCropper()" class="btn btn-secondary btn-sm">{{ __('profile.hero.cancel') }}</button>
                 <button @click="cropAndUpload()" x-bind:disabled="uploading"
-                    class="btn btn-primary btn-sm" x-text="uploading ? 'Menyimpan...' : 'Simpan Gambar'"></button>
+                    class="btn btn-primary btn-sm" x-text="uploading ? @js(__('profile.hero.saving')) : @js(__('profile.hero.save_photo'))"></button>
             </div>
         </div>
     </div>

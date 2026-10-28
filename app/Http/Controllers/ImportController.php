@@ -66,7 +66,7 @@ class ImportController extends Controller
         $rows = array_map(fn ($r) => str_getcsv($r), file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 
         if (count($rows) < 2) {
-            return back()->with('error', 'Fail CSV kosong atau tidak mengandungi data.');
+            return back()->with('error', __('imports.messages.csv_empty'));
         }
 
         $header = array_map('trim', array_shift($rows));
@@ -82,7 +82,7 @@ class ImportController extends Controller
 
                 if (count($row) < count($header)) {
                     $gagal++;
-                    $errors[] = 'Baris '.($i + 2).': bilangan lajur tidak cukup.';
+                    $errors[] = __('imports.messages.csv_row_short', ['row' => $i + 2]);
 
                     continue;
                 }
@@ -93,49 +93,49 @@ class ImportController extends Controller
 
                 if ($ic === '' || $nama === '') {
                     $gagal++;
-                    $errors[] = 'Baris '.($i + 2).': IC atau nama kosong.';
+                    $errors[] = __('imports.messages.csv_row_missing_identity', ['row' => $i + 2]);
 
                     continue;
                 }
 
                 if (trim($data['hubungan'] ?? '') === '') {
                     $gagal++;
-                    $errors[] = 'Baris '.($i + 2).': hubungan kosong.';
+                    $errors[] = __('imports.messages.csv_row_missing_relationship', ['row' => $i + 2]);
 
                     continue;
                 }
 
                 if (trim($data['telefon'] ?? '') === '') {
                     $gagal++;
-                    $errors[] = 'Baris '.($i + 2).': telefon kosong.';
+                    $errors[] = __('imports.messages.csv_row_missing_phone', ['row' => $i + 2]);
 
                     continue;
                 }
 
                 if (trim($data['alamat'] ?? '') === '') {
                     $gagal++;
-                    $errors[] = 'Baris '.($i + 2).': alamat kosong.';
+                    $errors[] = __('imports.messages.csv_row_missing_address', ['row' => $i + 2]);
 
                     continue;
                 }
 
                 if (! is_numeric($data['pendapatan'] ?? '')) {
                     $gagal++;
-                    $errors[] = 'Baris '.($i + 2).': pendapatan tidak sah.';
+                    $errors[] = __('imports.messages.csv_row_invalid_income', ['row' => $i + 2]);
 
                     continue;
                 }
 
                 if (! is_numeric($data['bilangan_tanggungan'] ?? '')) {
                     $gagal++;
-                    $errors[] = 'Baris '.($i + 2).': bilangan_tanggungan tidak sah.';
+                    $errors[] = __('imports.messages.csv_row_invalid_dependents', ['row' => $i + 2]);
 
                     continue;
                 }
 
                 if (ProfilAsnaf::where('ic', $ic)->exists()) {
                     $gagal++;
-                    $errors[] = 'Baris '.($i + 2).': IC '.$ic.' sudah wujud.';
+                    $errors[] = __('imports.messages.csv_row_duplicate_ic', ['row' => $i + 2, 'ic' => $ic]);
 
                     continue;
                 }
@@ -189,14 +189,22 @@ class ImportController extends Controller
         NotificationService::notifyRoles(
             ['admin', 'pegawai'],
             'import_completed',
-            'Import CSV selesai',
-            "{$berjaya} berjaya, {$gagal} gagal · ".now()->diffForHumans(),
+            __('imports.messages.csv_notification_title'),
+            __('imports.messages.csv_notification_body', [
+                'success' => $berjaya,
+                'failed' => $gagal,
+                'time' => now()->diffForHumans(),
+            ]),
             $icon,
             $color,
             route('importcsv')
         );
 
-        $message = "Import selesai: {$berjaya} berjaya, {$gagal} gagal (jumlah {$jumlah}).";
+        $message = __('imports.messages.csv_completed', [
+            'success' => $berjaya,
+            'failed' => $gagal,
+            'total' => $jumlah,
+        ]);
         if (! empty($errors)) {
             $message .= ' '.implode(' ', array_slice($errors, 0, 3));
         }

@@ -18,13 +18,13 @@ class GeminiProvider implements AiProvider
 
         if (! $apiKey) {
             return [
-                'reply' => 'Gemini provider is not configured. Set AI_GEMINI_API_KEY in .env and AI_PROVIDER=gemini to enable.',
+                'reply' => __('ai.providers.gemini.not_configured'),
                 'data' => ['type' => 'text', 'stub' => true],
             ];
         }
 
         return [
-            'reply' => '[Gemini stub] Would call Gemini here with the system prompt and 5 function declarations. See TODO in GeminiProvider.',
+            'reply' => __('ai.providers.gemini.stub'),
             'data' => ['type' => 'text', 'stub' => true],
         ];
     }

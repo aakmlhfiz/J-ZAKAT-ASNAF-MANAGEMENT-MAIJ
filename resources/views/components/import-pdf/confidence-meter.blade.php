@@ -8,11 +8,11 @@
             default => 'danger',
         };
         $label = match(true) {
-            $confidence >= 90 => 'Keyakinan Tinggi',
-            $confidence >= 75 => 'Sederhana',
-            $confidence >= 60 => 'Rendah',
-            $confidence > 0  => 'Perlu Semakan',
-            default => 'Tidak Dikesan',
+            $confidence >= 90 => __('imports.preview.meter_high'),
+            $confidence >= 75 => __('imports.preview.meter_medium'),
+            $confidence >= 60 => __('imports.preview.meter_low'),
+            $confidence > 0  => __('imports.preview.meter_review'),
+            default => __('imports.preview.meter_none'),
         };
     @endphp
     <span class="text-eyebrow text-tertiary shrink-0 w-12 tabular-nums">{{ $confidence }}%</span>

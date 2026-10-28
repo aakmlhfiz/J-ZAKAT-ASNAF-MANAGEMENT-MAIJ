@@ -15,12 +15,15 @@ class NewApplicantRegisteredMail extends Mailable
 
     public function __construct(
         public PortalUser $portalUser,
-    ) {}
+        ?string $locale = null,
+    ) {
+        $this->locale($locale ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pemohon Baru Berdaftar — J-ZAKAT',
+            subject: __('emails.new_applicant.subject'),
         );
     }
 

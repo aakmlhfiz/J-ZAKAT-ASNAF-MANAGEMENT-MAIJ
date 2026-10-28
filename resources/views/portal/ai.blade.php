@@ -1,14 +1,20 @@
 @extends('portal.layouts.app')
-@section('title', 'AI Assistant — Portal Pemohon')
-@section('page-title', 'AI Assistant')
+@section('title', __('ai.portal.tab_title'))
+@section('page-title', __('ai.portal.page_title'))
+
+@php
+    $aiStrings = [
+        'error' => __('ai.errors.connection'),
+    ];
+@endphp
 
 @section('content')
-<div x-data="portalAiChat()" class="max-w-3xl mx-auto">
+<div x-data='portalAiChat(@json($aiStrings))' class="max-w-3xl mx-auto">
     <div class="mb-5 flex items-center gap-3">
         <div class="w-11 h-11 rounded-[14px] bg-primary text-white flex items-center justify-center font-bold text-[16px] shrink-0" style="background: var(--gradient-royal);">AI</div>
         <div>
-            <h1 class="text-title text-text">Pembantu Maya</h1>
-            <p class="text-small text-secondary">Panduan permohonan bantuan zakat MAIJ</p>
+            <h1 class="text-title text-text">{{ __('ai.portal.title') }}</h1>
+            <p class="text-small text-secondary">{{ __('ai.portal.subtitle') }}</p>
         </div>
     </div>
 
@@ -28,24 +34,24 @@
                 <div class="w-16 h-16 rounded-[20px] mx-auto flex items-center justify-center mb-4" style="background: var(--gradient-royal);">
                     <span class="text-white font-bold text-[22px]">AI</span>
                 </div>
-                <h3 class="text-h3 text-text">Pembantu maya sedia membantu</h3>
-                <p class="text-body text-secondary mt-2 max-w-sm mx-auto">Tanya saya tentang jenis bantuan, dokumen, atau status permohonan anda.</p>
+                <h3 class="text-h3 text-text">{{ __('ai.portal.empty_title') }}</h3>
+                <p class="text-body text-secondary mt-2 max-w-sm mx-auto">{{ __('ai.portal.empty_body') }}</p>
                 <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-md mx-auto">
-                    <button type="button" @click="draft='Apakah bantuan yang boleh saya mohon?'; send()" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
+                    <button type="button" @click="draft=@js(__('ai.portal.suggestions.prompt_assistance_types')); send()" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
                         <i class="fa-solid fa-hand-holding-heart text-primary text-[12px]"></i>
-                        <p class="text-small font-medium text-text mt-1.5">Jenis bantuan</p>
+                        <p class="text-small font-medium text-text mt-1.5">{{ __('ai.portal.suggestions.assistance_types') }}</p>
                     </button>
-                    <button type="button" @click="draft='Apakah dokumen yang diperlukan?'; send()" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
+                    <button type="button" @click="draft=@js(__('ai.portal.suggestions.prompt_documents')); send()" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
                         <i class="fa-solid fa-folder-open text-primary text-[12px]"></i>
-                        <p class="text-small font-medium text-text mt-1.5">Dokumen diperlukan</p>
+                        <p class="text-small font-medium text-text mt-1.5">{{ __('ai.portal.suggestions.documents') }}</p>
                     </button>
-                    <button type="button" @click="draft='Bagaimana cara menghantar permohonan?'; send()" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
+                    <button type="button" @click="draft=@js(__('ai.portal.suggestions.prompt_how_to_apply')); send()" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
                         <i class="fa-solid fa-paper-plane text-primary text-[12px]"></i>
-                        <p class="text-small font-medium text-text mt-1.5">Cara memohon</p>
+                        <p class="text-small font-medium text-text mt-1.5">{{ __('ai.portal.suggestions.how_to_apply') }}</p>
                     </button>
-                    <button type="button" @click="draft='Apakah status permohonan saya?'; send()" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
+                    <button type="button" @click="draft=@js(__('ai.portal.suggestions.prompt_application_status')); send()" class="text-left p-3 rounded-[12px] bg-card border border-divider hover:border-primary transition-fast">
                         <i class="fa-solid fa-magnifying-glass-chart text-primary text-[12px]"></i>
-                        <p class="text-small font-medium text-text mt-1.5">Status permohonan</p>
+                        <p class="text-small font-medium text-text mt-1.5">{{ __('ai.portal.suggestions.application_status') }}</p>
                     </button>
                 </div>
             </div>
@@ -63,23 +69,24 @@
 
         <form @submit.prevent="send()" class="border-t border-divider p-3 md:p-4 bg-card flex items-end gap-3">
             <div class="flex-1 relative">
-                <textarea x-model="draft" @keydown.enter.prevent="if (!event.shiftKey) send()" rows="1" placeholder="Tanya pembantu maya..." class="input-base resize-none pr-11 py-3 max-h-32"></textarea>
+                <textarea x-model="draft" @keydown.enter.prevent="if (!event.shiftKey) send()" rows="1" placeholder="{{ __('ai.portal.placeholder') }}" class="input-base resize-none pr-11 py-3 max-h-32"></textarea>
                 <i class="fa-solid fa-message text-tertiary absolute right-3.5 bottom-3 text-[13px] pointer-events-none"></i>
             </div>
-            <button type="submit" :disabled="!draft.trim() || loading" class="btn btn-primary btn-icon btn-lg shrink-0" aria-label="Hantar mesej">
+            <button type="submit" :disabled="!draft.trim() || loading" class="btn btn-primary btn-icon btn-lg shrink-0" aria-label="{{ __('ai.portal.send') }}">
                 <i class="fa-solid fa-paper-plane text-[14px]"></i>
             </button>
         </form>
     </x-app-card>
 
-    <p class="text-[11px] text-tertiary mt-3 text-center">Pembantu maya memberi panduan am sahaja. Keputusan kelayakan muktamad adalah tertakluk kepada penilaian rasmi MAIJ.</p>
+    <p class="text-[11px] text-tertiary mt-3 text-center">{{ __('ai.portal.disclaimer') }}</p>
 </div>
 @endsection
 
 @push('scripts')
 <script>
-function portalAiChat() {
+function portalAiChat(strings = {}) {
     return {
+        strings,
         loading: false,
         messages: [],
         draft: '',
@@ -104,7 +111,7 @@ function portalAiChat() {
                 this.messages.push({ id: Date.now() + 1, role: 'ai', text: data.reply || '', data: data.data || { type: 'text' } });
             })
             .catch(() => {
-                this.messages.push({ id: Date.now() + 1, role: 'ai', text: 'Maaf, berlaku ralat sambungan. Sila cuba lagi.', data: { type: 'text' } });
+                this.messages.push({ id: Date.now() + 1, role: 'ai', text: this.strings.error || 'Maaf, berlaku ralat sambungan. Sila cuba lagi.', data: { type: 'text' } });
             })
             .finally(() => {
                 this.loading = false;

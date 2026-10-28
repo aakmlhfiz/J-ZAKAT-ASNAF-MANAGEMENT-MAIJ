@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\PortalUser;
 use App\Models\ProfilAsnaf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Attachment;
@@ -18,12 +19,17 @@ class ApplicationApprovedMail extends Mailable
     public function __construct(
         public ProfilAsnaf $profil,
         public string $letterPath,
-    ) {}
+        ?string $locale = null,
+    ) {
+        $locale ??= PortalUser::where('ic_no', $profil->ic)->value('language');
+
+        $this->locale($locale ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Tahniah! Permohonan Zakat Diluluskan — J-ZAKAT',
+            subject: __('emails.application_approved.subject'),
         );
     }
 

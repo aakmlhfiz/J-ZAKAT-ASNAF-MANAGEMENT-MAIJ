@@ -1,16 +1,16 @@
 @extends('portal.layouts.app')
-@section('title', 'Notifikasi — Portal Pemohon')
-@section('page-title', 'Notifikasi')
+@section('title', __('notifications.page_title'))
+@section('page-title', __('notifications.title'))
 
 @section('content')
 <x-page-header
-    title="Notifikasi"
-    subtitle="{{ $unread }} notifikasi belum dibaca"
+    title="{{ __('notifications.title') }}"
+    subtitle="{{ trans_choice('notifications.subtitle', $unread, ['count' => $unread]) }}"
 />
 
 @if($notifications->count() === 0)
     <x-app-card>
-        <x-empty-state icon="fa-bell-slash" title="Tiada notifikasi" description="Makluman berkaitan permohonan anda akan dipaparkan di sini." />
+        <x-empty-state icon="fa-bell-slash" title="{{ __('notifications.empty.title') }}" description="{{ __('notifications.empty.description') }}" />
     </x-app-card>
 @else
     <x-app-card class="p-0" :hover="false">
@@ -33,7 +33,7 @@
                         <p class="text-eyebrow text-tertiary mt-1">{{ $n->created_at->diffForHumans() }}</p>
                     </div>
                     @if($n->link)
-                        <a href="{{ $n->link }}" class="btn btn-sm btn-ghost shrink-0">
+                        <a href="{{ $n->link }}" class="btn btn-sm btn-ghost shrink-0" aria-label="{{ __('notifications.open') }}">
                             <i class="fa-solid fa-arrow-right text-[11px]"></i>
                         </a>
                     @endif

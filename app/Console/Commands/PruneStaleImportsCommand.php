@@ -47,7 +47,7 @@ class PruneStaleImportsCommand extends Command
 
         DocumentImport::whereIn('id', $ids)->update([
             'status' => 'failed',
-            'error_message' => 'Pemprosesan terhenti kerana melebihi had masa. Sila muat naik semula dokumen ini.',
+            'error_message' => __('imports.stale_error'),
             'ocr_completed_at' => now(),
             'progress' => 0,
         ]);

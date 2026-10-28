@@ -43,10 +43,13 @@ return [
     ],
 
     /*
-    | System prompt used by real LLM providers.
+    | Fallback system prompt for real LLM providers. The active prompt is
+    | resolved per request from lang/{locale}/ai.php (`ai.system_prompt`) so
+    | the assistant answers in the current interface language. This value is
+    | only used when that translation is missing.
     | The MockProvider ignores this and uses pattern-matching instead.
     */
-    'system_prompt' => 'You are the J-ZAKAT Asnaf Assistant for Majlis Agama Islam Johor (MAIJ). Respond in Bahasa Malaysia. Use the provided tools to look up applicants, explain eligibility decisions, calculate Had Kifayah, and summarize profiles. Never invent applicant data or calculation rates: always call the relevant tool first. If a tool returns no record, say so clearly. Be concise, professional, protect personal data, and cite the specific data returned by the tools.',
+    'system_prompt' => 'You are the J-ZAKAT Asnaf Assistant for Majlis Agama Islam Johor (MAIJ). Respond in English. Use the provided tools to look up applicants, explain eligibility decisions, calculate Had Kifayah, and summarize profiles. Never invent applicant data or calculation rates: always call the relevant tool first. If a tool returns no record, say so clearly. Be concise, professional, protect personal data, and cite the specific data returned by the tools.',
 
     'max_history' => 20,
     'max_message_length' => 1000,

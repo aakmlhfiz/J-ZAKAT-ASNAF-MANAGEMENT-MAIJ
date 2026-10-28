@@ -25,4 +25,18 @@ abstract class AbstractTool
      * FontAwesome icon class (without the 'fa-solid ' prefix).
      */
     abstract public function icon(): string;
+
+    /**
+     * Localized display label for a stored eligibility status.
+     * DB values stay unchanged ('Layak', 'Tidak Layak', 'Dalam Semakan').
+     */
+    protected function statusLabel(?string $status): string
+    {
+        return match ((string) $status) {
+            'Layak' => __('common.status.layak'),
+            'Tidak Layak' => __('common.status.tidak_layak'),
+            'Dalam Semakan' => __('common.status.dalam_semakan'),
+            default => (string) $status,
+        };
+    }
 }

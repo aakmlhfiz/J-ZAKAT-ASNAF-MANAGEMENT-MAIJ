@@ -1,24 +1,24 @@
 @extends('layouts.app', [
-    'title' => 'Sejarah Import PDF',
-    'subtitle' => 'Rekod import dokumen & pengekstrakan AI',
+    'title' => __('imports.history.meta_title'),
+    'subtitle' => __('imports.history.meta_subtitle'),
 ])
 @section('content')
 @php
     $current = request('status');
     $search  = request('search');
     $filters = [
-        ''           => ['label' => 'Semua',       'tone' => 'primary', 'count' => $totals['all']        ?? null],
-        'extracted'  => ['label' => 'Diekstrak',   'tone' => 'success', 'count' => $totals['extracted']  ?? null],
-        'needs_review' => ['label' => 'Perlu Semakan', 'tone' => 'warning', 'count' => null],
-        'committed'  => ['label' => 'Disimpan',    'tone' => 'success', 'count' => $totals['committed']  ?? null],
-        'failed'     => ['label' => 'Gagal',       'tone' => 'danger',  'count' => $totals['failed']     ?? null],
-        'processing' => ['label' => 'Memproses',   'tone' => 'warning', 'count' => $totals['processing'] ?? null],
+        ''           => ['label' => __('imports.history.filter_all'),       'tone' => 'primary', 'count' => $totals['all']        ?? null],
+        'extracted'  => ['label' => __('imports.status.extracted'),   'tone' => 'success', 'count' => $totals['extracted']  ?? null],
+        'needs_review' => ['label' => __('imports.status.needs_review'), 'tone' => 'warning', 'count' => null],
+        'committed'  => ['label' => __('imports.status.committed'),    'tone' => 'success', 'count' => $totals['committed']  ?? null],
+        'failed'     => ['label' => __('imports.status.failed'),       'tone' => 'danger',  'count' => $totals['failed']     ?? null],
+        'processing' => ['label' => __('imports.status.processing'),   'tone' => 'warning', 'count' => $totals['processing'] ?? null],
     ];
 @endphp
 
-<x-page-header title="Sejarah Import PDF" subtitle="{{ $items->total() }} rekod dijumpai" eyebrow="Pemprosesan Dokumen AI" icon="fa-clock-rotate-left">
+<x-page-header :title="__('imports.history.title')" :subtitle="__('imports.history.subtitle', ['count' => $items->total()])" :eyebrow="__('imports.history.eyebrow')" icon="fa-clock-rotate-left">
     <x-slot:actions>
-        <x-app-button variant="primary" size="md" icon="fa-plus" href="{{ route('import-pdf.index') }}">Import Baharu</x-app-button>
+        <x-app-button variant="primary" size="md" icon="fa-plus" href="{{ route('import-pdf.index') }}">{{ __('imports.history.new_import') }}</x-app-button>
     </x-slot:actions>
 </x-page-header>
 
@@ -26,7 +26,7 @@
     <form method="GET" class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center">
         <div class="relative flex-1 max-w-md">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-tertiary text-[13px] pointer-events-none"></i>
-            <input type="search" name="search" value="{{ $search }}" placeholder="Cari nama fail atau IC..." class="input-base pl-10 py-2.5 text-[13px]">
+            <input type="search" name="search" value="{{ $search }}" placeholder="{{ __('imports.history.search_placeholder') }}" class="input-base pl-10 py-2.5 text-[13px]">
         </div>
         <div class="flex items-center gap-2 flex-wrap">
             @foreach($filters as $value => $f)
@@ -58,15 +58,15 @@
         <table class="app-table">
             <thead>
                 <tr>
-                    <th>Fail</th>
-                    <th>Status</th>
-                    <th class="text-right">Keyakinan</th>
-                    <th>Enjin OCR</th>
-                    <th>Halaman</th>
-                    <th>Isi Rumah</th>
-                    <th>Profil</th>
-                    <th>Diupload Oleh</th>
-                    <th>Tarikh</th>
+                    <th>{{ __('imports.history.col_file') }}</th>
+                    <th>{{ __('imports.history.col_status') }}</th>
+                    <th class="text-right">{{ __('imports.history.col_confidence') }}</th>
+                    <th>{{ __('imports.history.col_engine') }}</th>
+                    <th>{{ __('imports.history.col_pages') }}</th>
+                    <th>{{ __('imports.history.col_household') }}</th>
+                    <th>{{ __('imports.history.col_profile') }}</th>
+                    <th>{{ __('imports.history.col_uploaded_by') }}</th>
+                    <th>{{ __('imports.history.col_date') }}</th>
                     <th class="w-10"></th>
                 </tr>
             </thead>
@@ -95,11 +95,11 @@
                                     default => 'warning',
                                 };
                                 $statusLabel = match($item->status) {
-                                    'extracted' => 'Diekstrak',
-                                    'needs_review' => 'Perlu Semakan',
-                                    'committed' => 'Disimpan',
-                                    'failed' => 'Gagal',
-                                    'processing' => 'Memproses',
+                                    'extracted' => __('imports.status.extracted'),
+                                    'needs_review' => __('imports.status.needs_review'),
+                                    'committed' => __('imports.status.committed'),
+                                    'failed' => __('imports.status.failed'),
+                                    'processing' => __('imports.status.processing'),
                                     default => $item->status,
                                 };
                             @endphp
@@ -133,24 +133,24 @@
                             @endif
                         </td>
                         <td class="text-secondary whitespace-nowrap">{{ $item->user?->name ?? '—' }}</td>
-                        <td class="text-secondary whitespace-nowrap">{{ $item->created_at->format('d M Y') }}</td>
+                        <td class="text-secondary whitespace-nowrap">{{ $item->created_at->locale(app()->getLocale())->translatedFormat('d M Y') }}</td>
                         <td>
                             <div class="flex items-center gap-1">
                                 @if(in_array($item->status, ['extracted', 'needs_review']))
-                                    <a href="{{ route('import-pdf.preview', $item->id) }}" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-primary transition-fast" title="Pratinjau">
+                                    <a href="{{ route('import-pdf.preview', $item->id) }}" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-primary transition-fast" title="{{ __('imports.history.action_preview') }}">
                                         <i class="fa-solid fa-eye text-[13px]"></i>
                                     </a>
                                 @endif
-                                <a href="{{ route('import-pdf.show', $item->id) }}" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-primary transition-fast" title="Butiran">
+                                <a href="{{ route('import-pdf.show', $item->id) }}" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-primary transition-fast" title="{{ __('imports.history.action_details') }}">
                                     <i class="fa-solid fa-circle-info text-[13px]"></i>
                                 </a>
-                                <a href="{{ route('import-pdf.file', $item->id) }}" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-primary transition-fast" title="Muat Turun">
+                                <a href="{{ route('import-pdf.file', $item->id) }}" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-primary transition-fast" title="{{ __('imports.history.action_download') }}">
                                     <i class="fa-solid fa-download text-[12px]"></i>
                                 </a>
-                                <form method="POST" action="{{ route('import-pdf.destroy', $item->id) }}" onsubmit="return confirm('Padam rekod ini?')" class="inline-flex">
+                                <form method="POST" action="{{ route('import-pdf.destroy', $item->id) }}" onsubmit="return confirm(@js(__('imports.history.confirm_delete')))" class="inline-flex">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-danger transition-fast" title="Padam">
+                                    <button type="submit" class="w-8 h-8 rounded-[8px] hover:bg-muted flex items-center justify-center text-tertiary hover:text-danger transition-fast" title="{{ __('imports.history.action_delete') }}">
                                         <i class="fa-solid fa-trash text-[12px]"></i>
                                     </button>
                                 </form>
@@ -159,9 +159,9 @@
                     </tr>
                 @empty
                     <tr><td colspan="10">
-                        <x-empty-state icon="fa-file-pdf" title="Tiada rekod dijumpai" :description="($search || $current) ? 'Cuba ubah carian atau penapis anda.' : 'Muat naik dokumen untuk mula.'">
+                        <x-empty-state icon="fa-file-pdf" :title="__('imports.history.empty_title')" :description="($search || $current) ? __('imports.history.empty_description_filtered') : __('imports.history.empty_description')">
                             <x-slot:action>
-                                <x-app-button variant="primary" size="md" icon="fa-upload" href="{{ route('import-pdf.index') }}">Muat Naik Borang</x-app-button>
+                                <x-app-button variant="primary" size="md" icon="fa-upload" href="{{ route('import-pdf.index') }}">{{ __('imports.history.upload_form') }}</x-app-button>
                             </x-slot:action>
                         </x-empty-state>
                     </td></tr>

@@ -16,12 +16,14 @@ class WelcomeAdminMail extends Mailable
     public function __construct(
         public Admin $admin,
         public ?string $plainPassword = null,
-    ) {}
+    ) {
+        $this->locale($this->admin->language ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Selamat Datang ke J-ZAKAT — Akaun Pentadbir Anda',
+            subject: __('emails.welcome_admin.subject'),
         );
     }
 

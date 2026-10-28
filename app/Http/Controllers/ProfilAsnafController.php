@@ -150,6 +150,7 @@ class ProfilAsnafController extends Controller
                         $profil,
                         $request->documents,
                         $request->note,
+                        $portalUser->language,
                     ));
                 } catch (\Throwable $e) {
                     Log::warning('Gagal menghantar emel dokumen tambahan.', [

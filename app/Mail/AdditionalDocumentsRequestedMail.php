@@ -18,12 +18,15 @@ class AdditionalDocumentsRequestedMail extends Mailable
         public ProfilAsnaf $profil,
         public array $documents,
         public ?string $note = null,
-    ) {}
+        ?string $locale = null,
+    ) {
+        $this->locale($locale ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Dokumen Tambahan Diperlukan — J-ZAKAT',
+            subject: __('emails.additional_documents.subject'),
         );
     }
 
@@ -31,6 +34,12 @@ class AdditionalDocumentsRequestedMail extends Mailable
     {
         $labels = collect($this->documents)
             ->map(function (string $value) {
+                $key = 'emails.documents.'.$value;
+
+                if (trans()->has($key)) {
+                    return __($key);
+                }
+
                 $case = DocumentType::tryFrom($value);
 
                 return $case ? $case->label() : $value;

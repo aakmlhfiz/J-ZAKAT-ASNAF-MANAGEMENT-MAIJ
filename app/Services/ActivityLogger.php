@@ -30,7 +30,7 @@ class ActivityLogger
         ActivityLog::create([
             'user_id' => $user->id,
             'activity' => 'login',
-            'description' => 'Log masuk berjaya',
+            'description' => __('audit.activity.login'),
             'device' => $agent['device'],
             'browser' => $agent['browser'].' · '.$agent['os'],
             'ip_address' => $request->ip(),
@@ -43,7 +43,7 @@ class ActivityLogger
         ActivityLog::create([
             'user_id' => $user->id,
             'activity' => 'logout',
-            'description' => 'Log keluar',
+            'description' => __('audit.activity.logout'),
             'ip_address' => $request->ip(),
         ]);
     }
@@ -71,7 +71,7 @@ class ActivityLogger
         ActivityLog::create([
             'user_id' => $user->id,
             'activity' => 'profile_update',
-            'description' => 'Profil dikemaskini ('.implode(', ', array_keys($changes)).')',
+            'description' => __('audit.activity.profile_updated').' ('.implode(', ', array_keys($changes)).')',
             'device' => $agent['device'],
             'browser' => $agent['browser'].' · '.$agent['os'],
             'ip_address' => $request->ip(),
@@ -85,7 +85,7 @@ class ActivityLogger
         ActivityLog::create([
             'user_id' => $user->id,
             'activity' => 'password_change',
-            'description' => 'Kata laluan ditukar',
+            'description' => __('audit.activity.password_changed'),
             'device' => $agent['device'],
             'browser' => $agent['browser'].' · '.$agent['os'],
             'ip_address' => $request->ip(),
@@ -94,7 +94,7 @@ class ActivityLogger
         SecurityLog::create([
             'user_id' => $user->id,
             'event' => 'password_changed',
-            'description' => 'Kata laluan akaun telah diubah',
+            'description' => __('audit.activity.account_password_changed'),
             'ip_address' => $request->ip(),
         ]);
     }
@@ -106,7 +106,7 @@ class ActivityLogger
         ActivityLog::create([
             'user_id' => $user->id,
             'activity' => 'photo_upload',
-            'description' => 'Gambar profil dikemaskini',
+            'description' => __('audit.activity.photo_uploaded'),
             'device' => $agent['device'],
             'browser' => $agent['browser'].' · '.$agent['os'],
             'ip_address' => $request->ip(),
@@ -118,7 +118,7 @@ class ActivityLogger
         ActivityLog::create([
             'user_id' => $user->id,
             'activity' => 'settings_update',
-            'description' => 'Tetapan '.$key.' dikemaskini',
+            'description' => __('audit.activity.settings_updated', ['key' => $key]),
             'ip_address' => $request->ip(),
         ]);
     }
@@ -128,14 +128,14 @@ class ActivityLogger
         SecurityLog::create([
             'user_id' => $user->id,
             'event' => '2fa_enabled',
-            'description' => 'Pengesahan dua faktor diaktifkan',
+            'description' => __('audit.activity.two_factor_enabled'),
             'ip_address' => $request->ip(),
         ]);
 
         ActivityLog::create([
             'user_id' => $user->id,
             'activity' => '2fa_enable',
-            'description' => 'Pengesahan dua faktor diaktifkan',
+            'description' => __('audit.activity.two_factor_enabled'),
             'ip_address' => $request->ip(),
         ]);
     }
@@ -145,14 +145,14 @@ class ActivityLogger
         SecurityLog::create([
             'user_id' => $user->id,
             'event' => '2fa_disabled',
-            'description' => 'Pengesahan dua faktor dinyahaktifkan',
+            'description' => __('audit.activity.two_factor_disabled'),
             'ip_address' => $request->ip(),
         ]);
 
         ActivityLog::create([
             'user_id' => $user->id,
             'activity' => '2fa_disable',
-            'description' => 'Pengesahan dua faktor dinyahaktifkan',
+            'description' => __('audit.activity.two_factor_disabled'),
             'ip_address' => $request->ip(),
         ]);
     }

@@ -31,6 +31,7 @@ class PasswordResetLinkController extends Controller
                     name: $user->name,
                     email: $user->email,
                     resetUrl: url(route('password.reset', ['token' => $token, 'email' => $user->email], false)),
+                    locale: $user->language,
                 ));
             }
         );

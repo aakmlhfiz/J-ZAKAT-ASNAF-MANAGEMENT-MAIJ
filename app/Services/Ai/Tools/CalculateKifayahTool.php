@@ -75,18 +75,20 @@ class CalculateKifayahTool extends AbstractTool
     {
         $r = HadAlKifayahService::calculate($input);
 
-        $formula = sprintf(
-            'Had Kifayah = RM %.2f  (A − C = RM %.2f − RM %.2f)',
-            $r['had_kifayah_total'],
-            $r['pendapatan_total'],
-            $r['had_kifayah_total']
-        );
+        $formula = __('ai.kifayah.formula', [
+            'had_kifayah' => number_format($r['had_kifayah_total'], 2),
+            'income' => number_format($r['pendapatan_total'], 2),
+        ]);
 
         return [
-            'reply' => "Pengiraan Had Al-Kifayah (MAIDAM):\n\n**{$formula}**\n\nStatus: **{$r['status']}** (keyakinan AI: {$r['confidence']}%)",
+            'reply' => __('ai.tools.calculate_kifayah.reply', [
+                'formula' => $formula,
+                'status' => $this->statusLabel($r['status']),
+                'confidence' => $r['confidence'],
+            ]),
             'data' => [
                 'type' => 'eligibility',
-                'title' => 'Keputusan Kelayakan',
+                'title' => __('ai.card.eligibility_result'),
                 'status' => $r['status'],
                 'confidence' => $r['confidence'],
                 'pendapatan' => $r['pendapatan_total'],
@@ -94,16 +96,56 @@ class CalculateKifayahTool extends AbstractTool
                 'baki' => $r['baki'],
                 'ai_score' => $r['confidence'],
                 'items' => array_map(
-                    fn ($row) => $row['label'].': RM '.number_format($row['subtotal'], 2),
+                    fn ($row) => $this->localizeBreakdownLabel($row['label']).': RM '.number_format($row['subtotal'], 2),
                     $r['breakdown']
                 ),
             ],
         ];
     }
 
+    /**
+     * Translate a Had Kifayah breakdown label produced by HadAlKifayahService.
+     * Labels keep their " × count" suffix; only the base name is translated.
+     */
+    private function localizeBreakdownLabel(string $label): string
+    {
+        if (str_contains($label, ' × ')) {
+            [$base, $count] = explode(' × ', $label, 2);
+
+            return $this->baseBreakdownLabel(trim($base)).' × '.$count;
+        }
+
+        return $this->baseBreakdownLabel($label);
+    }
+
+    private function baseBreakdownLabel(string $base): string
+    {
+        if (str_starts_with($base, 'Rumah Sewa')) {
+            return str_contains($base, 'tidak')
+                ? __('ai.kifayah.rent_not_selected')
+                : __('ai.kifayah.rent_selected');
+        }
+
+        return match ($base) {
+            'Ketua Keluarga' => __('ai.kifayah.head'),
+            'Isteri / Suami' => __('ai.kifayah.spouse'),
+            'Ibu Bapa Tanggungan' => __('ai.kifayah.parents'),
+            'Dewasa Tidak Bekerja' => __('ai.kifayah.adult_unemployed'),
+            'Dewasa Bekerja Ditanggung' => __('ai.kifayah.adult_working_dependant'),
+            'IPT' => __('ai.kifayah.higher_education'),
+            'Remaja' => __('ai.kifayah.teenager'),
+            'Sekolah Rendah' => __('ai.kifayah.primary_school'),
+            'Tadika' => __('ai.kifayah.kindergarten'),
+            'Utiliti (input)' => __('ai.kifayah.utilities'),
+            'Pengangkutan (input)' => __('ai.kifayah.transport'),
+            'Perubatan (input)' => __('ai.kifayah.medical'),
+            default => $base,
+        };
+    }
+
     public function label(): string
     {
-        return 'Kira Had Kifayah';
+        return __('ai.tools.calculate_kifayah.label');
     }
 
     public function icon(): string

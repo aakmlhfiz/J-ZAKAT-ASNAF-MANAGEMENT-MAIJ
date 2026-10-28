@@ -23,19 +23,22 @@ class OllamaProvider implements AiProvider
             $resp = Http::timeout(2)->get(rtrim($host, '/').'/api/tags');
             if ($resp->failed()) {
                 return [
-                    'reply' => "Ollama tidak dapat dihubungi di {$host}. Pastikan servis ollama berjalan dan AI_OLLAMA_HOST betul.",
+                    'reply' => __('ai.providers.ollama.unreachable', ['host' => $host]),
                     'data' => ['type' => 'text', 'stub' => true, 'reachable' => false],
                 ];
             }
         } catch (\Throwable $e) {
             return [
-                'reply' => "Ollama tidak dapat dihubungi di {$host} ({$e->getMessage()}).",
+                'reply' => __('ai.providers.ollama.unreachable_with_error', [
+                    'host' => $host,
+                    'error' => $e->getMessage(),
+                ]),
                 'data' => ['type' => 'text', 'stub' => true, 'reachable' => false],
             ];
         }
 
         return [
-            'reply' => "[Ollama stub] Ollama is reachable. Would POST to {$host}/api/chat here with the 5 tool definitions. See TODO in OllamaProvider.",
+            'reply' => __('ai.providers.ollama.stub', ['host' => $host]),
             'data' => ['type' => 'text', 'stub' => true, 'reachable' => true],
         ];
     }

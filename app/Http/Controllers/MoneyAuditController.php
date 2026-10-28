@@ -79,9 +79,17 @@ class MoneyAuditController extends Controller
         return response()->streamDownload(function () use ($query) {
             $out = fopen('php://output', 'w');
             fputcsv($out, [
-                'ID', 'Tarikh Lulus', 'Isi Rumah', 'Ahli', 'Jenis Bantuan',
-                'Amaun (RM)', 'Kekerapan', 'Status', 'Pegawai Kelulusan',
-                'No Rujukan', 'Keterangan',
+                __('money_audit.export.id'),
+                __('money_audit.export.approved_date'),
+                __('money_audit.export.household'),
+                __('money_audit.export.member'),
+                __('money_audit.export.jenis_bantuan'),
+                __('money_audit.export.amount'),
+                __('money_audit.export.frequency'),
+                __('money_audit.export.status'),
+                __('money_audit.export.approval_officer'),
+                __('money_audit.export.reference'),
+                __('money_audit.export.description'),
             ]);
             $query->chunk(500, function ($rows) use ($out) {
                 foreach ($rows as $r) {

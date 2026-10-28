@@ -13,10 +13,10 @@
 
     $tone = function ($conf) {
         $conf = (float) $conf;
-        if ($conf >= 90) return ['success', 'Tinggi'];
-        if ($conf >= 75) return ['warning', 'Sederhana'];
-        if ($conf >= 60) return ['danger', 'Rendah'];
-        return ['danger', 'Semakan'];
+        if ($conf >= 90) return ['success', __('imports.preview.confidence_high')];
+        if ($conf >= 75) return ['warning', __('imports.preview.confidence_medium')];
+        if ($conf >= 60) return ['danger', __('imports.preview.confidence_low')];
+        return ['danger', __('imports.review.needs_check')];
     };
     $review = function (array $field) {
         return ($field['needs_review'] ?? false) || (float) ($field['confidence'] ?? 0) < 60;
@@ -28,19 +28,19 @@
         return array_filter($fields, fn ($f) => (int) ($f['page'] ?? 0) === $page && ($f['value'] ?? null) !== null);
     };
     $cbState = function ($state) {
-        if ($state === true) return '<span class="text-success font-semibold">Tandai</span>';
-        if ($state === false) return '<span class="text-tertiary">Kosong</span>';
-        return '<span class="text-danger font-semibold">Tidak jelas</span>';
+        if ($state === true) return '<span class="text-success font-semibold">'.e(__('imports.maij.checkbox_checked')).'</span>';
+        if ($state === false) return '<span class="text-tertiary">'.e(__('imports.maij.checkbox_empty')).'</span>';
+        return '<span class="text-danger font-semibold">'.e(__('imports.maij.checkbox_unclear')).'</span>';
     };
     $sectionCards = [
-        ['key' => 'sara_hidup', 'title' => 'Sara Hidup (5A)', 'icon' => 'fa-bowl-rice'],
-        ['key' => 'medical', 'title' => 'Perubatan (5B)', 'icon' => 'fa-briefcase-medical'],
-        ['key' => 'business', 'title' => 'Berdikari (5C)', 'icon' => 'fa-screwdriver-wrench'],
-        ['key' => 'housing', 'title' => 'Perumahan (5D)', 'icon' => 'fa-house-medical'],
-        ['key' => 'debt', 'title' => 'Menjelaskan Hutang (5E)', 'icon' => 'fa-coins'],
-        ['key' => 'residence', 'title' => 'Tempat Tinggal', 'icon' => 'fa-house-chimney'],
-        ['key' => 'assets', 'title' => 'Harta', 'icon' => 'fa-car-side'],
-        ['key' => 'employment', 'title' => 'Pekerjaan', 'icon' => 'fa-briefcase'],
+        ['key' => 'sara_hidup', 'title' => __('imports.maij.section_sara_hidup'), 'icon' => 'fa-bowl-rice'],
+        ['key' => 'medical', 'title' => __('imports.maij.section_medical'), 'icon' => 'fa-briefcase-medical'],
+        ['key' => 'business', 'title' => __('imports.maij.section_business'), 'icon' => 'fa-screwdriver-wrench'],
+        ['key' => 'housing', 'title' => __('imports.maij.section_housing'), 'icon' => 'fa-house-medical'],
+        ['key' => 'debt', 'title' => __('imports.maij.section_debt'), 'icon' => 'fa-coins'],
+        ['key' => 'residence', 'title' => __('imports.maij.section_residence'), 'icon' => 'fa-house-chimney'],
+        ['key' => 'assets', 'title' => __('imports.maij.section_assets'), 'icon' => 'fa-car-side'],
+        ['key' => 'employment', 'title' => __('imports.maij.section_employment'), 'icon' => 'fa-briefcase'],
     ];
 @endphp
 
@@ -48,17 +48,17 @@
     <x-app-card class="p-6 mb-6" :hover="false" accent="primary">
         <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
             <x-section-header
-                title="Maklumat Berjaya Dikesan"
-                description="Pemahaman struktur borang — {{ $ocr['document']['document_type'] ?? 'Borang MAIJ' }} ({{ $ocr['document']['pages'] ?? '—' }} muka surat)"
+                :title="__('imports.maij.detected_title')"
+                :description="__('imports.maij.detected_description', ['type' => $ocr['document']['document_type'] ?? __('imports.maij.default_document_type'), 'pages' => $ocr['document']['pages'] ?? '—'])"
                 icon="fa-wand-magic-sparkles" />
             <div class="flex items-center gap-2">
                 @if(($ocr['source'] ?? '') === 'vision')
                     <x-status-badge status="primary" size="sm" :dot="false">
-                        <i class="fa-solid fa-eye text-[10px] mr-1"></i> Vision AI ({{ $ocr['provider'] ?? '—' }})
+                        <i class="fa-solid fa-eye text-[10px] mr-1"></i> {{ __('imports.maij.vision_badge') }} ({{ $ocr['provider'] ?? '—' }})
                     </x-status-badge>
                 @else
                     <x-status-badge status="info" size="sm" :dot="false">
-                        <i class="fa-solid fa-cpu text-[10px] mr-1"></i> Enjin Templat Setempat
+                        <i class="fa-solid fa-cpu text-[10px] mr-1"></i> {{ __('imports.maij.local_engine') }}
                     </x-status-badge>
                 @endif
                 @php $sections = $ocr['document']['sections_detected'] ?? []; @endphp
@@ -66,7 +66,7 @@
                     <div class="flex flex-wrap gap-1.5">
                         @foreach($sections as $s)
                             <span class="text-[11px] font-semibold bg-primary-soft text-primary px-2 py-1 rounded-pill">
-                                §{{ $s['number'] ?? '' }} · Muka {{ $s['page'] ?? '' }}
+                                {{ __('imports.maij.section_page', ['number' => $s['number'] ?? '', 'page' => $s['page'] ?? '']) }}
                             </span>
                         @endforeach
                     </div>
@@ -79,20 +79,20 @@
             <div class="mb-5">
                 <h4 class="text-body font-semibold text-text mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-hand-holding-heart text-primary text-[14px]"></i>
-                    Bantuan Dipohon (Muka 1)
+                    {{ __('imports.maij.applications_title') }}
                 </h4>
                 <div class="overflow-x-auto">
                     <table class="app-table">
-                        <thead><tr><th>Jenis Bantuan</th><th>Dipilih</th><th>Jumlah (RM)</th><th>Sebab / Ulasan</th><th>Sumber</th></tr></thead>
+                        <thead><tr><th>{{ __('imports.maij.col_assistance_type') }}</th><th>{{ __('imports.maij.col_selected') }}</th><th>{{ __('imports.maij.col_amount') }}</th><th>{{ __('imports.maij.col_reason') }}</th><th>{{ __('imports.maij.col_source') }}</th></tr></thead>
                         <tbody>
                             @foreach($applications as $app)
                                 <tr>
                                     <td class="text-small text-text font-medium">{{ $app['type'] }}</td>
                                     <td class="text-small">
                                         @if($app['selected'])
-                                            <x-status-badge status="success" size="sm">Dipilih</x-status-badge>
+                                            <x-status-badge status="success" size="sm">{{ __('imports.maij.selected_yes') }}</x-status-badge>
                                         @else
-                                            <x-status-badge status="muted" size="sm">Tidak</x-status-badge>
+                                            <x-status-badge status="muted" size="sm">{{ __('imports.maij.selected_no') }}</x-status-badge>
                                         @endif
                                     </td>
                                     <td class="text-small text-text tabular-nums">{{ $app['amount_requested'] ?? '—' }}</td>
@@ -111,7 +111,7 @@
             <div class="mb-5">
                 <h4 class="text-body font-semibold text-text mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-list-check text-primary text-[14px]"></i>
-                    Pilihan Kotak Semak
+                    {{ __('imports.maij.checkbox_title') }}
                 </h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     @foreach($checkboxes as $group => $options)
@@ -165,12 +165,12 @@
             <div class="mb-5">
                 <h4 class="text-body font-semibold text-text mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-people-group text-primary text-[14px]"></i>
-                    Tanggungan / Waris Yang Telah Bekerja (Muka 3)
+                    {{ __('imports.maij.dependents_title') }}
                 </h4>
                 <div class="overflow-x-auto">
                     <table class="app-table">
                         <thead>
-                            <tr><th>#</th><th>Nama Penuh</th><th>No. K/P</th><th>Sekolah / Pekerjaan</th><th>Pendapatan</th><th>Hubungan</th><th>Tinggal</th><th>Status</th></tr>
+                            <tr><th>{{ __('imports.maij.col_row') }}</th><th>{{ __('imports.maij.col_full_name') }}</th><th>{{ __('imports.maij.col_ic_no') }}</th><th>{{ __('imports.maij.col_school_work') }}</th><th>{{ __('imports.maij.col_income') }}</th><th>{{ __('imports.maij.col_relationship') }}</th><th>{{ __('imports.maij.col_living') }}</th><th>{{ __('imports.maij.col_status') }}</th></tr>
                         </thead>
                         <tbody>
                             @foreach($dependents as $d)
@@ -186,9 +186,9 @@
                                         @if(($d['nama_penuh'] ?? null) === null)
                                             <span class="text-tertiary">—</span>
                                         @elseif($d['needs_review'] ?? false)
-                                            <x-status-badge status="warning" size="sm">Semak</x-status-badge>
+                                            <x-status-badge status="warning" size="sm">{{ __('imports.maij.status_check') }}</x-status-badge>
                                         @else
-                                            <x-status-badge status="success" size="sm">OK</x-status-badge>
+                                            <x-status-badge status="success" size="sm">{{ __('imports.maij.status_ok') }}</x-status-badge>
                                         @endif
                                     </td>
                                 </tr>
@@ -203,7 +203,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
             <div>
                 <h4 class="text-body font-semibold text-text mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-coins text-primary text-[14px]"></i> Pendapatan Bulanan
+                    <i class="fa-solid fa-coins text-primary text-[14px]"></i> {{ __('imports.maij.income_title') }}
                 </h4>
                 <table class="app-table">
                     <tbody>
@@ -218,7 +218,7 @@
             </div>
             <div>
                 <h4 class="text-body font-semibold text-text mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-primary text-[14px]"></i> Perbelanjaan Bulanan
+                    <i class="fa-solid fa-receipt text-primary text-[14px]"></i> {{ __('imports.maij.expenses_title') }}
                 </h4>
                 <table class="app-table">
                     <tbody>
@@ -242,13 +242,13 @@
             <div class="mb-5 p-4 rounded-[14px] border border-divider/60 @if(($fa['overall'] ?? '') === 'fail') bg-danger-soft/40 @elseif(($fa['overall'] ?? '') === 'warn') bg-warning-soft/40 @else bg-muted/40 @endif">
                 <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
                     <h4 class="text-body font-semibold text-text flex items-center gap-2">
-                        <i class="fa-solid fa-magnifying-glass-dollar text-primary text-[14px]"></i> Audit Kewangan
+                        <i class="fa-solid fa-magnifying-glass-dollar text-primary text-[14px]"></i> {{ __('imports.maij.audit_title') }}
                     </h4>
                     <div class="flex items-center gap-2">
-                        <span class="text-[12px] text-tertiary tabular-nums">Pendapatan RM{{ number_format((float)($fa['income_sum'] ?? 0), 2) }}</span>
-                        <span class="text-[12px] text-tertiary tabular-nums">Perbelanjaan RM{{ number_format((float)($fa['expense_sum'] ?? 0), 2) }}</span>
+                        <span class="text-[12px] text-tertiary tabular-nums">{{ __('imports.maij.audit_income', ['amount' => number_format((float)($fa['income_sum'] ?? 0), 2)]) }}</span>
+                        <span class="text-[12px] text-tertiary tabular-nums">{{ __('imports.maij.audit_expense', ['amount' => number_format((float)($fa['expense_sum'] ?? 0), 2)]) }}</span>
                         <x-status-badge :status="$faTone" size="sm">
-                            {{ match($fa['overall'] ?? '') { 'pass' => 'SELARAS', 'warn' => 'PERLU SEMAKAN', 'fail' => 'TIDAK SELARAS', default => 'TIADA DATA' } }}
+                            {{ match($fa['overall'] ?? '') { 'pass' => __('imports.maij.audit_pass'), 'warn' => __('imports.maij.audit_warn'), 'fail' => __('imports.maij.audit_fail'), default => __('imports.maij.audit_none') } }}
                         </x-status-badge>
                     </div>
                 </div>
@@ -271,21 +271,21 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="p-4 rounded-[14px] bg-muted/40 border border-divider/60">
                 <h4 class="text-body font-semibold text-text mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-file-signature text-primary text-[14px]"></i> Pengakuan Pemohon (Muka 4)
+                    <i class="fa-solid fa-file-signature text-primary text-[14px]"></i> {{ __('imports.maij.declaration_title') }}
                 </h4>
                 <dl class="space-y-2 text-small">
-                    <div class="flex justify-between"><dt class="text-tertiary">Nama</dt><dd class="text-text font-medium">{{ $declaration['pengakuan_nama']['value'] ?? '—' }}</dd></div>
-                    <div class="flex justify-between"><dt class="text-tertiary">Tarikh</dt><dd class="text-text">{{ $declaration['pengakuan_tarikh']['value'] ?? '—' }}</dd></div>
+                    <div class="flex justify-between"><dt class="text-tertiary">{{ __('imports.maij.declaration_name') }}</dt><dd class="text-text font-medium">{{ $declaration['pengakuan_nama']['value'] ?? '—' }}</dd></div>
+                    <div class="flex justify-between"><dt class="text-tertiary">{{ __('imports.maij.declaration_date') }}</dt><dd class="text-text">{{ $declaration['pengakuan_tarikh']['value'] ?? '—' }}</dd></div>
                     <div class="flex justify-between items-center">
-                        <dt class="text-tertiary">Tandatangan</dt>
+                        <dt class="text-tertiary">{{ __('imports.maij.declaration_signature') }}</dt>
                         <dd>
                             @php $sig = $declaration['signature'] ?? []; @endphp
                             @if(($sig['present'] ?? null) === true)
-                                <x-status-badge status="success" size="sm">Ada ({{ $sig['confidence'] ?? 0 }}%)</x-status-badge>
+                                <x-status-badge status="success" size="sm">{{ __('imports.maij.signature_present', ['confidence' => $sig['confidence'] ?? 0]) }}</x-status-badge>
                             @elseif(($sig['present'] ?? null) === false)
-                                <x-status-badge status="muted" size="sm">Tidak dikesan</x-status-badge>
+                                <x-status-badge status="muted" size="sm">{{ __('imports.maij.signature_missing') }}</x-status-badge>
                             @else
-                                <x-status-badge status="warning" size="sm">Tidak jelas</x-status-badge>
+                                <x-status-badge status="warning" size="sm">{{ __('imports.maij.signature_unclear') }}</x-status-badge>
                             @endif
                         </dd>
                     </div>
@@ -293,23 +293,23 @@
             </div>
             <div class="p-4 rounded-[14px] bg-muted/40 border border-divider/60">
                 <h4 class="text-body font-semibold text-text mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-user-check text-primary text-[14px]"></i> Butiran Pengakuan / Pengesah
+                    <i class="fa-solid fa-user-check text-primary text-[14px]"></i> {{ __('imports.maij.verification_title') }}
                 </h4>
                 <dl class="space-y-2 text-small">
-                    <div class="flex justify-between"><dt class="text-tertiary">Nama</dt><dd class="text-text font-medium">{{ $verification['pengesah_nama']['value'] ?? '—' }}</dd></div>
-                    <div class="flex justify-between"><dt class="text-tertiary">Jawatan</dt><dd class="text-text">{{ $verification['pengesah_jawatan']['value'] ?? '—' }}</dd></div>
-                    <div class="flex justify-between"><dt class="text-tertiary">Ulasan</dt><dd class="text-text">{{ $verification['pengesah_ulasan']['value'] ?? '—' }}</dd></div>
-                    <div class="flex justify-between"><dt class="text-tertiary">Tarikh</dt><dd class="text-text">{{ $verification['pengesah_tarikh']['value'] ?? '—' }}</dd></div>
+                    <div class="flex justify-between"><dt class="text-tertiary">{{ __('imports.maij.declaration_name') }}</dt><dd class="text-text font-medium">{{ $verification['pengesah_nama']['value'] ?? '—' }}</dd></div>
+                    <div class="flex justify-between"><dt class="text-tertiary">{{ __('imports.maij.verification_position') }}</dt><dd class="text-text">{{ $verification['pengesah_jawatan']['value'] ?? '—' }}</dd></div>
+                    <div class="flex justify-between"><dt class="text-tertiary">{{ __('imports.maij.verification_comment') }}</dt><dd class="text-text">{{ $verification['pengesah_ulasan']['value'] ?? '—' }}</dd></div>
+                    <div class="flex justify-between"><dt class="text-tertiary">{{ __('imports.maij.verification_date') }}</dt><dd class="text-text">{{ $verification['pengesah_tarikh']['value'] ?? '—' }}</dd></div>
                     <div class="flex justify-between items-center">
-                        <dt class="text-tertiary">Tandatangan / Cop</dt>
+                        <dt class="text-tertiary">{{ __('imports.maij.verification_stamp') }}</dt>
                         <dd>
                             @php $stamp = $verification['stamp'] ?? []; @endphp
                             @if(($stamp['present'] ?? null) === true)
-                                <x-status-badge status="success" size="sm">Ada</x-status-badge>
+                                <x-status-badge status="success" size="sm">{{ __('imports.maij.signature_present_short') }}</x-status-badge>
                             @elseif(($stamp['present'] ?? null) === false)
-                                <x-status-badge status="muted" size="sm">Tidak dikesan</x-status-badge>
+                                <x-status-badge status="muted" size="sm">{{ __('imports.maij.signature_missing') }}</x-status-badge>
                             @else
-                                <x-status-badge status="warning" size="sm">Tidak jelas</x-status-badge>
+                                <x-status-badge status="warning" size="sm">{{ __('imports.maij.signature_unclear') }}</x-status-badge>
                             @endif
                         </dd>
                     </div>

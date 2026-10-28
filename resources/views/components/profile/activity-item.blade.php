@@ -9,8 +9,12 @@
     ];
     $s = $statusMap[$status] ?? $statusMap['primary'];
     $statusLabel = match($status) {
-        'success' => 'Berjaya', 'warning' => 'Amaran', 'danger' => 'Gagal',
-        'info' => 'Info', 'primary' => 'Profil', default => ucfirst($status),
+        'success' => __('profile.activity.status_success'),
+        'warning' => __('profile.activity.status_warning'),
+        'danger' => __('profile.activity.status_danger'),
+        'info' => __('profile.activity.status_info'),
+        'primary' => __('profile.activity.status_primary'),
+        default => ucfirst($status),
     };
     $actIcon = match($icon) {
         'login' => 'fa-right-to-bracket',

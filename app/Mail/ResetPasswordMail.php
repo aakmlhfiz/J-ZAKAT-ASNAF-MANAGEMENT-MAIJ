@@ -17,12 +17,15 @@ class ResetPasswordMail extends Mailable
         public string $name,
         public string $email,
         public string $resetUrl,
-    ) {}
+        ?string $locale = null,
+    ) {
+        $this->locale($locale ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Set Semula Kata Laluan — J-ZAKAT',
+            subject: __('emails.reset_password.subject'),
         );
     }
 

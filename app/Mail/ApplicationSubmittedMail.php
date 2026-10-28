@@ -17,12 +17,15 @@ class ApplicationSubmittedMail extends Mailable
     public function __construct(
         public PortalUser $portalUser,
         public Application $application,
-    ) {}
+        ?string $locale = null,
+    ) {
+        $this->locale($locale ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Permohonan Zakat Baru Dihantar — J-ZAKAT',
+            subject: __('emails.application_submitted.subject'),
         );
     }
 

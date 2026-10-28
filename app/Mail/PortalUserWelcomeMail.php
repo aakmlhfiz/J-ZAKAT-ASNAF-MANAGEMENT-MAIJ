@@ -15,12 +15,14 @@ class PortalUserWelcomeMail extends Mailable
 
     public function __construct(
         public PortalUser $portalUser,
-    ) {}
+    ) {
+        $this->locale($this->portalUser->language ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Selamat Datang ke J-ZAKAT — Akaun Pemohon Anda',
+            subject: __('emails.portal_user_welcome.subject'),
         );
     }
 

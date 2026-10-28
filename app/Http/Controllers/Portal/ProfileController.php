@@ -22,10 +22,15 @@ class ProfileController extends Controller
                 ->where('action', 'portal.login')->count(),
             'last_login' => AuditLog::where('user_id', $userId)
                 ->where('action', 'portal.login')->latest('created_at')->first(),
-            'account_created_date' => $user->created_at->format('d M Y'),
-            'account_created_ago' => $user->created_at->diffForHumans(),
-            'role_label' => $user->roleLabel(),
-            'status_label' => $user->statusLabel(),
+            'account_created_date' => $user->created_at->locale(app()->getLocale())->translatedFormat('d M Y'),
+            'account_created_ago' => $user->created_at->locale(app()->getLocale())->diffForHumans(),
+            'role_label' => __('profile.hero.role_portal'),
+            'status_label' => match ($user->status) {
+                'active' => __('profile.status.active'),
+                'inactive' => __('profile.status.inactive'),
+                'suspended' => __('profile.status.suspended'),
+                default => $user->statusLabel(),
+            },
             'application_count' => $user->applications()->count(),
         ];
 
@@ -92,7 +97,7 @@ class ProfileController extends Controller
             AuditLogger::profileUpdated($user, $request, $changes);
         }
 
-        return back()->with('success', 'Profil berjaya dikemaskini.');
+        return back()->with('success', __('profile.messages.profile_updated'));
     }
 
     public function updatePassword(Request $request)
@@ -105,14 +110,14 @@ class ProfileController extends Controller
         ]);
 
         if (! Hash::check($validated['current_password'], $user->password)) {
-            return back()->withErrors(['current_password' => 'Kata laluan semasa tidak tepat.']);
+            return back()->withErrors(['current_password' => __('profile.messages.current_password_incorrect')]);
         }
 
         $user->update(['password' => $validated['password']]);
 
         AuditLogger::passwordChanged($user, $request);
 
-        return back()->with('success', 'Kata laluan berjaya ditukar.');
+        return back()->with('success', __('profile.messages.password_updated'));
     }
 
     public function enableTwoFactor(Request $request, PortalTwoFactorService $service)
@@ -140,10 +145,10 @@ class ProfileController extends Controller
         $valid = $service->enable($user, $request->code, $request);
 
         if (! $valid) {
-            return response()->json(['ok' => false, 'message' => 'Kod tidak sah. Sila cuba lagi.'], 422);
+            return response()->json(['ok' => false, 'message' => __('profile.messages.invalid_code')], 422);
         }
 
-        return response()->json(['ok' => true, 'message' => '2FA berjaya diaktifkan.']);
+        return response()->json(['ok' => true, 'message' => __('profile.messages.two_factor_enabled')]);
     }
 
     public function disableTwoFactor(Request $request, PortalTwoFactorService $service)
@@ -152,21 +157,21 @@ class ProfileController extends Controller
         $user = auth('portal')->user();
 
         if (! Hash::check($request->current_password, $user->password)) {
-            return response()->json(['ok' => false, 'message' => 'Kata laluan tidak tepat.'], 422);
+            return response()->json(['ok' => false, 'message' => __('profile.messages.password_incorrect')], 422);
         }
 
         $service->disable($user, $request);
 
-        return response()->json(['ok' => true, 'message' => '2FA telah dinyahaktifkan.']);
+        return response()->json(['ok' => true, 'message' => __('profile.messages.two_factor_disabled')]);
     }
 
     private function permissionsForRole(): array
     {
         return [
-            ['label' => 'Dashboard', 'active' => true],
-            ['label' => 'Permohonan', 'active' => true],
-            ['label' => 'Had Kifayah', 'active' => true],
-            ['label' => 'Profil', 'active' => true],
+            ['label' => __('profile.permissions.dashboard'), 'active' => true],
+            ['label' => __('profile.permissions.applications'), 'active' => true],
+            ['label' => __('profile.permissions.had_kifayah'), 'active' => true],
+            ['label' => __('profile.permissions.profile'), 'active' => true],
         ];
     }
 }

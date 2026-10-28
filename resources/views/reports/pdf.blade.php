@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan J-ZAKAT</title>
+    <title>{{ __('pdf.report.meta_title') }}</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -89,39 +89,39 @@
     </style>
 </head>
 <body>
-    <h1>Laporan J-ZAKAT</h1>
-    <p class="meta">Tarikh dijana: {{ now()->format('d F Y, H:i') }} &nbsp;·&nbsp; Majlis Agama Islam Johor (MAIJ)</p>
+    <h1>{{ __('pdf.report.title') }}</h1>
+    <p class="meta">{{ __('pdf.report.generated_at', ['datetime' => now()->locale(app()->getLocale())->translatedFormat('d F Y, H:i')]) }} &nbsp;·&nbsp; {{ __('pdf.report.org') }}</p>
 
-    <h2>Ringkasan Keseluruhan</h2>
+    <h2>{{ __('pdf.report.summary') }}</h2>
     <div class="stats">
         <div class="stat">
-            <div class="label">Jumlah Pemohon</div>
+            <div class="label">{{ __('pdf.report.total_applicants') }}</div>
             <div class="value">{{ $totals['jumlah'] }}</div>
         </div>
         <div class="stat">
-            <div class="label">Layak</div>
+            <div class="label">{{ __('pdf.report.eligible') }}</div>
             <div class="value" style="color:#34C759;">{{ $totals['layak'] }}</div>
         </div>
         <div class="stat">
-            <div class="label">Tidak Layak</div>
+            <div class="label">{{ __('pdf.report.not_eligible') }}</div>
             <div class="value" style="color:#FF3B30;">{{ $totals['tidak_layak'] }}</div>
         </div>
         <div class="stat">
-            <div class="label">Semakan</div>
+            <div class="label">{{ __('pdf.report.review') }}</div>
             <div class="value" style="color:#FF9F0A;">{{ $totals['semakan'] }}</div>
         </div>
     </div>
 
-    <h2>Statistik Bulanan (12 Bulan)</h2>
+    <h2>{{ __('pdf.report.monthly') }}</h2>
     <table>
         <thead>
             <tr>
-                <th>Bulan</th>
-                <th class="r">Jumlah</th>
-                <th class="r">Layak</th>
-                <th class="r">Tidak Layak</th>
-                <th class="r">Semakan</th>
-                <th class="r">% Layak</th>
+                <th>{{ __('pdf.report.month') }}</th>
+                <th class="r">{{ __('pdf.report.total') }}</th>
+                <th class="r">{{ __('pdf.report.eligible') }}</th>
+                <th class="r">{{ __('pdf.report.not_eligible') }}</th>
+                <th class="r">{{ __('pdf.report.review') }}</th>
+                <th class="r">{{ __('pdf.report.pct_eligible') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -138,28 +138,32 @@
         </tbody>
     </table>
 
-    <h2>Senarai Penuh Pemohon ({{ $applicants->count() }})</h2>
+    <h2>{{ __('pdf.report.full_list', ['count' => $applicants->count()]) }}</h2>
     <table>
         <thead>
             <tr>
-                <th>Nama</th>
-                <th>No. IC</th>
-                <th>Telefon</th>
-                <th class="r">Pendapatan</th>
-                <th class="r">Had Kifayah</th>
-                <th>Status</th>
-                <th class="r">Skor AI</th>
+                <th>{{ __('pdf.report.name') }}</th>
+                <th>{{ __('pdf.report.ic') }}</th>
+                <th>{{ __('pdf.report.phone') }}</th>
+                <th class="r">{{ __('pdf.report.income') }}</th>
+                <th class="r">{{ __('pdf.report.kifayah') }}</th>
+                <th>{{ __('pdf.report.status') }}</th>
+                <th class="r">{{ __('pdf.report.ai_score') }}</th>
             </tr>
         </thead>
         <tbody>
             @foreach($applicants as $p)
+                @php
+                    $statusKey = 'common.status.'.str_replace([' ', '-'], '_', strtolower((string) $p->status_kelayakan));
+                    $statusLabel = trans()->has($statusKey) ? __($statusKey) : $p->status_kelayakan;
+                @endphp
                 <tr>
                     <td>{{ $p->nama }}</td>
                     <td>{{ $p->ic }}</td>
                     <td>{{ $p->telefon ?: '—' }}</td>
                     <td class="r">RM {{ number_format((float) $p->pendapatan, 2) }}</td>
                     <td class="r">RM {{ number_format((float) $p->had_kifayah, 2) }}</td>
-                    <td>{{ $p->status_kelayakan }}</td>
+                    <td>{{ $statusLabel }}</td>
                     <td class="r">{{ number_format((float) $p->ai_score, 0) }}%</td>
                 </tr>
             @endforeach
@@ -167,7 +171,7 @@
     </table>
 
     <div class="footer">
-        © {{ date('Y') }} J-ZAKAT — Smart Asnaf Eligibility System
+        {{ __('pdf.report.copyright', ['year' => date('Y'), 'platform' => __('common.footer.platform')]) }}
     </div>
 </body>
 </html>

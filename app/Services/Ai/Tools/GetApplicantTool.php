@@ -24,31 +24,31 @@ class GetApplicantTool extends AbstractTool
 
         if (! $p) {
             return [
-                'reply' => "Tiada pemohon dengan No. IC **{$ic}** dijumpai dalam pangkalan data.",
+                'reply' => __('ai.tools.get_applicant.not_found', ['ic' => $ic]),
                 'data' => ['type' => 'text', 'ic' => $ic, 'not_found' => true],
             ];
         }
 
         $gap = (float) $p->had_kifayah - (float) $p->pendapatan;
-        $reason = $p->status_kelayakan === 'Layak'
-            ? 'Pendapatan berada di bawah Had Kifayah. Layak dipertimbangkan untuk bantuan.'
-            : ($p->status_kelayakan === 'Tidak Layak'
-                ? 'Pendapatan melebihi Had Kifayah. Tidak layak pada masa ini.'
-                : 'Data kewangan belum lengkap.');
+        $reason = match ($p->status_kelayakan) {
+            'Layak' => __('ai.tools.get_applicant.reason_eligible'),
+            'Tidak Layak' => __('ai.tools.get_applicant.reason_not_eligible'),
+            default => __('ai.tools.get_applicant.reason_incomplete'),
+        };
 
         return [
-            'reply' => "Berikut adalah profil pemohon **{$p->nama}**:",
+            'reply' => __('ai.tools.get_applicant.reply', ['name' => $p->nama]),
             'data' => [
                 'type' => 'summary',
                 'fields' => [
-                    'Nama' => $p->nama,
-                    'No. IC' => $p->ic,
-                    'Pendapatan' => 'RM '.number_format((float) $p->pendapatan, 2),
-                    'Tanggungan' => (int) $p->bilangan_tanggungan.' orang',
-                    'Sewa' => 'RM '.number_format((float) $p->sewa, 2),
-                    'Utiliti' => 'RM '.number_format((float) $p->utiliti, 2),
-                    'Had Kifayah' => 'RM '.number_format((float) $p->had_kifayah, 2),
-                    'Status' => $p->status_kelayakan,
+                    __('ai.fields.name') => $p->nama,
+                    __('ai.fields.ic') => $p->ic,
+                    __('ai.fields.income') => 'RM '.number_format((float) $p->pendapatan, 2),
+                    __('ai.fields.dependants') => trans_choice('ai.values.people', (int) $p->bilangan_tanggungan),
+                    __('ai.fields.rent') => 'RM '.number_format((float) $p->sewa, 2),
+                    __('ai.fields.utilities') => 'RM '.number_format((float) $p->utiliti, 2),
+                    __('ai.fields.had_kifayah') => 'RM '.number_format((float) $p->had_kifayah, 2),
+                    __('ai.fields.status') => $this->statusLabel($p->status_kelayakan),
                 ],
                 'reason' => $reason,
                 'gap' => $gap,
@@ -58,7 +58,7 @@ class GetApplicantTool extends AbstractTool
 
     public function label(): string
     {
-        return 'Cari pemohon mengikut No. IC';
+        return __('ai.tools.get_applicant.label');
     }
 
     public function icon(): string

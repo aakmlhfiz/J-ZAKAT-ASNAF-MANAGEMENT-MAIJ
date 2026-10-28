@@ -2,6 +2,12 @@ import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 import QRCode from 'qrcode';
 
+// UI copy is injected by the profile.strings Blade component.
+const profileT = (key, fallback) => {
+    const strings = window.profileStrings || {};
+    return strings[key] !== undefined ? strings[key] : fallback;
+};
+
 document.addEventListener('alpine:init', () => {
     // ── Global Dark Mode ──────────────────────────────────────
     Alpine.data('darkMode', () => ({
@@ -102,12 +108,12 @@ document.addEventListener('alpine:init', () => {
                 if (res.ok) {
                     this.closeCropper();
                     this.preview = canvas.toDataURL('image/jpeg');
-                    window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Gambar profil berjaya dikemaskini.', type: 'success', title: 'Berjaya' } }));
+                    window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('photo_updated', 'Gambar profil berjaya dikemaskini.'), type: 'success', title: profileT('toast_success', 'Berjaya') } }));
                 } else {
-                    window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Gagal memuat naik gambar.', type: 'error', title: 'Ralat' } }));
+                    window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('photo_upload_failed', 'Gagal memuat naik gambar.'), type: 'error', title: profileT('toast_error', 'Ralat') } }));
                 }
             } catch {
-                window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Ralat semasa memproses gambar.', type: 'error', title: 'Ralat' } }));
+                window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('photo_process_error', 'Ralat semasa memproses gambar.'), type: 'error', title: profileT('toast_error', 'Ralat') } }));
             } finally {
                 this.uploading = false;
             }
@@ -174,7 +180,14 @@ document.addEventListener('alpine:init', () => {
             return Math.min(s, 4);
         },
 
-        label() { return ['', 'Lemah', 'Sederhana', 'Baik', 'Kuat'][this.strength] || ''; },
+        label() {
+            return [
+                profileT('strength_weak', 'Lemah'),
+                profileT('strength_fair', 'Sederhana'),
+                profileT('strength_good', 'Baik'),
+                profileT('strength_strong', 'Kuat'),
+            ][this.strength - 1] || '';
+        },
         cls() { return ['', 'strength-weak', 'strength-fair', 'strength-good', 'strength-strong'][this.strength] || ''; },
     }));
 
@@ -220,7 +233,7 @@ document.addEventListener('alpine:init', () => {
                     });
                 });
             } catch {
-                this.error = 'Ralat memulakan pendaftaran 2FA.';
+                this.error = profileT('two_factor_start_error', 'Ralat memulakan pendaftaran 2FA.');
             }
             this.loading = false;
         },
@@ -240,13 +253,13 @@ document.addEventListener('alpine:init', () => {
                 if (data.ok) {
                     this.isEnabled = true;
                     this.state = 'done';
-                    window.dispatchEvent(new CustomEvent('toast', { detail: { message: '2FA berjaya diaktifkan!', type: 'success', title: '2FA' } }));
+                    window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('two_factor_enabled_toast', '2FA berjaya diaktifkan!'), type: 'success', title: '2FA' } }));
                     setTimeout(() => window.location.reload(), 800);
                 } else {
-                    this.error = data.message || 'Kod tidak sah.';
+                    this.error = data.message || profileT('invalid_code_short', 'Kod tidak sah.');
                 }
             } catch {
-                this.error = 'Ralat mengesahkan kod.';
+                this.error = profileT('verify_error', 'Ralat mengesahkan kod.');
             }
             this.loading = false;
         },
@@ -271,13 +284,13 @@ document.addEventListener('alpine:init', () => {
                     this.state = 'idle';
                     this.showPasswordPrompt = false;
                     this.disablePassword = '';
-                    window.dispatchEvent(new CustomEvent('toast', { detail: { message: '2FA telah dinyahaktifkan.', type: 'warning', title: '2FA' } }));
+                    window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('two_factor_disabled', '2FA telah dinyahaktifkan.'), type: 'warning', title: '2FA' } }));
                     setTimeout(() => window.location.reload(), 800);
                 } else {
-                    this.error = data.message || 'Kata laluan tidak tepat.';
+                    this.error = data.message || profileT('password_incorrect', 'Kata laluan tidak tepat.');
                 }
             } catch {
-                window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Ralat.', type: 'error', title: 'Ralat' } }));
+                window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('generic_error', 'Ralat.'), type: 'error', title: profileT('toast_error', 'Ralat') } }));
             }
             this.loading = false;
         },
@@ -313,9 +326,9 @@ document.addEventListener('alpine:init', () => {
                     headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': token },
                     body: JSON.stringify({ notification_email: this.email, notification_push: this.push, notification_sms: this.sms }),
                 });
-                window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Keutamaan notifikasi disimpan.', type: 'success', title: 'Disimpan' } }));
+                window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('notifications_saved', 'Keutamaan notifikasi disimpan.'), type: 'success', title: profileT('toast_saved', 'Disimpan') } }));
             } catch {
-                window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Gagal menyimpan.', type: 'error', title: 'Ralat' } }));
+                window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('save_failed', 'Gagal menyimpan.'), type: 'error', title: profileT('toast_error', 'Ralat') } }));
             }
             this.saving = false;
         },
@@ -358,9 +371,9 @@ document.addEventListener('alpine:init', () => {
                 a.download = 'account-data.json';
                 a.click();
                 URL.revokeObjectURL(url);
-                window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Data akaun berjaya dimuat turun.', type: 'success', title: 'Dimuat Turun' } }));
+                window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('account_downloaded', 'Data akaun berjaya dimuat turun.'), type: 'success', title: profileT('toast_downloaded', 'Dimuat Turun') } }));
             } catch {
-                window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Gagal memuat turun data.', type: 'error', title: 'Ralat' } }));
+                window.dispatchEvent(new CustomEvent('toast', { detail: { message: profileT('download_failed', 'Gagal memuat turun data.'), type: 'error', title: profileT('toast_error', 'Ralat') } }));
             }
         },
     }));
@@ -375,7 +388,7 @@ document.addEventListener('alpine:init', () => {
                     headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': token },
                 });
                 const data = await res.json().catch(() => ({}));
-                window.dispatchEvent(new CustomEvent('toast', { detail: { message: data.message || 'Semua peranti lain telah dilog keluar.', type: 'success', title: 'Log Keluar' } }));
+                window.dispatchEvent(new CustomEvent('toast', { detail: { message: data.message || profileT('all_devices_logged_out', 'Semua peranti lain telah dilog keluar.'), type: 'success', title: profileT('toast_logout', 'Log Keluar') } }));
                 setTimeout(() => window.location.reload(), 600);
             } catch {}
         },

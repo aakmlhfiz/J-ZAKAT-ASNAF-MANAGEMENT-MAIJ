@@ -15,33 +15,31 @@ use App\Models\PortalUser;
  */
 class PortalAiService
 {
-    public const GUARDRAIL = 'Keputusan kelayakan muktamad adalah tertakluk kepada penilaian rasmi Majlis Agama Islam Johor (MAIJ).';
-
     public function chat(PortalUser $user, string $message): array
     {
         $message = mb_strtolower(trim($message));
 
-        if (preg_match('/(bantuan|jenis bantuan|apa bantuan|bantuan apa)/', $message) && preg_match('/(mohon|layak|boleh)/', $message)) {
+        if (preg_match('/(bantuan|assistance|aid|type of assistance)/', $message) && preg_match('/(mohon|apply|layak|eligible|boleh|can)/', $message)) {
             return $this->text($this->assistanceTypes());
         }
 
-        if (preg_match('/(dokumen|apa dokumen|dokumen apa)/', $message)) {
+        if (preg_match('/(dokumen|document)/', $message)) {
             return $this->text($this->requiredDocuments());
         }
 
-        if (preg_match('/(hantar|serah|submit|kemukakan).*(permohonan|borang)/', $message) || preg_match('/cara mohon|bagaimana mohon/', $message)) {
+        if (preg_match('/(hantar|serah|submit|kemukakan|send).*(permohonan|borang|application|form)/', $message) || preg_match('/(cara mohon|how to apply|how do i apply|how to submit)/', $message)) {
             return $this->text($this->howToSubmit());
         }
 
-        if (preg_match('/(status|semakan).*(permohonan)/', $message) || preg_match('/status permohonan/', $message)) {
+        if (preg_match('/(status|semakan|review).*(permohonan|application)/', $message) || preg_match('/(application status|status permohonan)/', $message)) {
             return $this->text($this->applicationStatus($user));
         }
 
-        if (preg_match('/(isi rumah|kemas kini|update).*(maklumat|isi rumah|rumah)/', $message)) {
+        if (preg_match('/(isi rumah|household|kemas kini|update).*(maklumat|information|isi rumah|household|rumah)/', $message)) {
             return $this->text($this->updateHousehold());
         }
 
-        if (preg_match('/(dokumen.*(ditolak|reject)|ditolak|tidak lulus).*(dokumen)/', $message) || preg_match('/dokumen ditolak/', $message)) {
+        if (preg_match('/(dokumen|document).*(ditolak|reject|rejected)|(?:ditolak|rejected).*(dokumen|document)/', $message) || preg_match('/(dokumen ditolak|rejected document|document rejected)/', $message)) {
             return $this->text($this->rejectedDocument());
         }
 
@@ -56,78 +54,93 @@ class PortalAiService
     private function suggestions(): array
     {
         $items = [
-            ['prompt' => 'Apakah bantuan yang boleh saya mohon?', 'label' => 'Jenis bantuan'],
-            ['prompt' => 'Apakah dokumen yang diperlukan?', 'label' => 'Dokumen diperlukan'],
-            ['prompt' => 'Bagaimana cara menghantar permohonan?', 'label' => 'Cara memohon'],
-            ['prompt' => 'Apakah status permohonan saya?', 'label' => 'Status permohonan'],
-            ['prompt' => 'Bagaimana kemas kini maklumat isi rumah?', 'label' => 'Kemas kini isi rumah'],
-            ['prompt' => 'Dokumen saya ditolak, apa perlu saya buat?', 'label' => 'Dokumen ditolak'],
+            ['key' => 'types'],
+            ['key' => 'documents_item'],
+            ['key' => 'submit'],
+            ['key' => 'status'],
+            ['key' => 'household'],
+            ['key' => 'rejected'],
         ];
 
-        $suggestions = array_map(fn ($i, $idx) => [
+        $suggestions = array_map(fn ($item, $idx) => [
             'id' => 's'.$idx,
             'icon' => 'fa-solid fa-circle-question',
-            'label' => $i['label'],
-            'prompt' => $i['prompt'],
+            'label' => __('ai.portal.suggestions.'.$item['key'].'.label'),
+            'prompt' => __('ai.portal.suggestions.'.$item['key'].'.prompt'),
         ], $items, array_keys($items));
 
         return [
-            'reply' => "Salam, saya pembantu maya J-ZAKAT. Anda boleh bertanya tentang:\n\n• Jenis bantuan yang boleh dipohon\n• Dokumen yang diperlukan\n• Cara menghantar permohonan\n• Status permohonan anda\n• Kemas kini maklumat isi rumah\n• Tindakan jika dokumen ditolak\n\nSila pilih atau taip soalan anda.",
+            'reply' => __('ai.portal.suggestions_reply'),
             'data' => ['type' => 'suggestions', 'suggestions' => $suggestions],
         ];
     }
 
     private function assistanceTypes(): string
     {
-        $list = implode("\n", array_map(fn ($v) => "• {$v}", array_values(AssistanceHistory::jenisBantuanOptions())));
+        $labels = __('ai.portal.assistance_types');
+        $list = collect(AssistanceHistory::jenisBantuanOptions())
+            ->map(fn ($label) => '• '.($labels[$label] ?? $label))
+            ->implode("\n");
 
-        return "Anda boleh memohon jenis bantuan berikut:\n\n{$list}\n\nSetiap permohonan akan dinilai mengikut garis panduan MAIJ. ".self::GUARDRAIL;
+        return __('ai.portal.assistance_reply', [
+            'list' => $list,
+            'guardrail' => $this->guardrail(),
+        ]);
     }
 
     private function requiredDocuments(): string
     {
-        return "Dokumen yang lazimnya diperlukan:\n\n• Salinan Kad Pengenalan pemohon dan ahli isi rumah\n• Slip gaji atau penyata pendapatan terkini\n• Bil utiliti atau bukti komitmen bulanan\n• Dokumen sokongan mengikut jenis bantuan (contoh: laporan perubatan untuk bantuan perubatan)\n\nSila muat naik dokumen yang jelas dan sah. ".self::GUARDRAIL;
+        return __('ai.portal.documents_reply', [
+            'guardrail' => $this->guardrail(),
+        ]);
     }
 
     private function howToSubmit(): string
     {
-        return "Untuk menghantar permohonan:\n\n1. Klik \"Mohon Bantuan\" pada dashboard\n2. Pilih jenis bantuan dan lengkapkan borang\n3. Muat naik dokumen sokongan\n4. Simpan sebagai draf atau hantar terus untuk semakan\n\nAnda juga boleh mengimbas Borang Bantuan MAIJ yang telah diisi melalui menu \"Permohonan Bantuan\".";
+        return __('ai.portal.how_to_submit_reply');
     }
 
     private function applicationStatus(PortalUser $user): string
     {
         $apps = $user->applications()->orderByDesc('id')->get();
+
         if ($apps->isEmpty()) {
-            return 'Anda belum mempunyai sebarang permohonan. Klik "Mohon Bantuan" untuk memulakan permohonan pertama anda.';
+            return __('ai.portal.no_applications');
         }
 
-        $lines = ['Berikut ringkasan permohonan anda:'];
+        $lines = [__('ai.portal.status_intro')];
+
         foreach ($apps->take(5) as $app) {
-            $status = match ($app->status) {
-                'draft' => 'Draf',
-                'submitted' => 'Dihantar',
-                'under_review' => 'Dalam Semakan',
-                'approved' => 'Diluluskan',
-                'rejected' => 'Ditolak',
-                'incomplete' => 'Tidak Lengkap',
-                default => ucfirst((string) $app->status),
-            };
-            $lines[] = "• {$app->application_no} — {$status}";
+            $status = __('ai.portal.application_statuses.'.$app->status);
+
+            if (! is_string($status) || str_starts_with($status, 'ai.portal.')) {
+                $status = ucfirst((string) $app->status);
+            }
+
+            $lines[] = __('ai.portal.status_line', [
+                'no' => $app->application_no,
+                'status' => $status,
+            ]);
         }
 
         $lines[] = '';
-        $lines[] = 'Untuk butiran penuh, buka menu "Permohonan Saya". '.self::GUARDRAIL;
+        $lines[] = __('ai.portal.status_footer', ['guardrail' => $this->guardrail()]);
 
         return implode("\n", $lines);
     }
 
     private function updateHousehold(): string
     {
-        return 'Anda boleh melihat ahli isi rumah melalui menu "Isi Rumah Saya". Untuk mengemas kini maklumat isi rumah atau pendapatan, sila hubungi Bahagian Pengurusan Zakat MAIJ atau kemas kini melalui permohonan baharu. Data isi rumah perlu disahkan oleh pegawai MAIJ.';
+        return __('ai.portal.update_household');
     }
 
     private function rejectedDocument(): string
     {
-        return "Jika dokumen anda ditolak atau memerlukan semakan:\n\n1. Semak mesej pada dokumen tersebut\n2. Muat naik semula dokumen yang lebih jelas atau lengkap\n3. Pastikan format PDF/JPG/PNG dan maklumat boleh dibaca\n4. Hubungi MAIJ di talian 07-228 2928 jika masalah berterusan";
+        return __('ai.portal.rejected_document');
+    }
+
+    private function guardrail(): string
+    {
+        return __('ai.portal.guardrail');
     }
 }

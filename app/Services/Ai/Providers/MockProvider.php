@@ -94,12 +94,7 @@ class MockProvider implements AiProvider
         ], $this->tools);
 
         return [
-            'reply' => "Saya boleh membantu anda dengan:\n\n".
-                "• Cari profil pemohon (beri No. IC atau nama)\n".
-                "• Kira Had Kifayah (contoh: *kira 1500 3 300 100*)\n".
-                "• Jelaskan kelayakan pemohon (contoh: *adakah 011212083433 layak?*)\n".
-                "• Papar statistik sistem\n".
-                '• Cari rekod pemohon mengikut nama',
+            'reply' => __('ai.mock.fallback'),
             'data' => [
                 'type' => 'suggestions',
                 'suggestions' => $suggestions,
@@ -110,12 +105,12 @@ class MockProvider implements AiProvider
     private function examplePromptFor(AbstractTool $tool): string
     {
         return match (get_class($tool)) {
-            GetApplicantTool::class => 'Berikan profil pemohon 011212083433',
-            SearchApplicantsTool::class => 'Cari rekod pemohon bernama Ahmad',
-            GetDashboardStatsTool::class => 'Berapa jumlah asnaf semasa?',
-            CalculateKifayahTool::class => 'Kira Had Kifayah 1500 3 300 100',
-            ExplainEligibilityTool::class => 'Adakah pemohon 011212083433 layak?',
-            default => 'Tolong bantu saya',
+            GetApplicantTool::class => __('ai.mock.prompts.get_applicant'),
+            SearchApplicantsTool::class => __('ai.mock.prompts.search_applicants'),
+            GetDashboardStatsTool::class => __('ai.mock.prompts.dashboard_stats'),
+            CalculateKifayahTool::class => __('ai.mock.prompts.calculate_kifayah'),
+            ExplainEligibilityTool::class => __('ai.mock.prompts.explain_eligibility'),
+            default => __('ai.mock.prompts.default'),
         };
     }
 }

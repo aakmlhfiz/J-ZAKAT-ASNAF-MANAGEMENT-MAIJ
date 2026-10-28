@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <title>Surat Kelulusan - {{ $profil->nama }}</title>
+    <title>{{ __('pdf.letter.meta_title_approved', ['name' => $profil->nama]) }}</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -144,6 +144,8 @@
 </head>
 <body>
     @php
+        $statusKey = 'common.status.'.str_replace([' ', '-'], '_', strtolower((string) $profil->status_kelayakan));
+        $statusLabel = trans()->has($statusKey) ? __($statusKey) : $profil->status_kelayakan;
         $logoPath = storage_path('app/public/letter-assets/MAIJ.PNG');
         $logoBase64 = '';
         if (file_exists($logoPath)) {
@@ -152,7 +154,7 @@
         $hijriDate = '';
         try {
             $timestamp = $tarikh->timestamp;
-            $hijriMonths = ['Muharram','Safar','Rabiulawal','Rabiulakhir','Jamadilawal','Jamadilakhir','Rejab','Syaaban','Ramadhan','Syawal','Zulkaedah','Zulhijjah'];
+            $hijriMonths = __('pdf.letter.hijri_months');
             $jd = (int)($timestamp / 86400) + 2440587.5;
             $l = $jd - 1948440 + 10632;
             $n = (int)(($l - 1) / 10631);
@@ -179,56 +181,56 @@
             <td>
                 <div class="org-name">
                     <div class="arab" style="font-size:16px;direction:rtl;text-align:right;">جابتن اݢام إسلام نڬري جوهر</div>
-                    JABATAN AGAMA ISLAM NEGERI JOHOR,
+                    {{ __('pdf.letter.org_name') }}
                 </div>
                 <div class="org-details">
-                    <strong>BAHAGIAN PENDIDIKAN ISLAM,</strong><br>
-                    Tingkat 3 & 4, Blok B,<br>
-                    Pusat Islam Iskandar Johor,<br>
-                    Jalan Masjid Abu Bakar,<br>
-                    80990 Johor Bahru, Johor
+                    <strong>{{ __('pdf.letter.division') }}</strong><br>
+                    {{ __('pdf.letter.address_line_1') }}<br>
+                    {{ __('pdf.letter.address_line_2') }}<br>
+                    {{ __('pdf.letter.address_line_3') }}<br>
+                    {{ __('pdf.letter.address_line_4') }}
                 </div>
             </td>
             <td class="contact-cell">
-                No. Tel : 07-228 2928/30/32/33/55<br>
-                Faks &nbsp;&nbsp;&nbsp;&nbsp; : 07-223 3178<br>
-                Emel &nbsp;&nbsp;&nbsp; : bpai@johor.gov.my<br>
-                Website : jainj.johor.gov.my
+                {{ __('pdf.letter.tel') }} : 07-228 2928/30/32/33/55<br>
+                {{ __('pdf.letter.fax') }} &nbsp;&nbsp;&nbsp;&nbsp; : 07-223 3178<br>
+                {{ __('pdf.letter.email') }} &nbsp;&nbsp;&nbsp; : bpai@johor.gov.my<br>
+                {{ __('pdf.letter.website') }} : jainj.johor.gov.my
             </td>
         </tr>
     </table>
 
     {{-- Reference block --}}
     <div class="ref">
-        <span class="ref-no">Ruj. Kami : {{ $ref_no }} (A)</span><br>
-        Tarikh &nbsp;&nbsp;&nbsp;&nbsp;: {{ $tarikh->format('d F Y') }}<br>
+        <span class="ref-no">{{ __('pdf.letter.our_ref') }} : {{ $ref_no }} (A)</span><br>
+        {{ __('pdf.letter.date') }} &nbsp;&nbsp;&nbsp;&nbsp;: {{ $tarikh->locale(app()->getLocale())->translatedFormat('d F Y') }}<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $hijriDate }}
     </div>
 
-    <div class="reply-note">* Sila nyatakan rujukan bilangan surat kami apabila menjawab</div>
+    <div class="reply-note">{{ __('pdf.letter.reply_note') }}</div>
 
     {{-- Recipient --}}
     <div class="recipient">
-        <strong>Kepada :</strong><br>
+        <strong>{{ __('pdf.letter.to') }}</strong><br>
         {{ $profil->nama }}<br>
         @if ($profil->alamat)
             {{ $profil->alamat }}
         @endif
     </div>
 
-    <div class="salutation"><strong>Tuan,</strong></div>
+    <div class="salutation"><strong>{{ __('pdf.letter.salutation') }}</strong></div>
 
     {{-- Subject --}}
-    <div class="subject">{{ $type === 'approved' ? 'KELULUSAN' : 'PENOLAKAN' }} BANTUAN ZAKAT MAJLIS AGAMA ISLAM NEGERI JOHOR (MAIJ)</div>
+    <div class="subject">{{ $type === 'approved' ? __('pdf.letter.subject_approved') : __('pdf.letter.subject_rejected') }}</div>
 
-    <p>Dengan hormatnya, saya merujuk kepada perkara di atas.</p>
+    <p>{{ __('pdf.letter.intro') }}</p>
 
     {{-- Numbered paragraph 2 --}}
     <p class="num"><strong>2. &nbsp;</strong>
         @if ($type === 'approved')
-            Sukacita dimaklumkan bahawa permohonan tuan/puan telah <strong>DILULUSKAN</strong> oleh Mesyuarat Jawatankuasa Zakat MAIJ. Butiran permohonan adalah seperti berikut :-
+            {!! __('pdf.letter.approved_paragraph') !!}
         @else
-            Dimaklumkan bahawa permohonan tuan/puan telah <strong>DITOLAK</strong> selepas semakan oleh Mesyuarat Jawatankuasa Zakat MAIJ. Butiran permohonan adalah seperti berikut :-
+            {!! __('pdf.letter.rejected_paragraph') !!}
         @endif
     </p>
 
@@ -236,53 +238,53 @@
     <table class="details">
         <thead>
             <tr>
-                <th class="bil">BIL</th>
-                <th class="butiran">BUTIRAN</th>
-                <th>MAKLUMAT</th>
+                <th class="bil">{{ __('pdf.letter.table_no') }}</th>
+                <th class="butiran">{{ __('pdf.letter.table_details') }}</th>
+                <th>{{ __('pdf.letter.table_info') }}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td class="bil">1</td>
-                <td class="butiran">Nama Pemohon</td>
+                <td class="butiran">{{ __('pdf.letter.name') }}</td>
                 <td>{{ $profil->nama }}</td>
             </tr>
             <tr>
                 <td class="bil">2</td>
-                <td class="butiran">No. Kad Pengenalan</td>
+                <td class="butiran">{{ __('pdf.letter.ic_no') }}</td>
                 <td>{{ $profil->ic }}</td>
             </tr>
             @if ($profil->telefon)
             <tr>
                 <td class="bil">3</td>
-                <td class="butiran">No. Telefon</td>
+                <td class="butiran">{{ __('pdf.letter.phone') }}</td>
                 <td>{{ $profil->telefon }}</td>
             </tr>
             @endif
             <tr>
                 <td class="bil">4</td>
-                <td class="butiran">Bilangan Tanggungan</td>
-                <td>{{ $profil->bilangan_tanggungan }} orang</td>
+                <td class="butiran">{{ __('pdf.letter.dependents') }}</td>
+                <td>{{ __('pdf.letter.dependents_unit', ['count' => $profil->bilangan_tanggungan]) }}</td>
             </tr>
             <tr>
                 <td class="bil">5</td>
-                <td class="butiran">Pendapatan Bulanan</td>
+                <td class="butiran">{{ __('pdf.letter.monthly_income') }}</td>
                 <td>RM {{ number_format((float) $profil->pendapatan, 2) }}</td>
             </tr>
             <tr>
                 <td class="bil">6</td>
-                <td class="butiran">Had Kifayah</td>
+                <td class="butiran">{{ __('pdf.letter.kifayah') }}</td>
                 <td>RM {{ number_format((float) $profil->had_kifayah, 2) }}</td>
             </tr>
             <tr>
                 <td class="bil">7</td>
-                <td class="butiran">Status Kelayakan</td>
-                <td>{{ $profil->status_kelayakan }}</td>
+                <td class="butiran">{{ __('pdf.letter.eligibility_status') }}</td>
+                <td>{{ $statusLabel }}</td>
             </tr>
             @if ($profil->ai_score)
             <tr>
                 <td class="bil">8</td>
-                <td class="butiran">Skor Penilaian AI</td>
+                <td class="butiran">{{ __('pdf.letter.ai_score') }}</td>
                 <td>{{ number_format((float) $profil->ai_score, 0) }}%</td>
             </tr>
             @endif
@@ -292,37 +294,36 @@
     {{-- Numbered paragraph 3 --}}
     <p class="num"><strong>3. &nbsp;</strong>
         @if ($type === 'approved')
-            Sehubungan itu, pihak tuan/puan dikehendaki hadir ke Pejabat MAIJ dalam tempoh <strong>14 hari</strong> dari tarikh surat ini dengan membawa dokumen asal seperti berikut :-
+            {!! __('pdf.letter.approved_instruction') !!}
         @else
-            Pihak tuan/puan boleh mengemukakan rayuan atau permohonan baharu dengan melampirkan dokumen yang lebih lengkap. Untuk makluman lanjut, sila rujuk ketetapan berikut :-
+            {!! __('pdf.letter.rejected_instruction') !!}
         @endif
     </p>
 
     <ol class="alpha" type="i">
-        <li>Kad Pengenalan (asal &amp; salinan);</li>
-        <li>Slip gaji terkini (3 bulan);</li>
-        <li>Surat / Notis kelulusan ini (cetakan).</li>
+        @foreach ($type === 'approved' ? __('pdf.letter.approved_documents') : __('pdf.letter.rejected_documents') as $document)
+        <li>{{ $document }}</li>
+        @endforeach
     </ol>
 
     {{-- Numbered paragraph 4 --}}
-    <p class="num"><strong>4. &nbsp;</strong>Untuk sebarang pertanyaan, sila hubungi <strong>Bahagian Pengurusan Zakat MAIJ</strong> di talian <strong>07-228 2928</strong>.</p>
+    <p class="num"><strong>4. &nbsp;</strong>{!! __('pdf.letter.contact', ['phone' => '07-228 2928']) !!}</p>
 
-    <p>Sekian, terima kasih.</p>
+    <p>{{ __('pdf.letter.closing') }}</p>
 
     {{-- Tagline --}}
-    <div class="tagline">"BERKHIDMAT UNTUK NEGARA"</div>
+    <div class="tagline">{{ __('pdf.letter.tagline') }}</div>
 
     {{-- Signature --}}
     <div class="signature">
-        <p class="amanah">Saya yang menjalankan amanah,</p>
+        <p class="amanah">{{ __('pdf.letter.amanah') }}</p>
         <p>&nbsp;</p>
         <p>&nbsp;</p>
         <p class="name">({{ strtoupper($admin->name ?? 'MOHD ASNAWI BIN AMAT JUPRI') }})</p>
         <p class="designation">
-            Penolong Pengarah,<br>
-            Unit Pentadbiran,<br>
-            Bahagian Pendidikan Islam,<br>
-            Jabatan Agama Islam Negeri Johor
+            @foreach (__('pdf.letter.designation') as $line)
+                {{ $line }}@if (! $loop->last)<br>@endif
+            @endforeach
         </p>
     </div>
 
@@ -332,7 +333,7 @@
         <span class="certs">ISO 9001:2008</span>
         <span class="certs">SIRIM</span><br>
         <span class="cert-line">CERTIFIED TO ISO 9001:2008 &nbsp;&nbsp; CERT. NO: AR-406</span><br>
-        <span class="cert-line" style="margin-top:6px;display:block;">s.k. Fail</span>
+        <span class="cert-line" style="margin-top:6px;display:block;">{{ __('pdf.letter.cc') }}</span>
     </div>
 </body>
 </html>

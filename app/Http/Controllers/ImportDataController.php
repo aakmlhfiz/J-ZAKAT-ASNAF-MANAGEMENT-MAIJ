@@ -31,7 +31,8 @@ class ImportDataController extends Controller
                     'type' => 'csv',
                     'date' => $h->created_at,
                     'title' => $h->nama_fail,
-                    'detail' => $h->jumlah_rekod.' rekod · '.$h->berjaya.' ok'.($h->gagal > 0 ? ' · '.$h->gagal.' gagal' : ''),
+                    'detail' => __('imports.messages.csv_detail', ['records' => $h->jumlah_rekod, 'success' => $h->berjaya])
+                        .($h->gagal > 0 ? __('imports.messages.csv_detail_failed', ['failed' => $h->gagal]) : ''),
                     'status' => $h->gagal > 0 ? 'partial' : 'success',
                 ])
             )
@@ -40,7 +41,14 @@ class ImportDataController extends Controller
                     'type' => 'pdf',
                     'date' => $h->created_at,
                     'title' => $h->original_filename,
-                    'detail' => 'Status: '.ucfirst($h->status).($h->overall_confidence ? ' · '.round($h->overall_confidence).'% keyakinan' : ''),
+                    'detail' => __('imports.messages.pdf_detail', ['status' => match ($h->status) {
+                        'extracted' => __('imports.status.extracted'),
+                        'needs_review' => __('imports.status.needs_review'),
+                        'committed' => __('imports.status.committed'),
+                        'failed' => __('imports.status.failed'),
+                        'processing' => __('imports.status.processing'),
+                        default => $h->status,
+                    }]).($h->overall_confidence ? __('imports.messages.pdf_detail_confidence', ['confidence' => round($h->overall_confidence)]) : ''),
                     'status' => match ($h->status) {
                         'extracted', 'committed' => 'success',
                         'failed' => 'danger',

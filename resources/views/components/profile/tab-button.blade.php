@@ -1,4 +1,7 @@
-@props(['tab' => 'ringkasan', 'label' => 'Ringkasan', 'icon' => null, 'count' => null])
+@props(['tab' => 'ringkasan', 'label' => null, 'icon' => null, 'count' => null])
+@php
+    $label = $label ?? __('profile.tabs.summary');
+@endphp
 <button
     @click="$dispatch('profile-tab', '{{ $tab }}')"
     :class="currentTab === '{{ $tab }}' ? 'profile-tab active' : 'profile-tab'"

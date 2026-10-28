@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Import Data - J-ZAKAT')
+@section('title', __('imports.data.meta_title'))
 
 @php
-    $title = 'Import Data';
-    $subtitle = 'Muat naik data pemohon melalui CSV atau PDF';
+    $title = __('imports.data.title');
+    $subtitle = __('imports.data.subtitle');
 @endphp
 
 @push('scripts')
@@ -54,24 +54,24 @@
 @section('content')
 <div x-data="importTabs">
 
-<x-page-header title="Import Data" subtitle="Muat naik data pemohon secara pukal melalui CSV atau dokumen PDF" icon="fa-file-import" eyebrow="Pengurusan Data" />
+<x-page-header :title="__('imports.data.title')" :subtitle="__('imports.data.header_subtitle')" :eyebrow="__('imports.data.eyebrow')" icon="fa-file-import" />
 
 {{-- Tabs --}}
 <div class="flex flex-wrap gap-1 mb-6 border-b border-divider pb-0">
     <button @click="selectTab('csv')"
         class="relative px-5 py-2.5 text-[13px] font-semibold transition-apple rounded-t-[10px] -mb-px"
         :class="tab === 'csv' ? 'text-primary bg-card border border-divider border-b-card' : 'text-secondary hover:text-text hover:bg-muted'">
-        <i class="fa-solid fa-file-csv text-[12px] mr-1.5"></i> CSV (Pukal)
+        <i class="fa-solid fa-file-csv text-[12px] mr-1.5"></i> {{ __('imports.tabs.csv') }}
     </button>
     <button @click="selectTab('pdf')"
         class="relative px-5 py-2.5 text-[13px] font-semibold transition-apple rounded-t-[10px] -mb-px"
         :class="tab === 'pdf' ? 'text-primary bg-card border border-divider border-b-card' : 'text-secondary hover:text-text hover:bg-muted'">
-        <i class="fa-solid fa-file-pdf text-[12px] mr-1.5"></i> PDF / OCR
+        <i class="fa-solid fa-file-pdf text-[12px] mr-1.5"></i> {{ __('imports.tabs.pdf') }}
     </button>
     <button @click="selectTab('history')"
         class="relative px-5 py-2.5 text-[13px] font-semibold transition-apple rounded-t-[10px] -mb-px"
         :class="tab === 'history' ? 'text-primary bg-card border border-divider border-b-card' : 'text-secondary hover:text-text hover:bg-muted'">
-        <i class="fa-solid fa-clock-rotate-left text-[12px] mr-1.5"></i> Sejarah Import
+        <i class="fa-solid fa-clock-rotate-left text-[12px] mr-1.5"></i> {{ __('imports.tabs.history') }}
     </button>
 </div>
 
@@ -80,98 +80,98 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
             <x-app-card class="p-6" :hover="false">
-                <x-section-header title="Muat Naik Fail CSV" description="Pilih atau tarik fail CSV pemohon ke kawasan di bawah" icon="fa-cloud-arrow-up" />
+                <x-section-header :title="__('imports.csv.upload_title')" :description="__('imports.csv.upload_description')" icon="fa-cloud-arrow-up" />
                 <form method="POST" action="{{ route('importcsv.store') }}" enctype="multipart/form-data">
                     @csrf
-                    <x-file-dropzone name="csv" accept=".csv" label="Tarik fail CSV ke sini atau klik untuk muat naik" hint="Saiz maksimum: 10MB" />
+                    <x-file-dropzone name="csv" accept=".csv" :label="__('imports.csv.dropzone_label')" :hint="__('imports.csv.dropzone_hint')" />
                     <div class="flex items-center gap-3 mt-6 flex-wrap">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fa-solid fa-upload mr-1.5 text-[12px]"></i> Muat Naik & Import
+                            <i class="fa-solid fa-upload mr-1.5 text-[12px]"></i> {{ __('imports.csv.upload_import') }}
                         </button>
                         <a href="{{ route('importcsv.template') }}" class="btn btn-outline">
-                            <i class="fa-solid fa-download mr-1.5 text-[12px]"></i> Muat Turun Templat
+                            <i class="fa-solid fa-download mr-1.5 text-[12px]"></i> {{ __('imports.csv.download_template') }}
                         </a>
                     </div>
                 </form>
             </x-app-card>
 
             <x-app-card class="p-6" :hover="false">
-                <x-section-header title="Format CSV" description="Pastikan fail CSV mengandungi lajur berikut" icon="fa-table-list" />
+                <x-section-header :title="__('imports.csv.format_title')" :description="__('imports.csv.format_description')" icon="fa-table-list" />
                 <div class="overflow-x-auto">
                     <table class="app-table is-compact">
                         <thead>
                             <tr>
-                                <th>Lajur</th>
-                                <th>Jenis</th>
-                                <th>Keterangan</th>
+                                <th>{{ __('imports.csv.col_column') }}</th>
+                                <th>{{ __('imports.csv.col_type') }}</th>
+                                <th>{{ __('imports.csv.col_description') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td class="font-medium text-text">nama</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">Wajib</span></td><td class="text-secondary">Nama penuh pemohon</td></tr>
-                            <tr><td class="font-medium text-text">ic</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">Wajib</span></td><td class="text-secondary">Nombor kad pengenalan (unik)</td></tr>
-                            <tr><td class="font-medium text-text">ic_ketua_rumah</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">IC ketua isi rumah</td></tr>
-                            <tr><td class="font-medium text-text">hubungan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">Wajib</span></td><td class="text-secondary">Hubungan dengan ketua</td></tr>
-                            <tr><td class="font-medium text-text">pendapatan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">Wajib</span></td><td class="text-secondary">Pendapatan bulanan (RM)</td></tr>
-                            <tr><td class="font-medium text-text">bilangan_tanggungan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">Wajib</span></td><td class="text-secondary">Bilangan tanggungan</td></tr>
-                            <tr><td class="font-medium text-text">sewa</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Sewa rumah (RM)</td></tr>
-                            <tr><td class="font-medium text-text">utiliti</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bil utiliti (RM)</td></tr>
-                            <tr><td class="font-medium text-text">telefon</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">Wajib</span></td><td class="text-secondary">Nombor telefon</td></tr>
-                            <tr><td class="font-medium text-text">alamat</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">Wajib</span></td><td class="text-secondary">Alamat penuh</td></tr>
-                            <tr><td class="font-medium text-text">n_isteri_suami</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bilangan isteri/suami</td></tr>
-                            <tr><td class="font-medium text-text">n_ibu_bapa</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bilangan ibu bapa tanggungan</td></tr>
-                            <tr><td class="font-medium text-text">n_dewasa_tidak_bekerja</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bilangan dewasa tidak bekerja</td></tr>
-                            <tr><td class="font-medium text-text">n_dewasa_bekerja_tanggung</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bilangan dewasa bekerja ditanggung</td></tr>
-                            <tr><td class="font-medium text-text">n_ipt</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bilangan pelajar IPT</td></tr>
-                            <tr><td class="font-medium text-text">n_remaja</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bilangan remaja sekolah menengah</td></tr>
-                            <tr><td class="font-medium text-text">n_kanak_rendah</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bilangan kanak-kanak sekolah rendah</td></tr>
-                            <tr><td class="font-medium text-text">n_kanak_tadika</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Bilangan kanak-kanak tadika</td></tr>
-                            <tr><td class="font-medium text-text">perumahan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">sendiri / sewa</td></tr>
-                            <tr><td class="font-medium text-text">pengangkutan_input</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Kos pengangkutan (RM)</td></tr>
-                            <tr><td class="font-medium text-text">perubatan_input</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">Pilihan</span></td><td class="text-secondary">Kos perubatan (RM)</td></tr>
+                            <tr><td class="font-medium text-text">nama</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.nama') }}</td></tr>
+                            <tr><td class="font-medium text-text">ic</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.ic') }}</td></tr>
+                            <tr><td class="font-medium text-text">ic_ketua_rumah</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.ic_ketua_rumah') }}</td></tr>
+                            <tr><td class="font-medium text-text">hubungan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.hubungan') }}</td></tr>
+                            <tr><td class="font-medium text-text">pendapatan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.pendapatan') }}</td></tr>
+                            <tr><td class="font-medium text-text">bilangan_tanggungan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.bilangan_tanggungan') }}</td></tr>
+                            <tr><td class="font-medium text-text">sewa</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.sewa') }}</td></tr>
+                            <tr><td class="font-medium text-text">utiliti</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.utiliti') }}</td></tr>
+                            <tr><td class="font-medium text-text">telefon</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.telefon') }}</td></tr>
+                            <tr><td class="font-medium text-text">alamat</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.alamat') }}</td></tr>
+                            <tr><td class="font-medium text-text">n_isteri_suami</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_isteri_suami') }}</td></tr>
+                            <tr><td class="font-medium text-text">n_ibu_bapa</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_ibu_bapa') }}</td></tr>
+                            <tr><td class="font-medium text-text">n_dewasa_tidak_bekerja</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_dewasa_tidak_bekerja') }}</td></tr>
+                            <tr><td class="font-medium text-text">n_dewasa_bekerja_tanggung</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_dewasa_bekerja_tanggung') }}</td></tr>
+                            <tr><td class="font-medium text-text">n_ipt</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_ipt') }}</td></tr>
+                            <tr><td class="font-medium text-text">n_remaja</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_remaja') }}</td></tr>
+                            <tr><td class="font-medium text-text">n_kanak_rendah</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_kanak_rendah') }}</td></tr>
+                            <tr><td class="font-medium text-text">n_kanak_tadika</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_kanak_tadika') }}</td></tr>
+                            <tr><td class="font-medium text-text">perumahan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.perumahan') }}</td></tr>
+                            <tr><td class="font-medium text-text">pengangkutan_input</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.pengangkutan_input') }}</td></tr>
+                            <tr><td class="font-medium text-text">perubatan_input</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.perubatan_input') }}</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="bg-muted/50 p-4 rounded-[10px] mt-4 flex items-start gap-3">
                     <i class="fa-solid fa-circle-info text-primary text-[14px] mt-0.5"></i>
-                    <p class="text-small text-text leading-relaxed">Lajur Pilihan akan dianggap <code class="font-mono text-[12px]">0</code> (atau <code class="font-mono text-[12px]">sendiri</code> untuk perumahan) jika dikosongkan.</p>
+                    <p class="text-small text-text leading-relaxed">{!! __('imports.csv.optional_note_short') !!}</p>
                 </div>
             </x-app-card>
         </div>
 
         <div class="space-y-6">
             <x-app-card class="p-6" :hover="false" elevated>
-                <x-section-header title="Sejarah CSV" description="10 import terkini" icon="fa-clock-rotate-left" />
+                <x-section-header :title="__('imports.csv.history_csv_title')" :description="__('imports.csv.history_description')" icon="fa-clock-rotate-left" />
                 <div class="grid grid-cols-3 gap-3 mb-5">
                     <div class="text-center p-3 rounded-[10px] bg-muted/50">
                         <p class="text-metric-sm text-text tabular-nums">{{ $csvStats['total'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">Jumlah</p>
+                        <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.total') }}</p>
                     </div>
                     <div class="text-center p-3 rounded-[10px] bg-muted/50">
                         <p class="text-metric-sm text-success tabular-nums">{{ $csvStats['berjaya'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">Berjaya</p>
+                        <p class="text-eyebrow text-tertiary mt-1">{{ __('common.status.success') }}</p>
                     </div>
                     <div class="text-center p-3 rounded-[10px] bg-muted/50">
                         <p class="text-metric-sm text-danger tabular-nums">{{ $csvStats['gagal'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">Gagal</p>
+                        <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.failed') }}</p>
                     </div>
                 </div>
                 @if($csvHistory->isEmpty())
-                    <x-empty-state icon="fa-file-csv" title="Belum ada import CSV" description="Sejarah import CSV akan dipaparkan di sini." />
+                    <x-empty-state icon="fa-file-csv" :title="__('imports.csv.empty_csv_title')" :description="__('imports.csv.empty_description')" />
                 @else
                     <ul class="space-y-2">
                         @foreach($csvHistory as $h)
                             <li class="p-3 rounded-[10px] hover:bg-muted transition-apple">
                                 <div class="flex items-center justify-between gap-3">
                                     <p class="text-body text-text font-medium truncate flex-1">{{ $h->nama_fail }}</p>
-                                    <span class="text-eyebrow text-tertiary shrink-0">{{ $h->created_at->format('d M Y') }}</span>
+                                    <span class="text-eyebrow text-tertiary shrink-0">{{ $h->created_at->locale(app()->getLocale())->translatedFormat('d M Y') }}</span>
                                 </div>
                                 <div class="mt-1.5 flex items-center gap-2 text-small">
-                                    <span class="text-secondary tabular-nums">{{ $h->jumlah_rekod }} rekod</span>
+                                    <span class="text-secondary tabular-nums">{{ __('imports.records', ['count' => $h->jumlah_rekod]) }}</span>
                                     <span class="text-tertiary">·</span>
-                                    <span class="text-success font-semibold">{{ $h->berjaya }} ok</span>
+                                    <span class="text-success font-semibold">{{ __('imports.ok', ['count' => $h->berjaya]) }}</span>
                                     @if($h->gagal > 0)
                                         <span class="text-tertiary">·</span>
-                                        <span class="text-danger font-semibold">{{ $h->gagal }} gagal</span>
+                                        <span class="text-danger font-semibold">{{ __('imports.failed_count', ['count' => $h->gagal]) }}</span>
                                     @endif
                                 </div>
                             </li>
@@ -188,7 +188,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
             <x-app-card class="p-6" :hover="false">
-                <x-section-header title="Muat Naik Borang" description="Pilih atau tarik fail borang permohonan (PDF, JPG, PNG)" icon="fa-cloud-arrow-up" />
+                <x-section-header :title="__('imports.pdf.upload_form_title')" :description="__('imports.pdf.upload_form_description')" icon="fa-cloud-arrow-up" />
 
                 <div x-data="pdfUploader" class="space-y-5">
                     <form id="upload-form" method="POST" action="{{ route('import-pdf.upload') }}" enctype="multipart/form-data">
@@ -208,9 +208,9 @@
                                 <i class="fa-solid fa-cloud-arrow-up text-primary text-[26px]"></i>
                             </div>
 
-                            <p class="text-h3 text-text" x-text="fileName || 'Tarik fail ke sini atau klik'"></p>
-                            <p class="text-small text-secondary mt-2">Format disokong: PDF, JPG, PNG</p>
-                            <p class="text-eyebrow text-tertiary mt-3">Saiz maksimum: 10MB</p>
+                            <p class="text-h3 text-text" x-text="fileName || @js(__('imports.pdf.drop_title'))"></p>
+                            <p class="text-small text-secondary mt-2">{{ __('imports.pdf.formats') }}</p>
+                            <p class="text-eyebrow text-tertiary mt-3">{{ __('imports.pdf.max_size') }}</p>
 
                             <div x-show="fileName" x-cloak class="mt-5 bg-muted/50 inline-flex items-center gap-2 px-4 py-2 rounded-pill">
                                 <i class="fa-solid fa-file text-primary text-[13px]"></i>
@@ -224,16 +224,16 @@
                                 <div class="h-2 bg-muted rounded-pill overflow-hidden">
                                     <div class="h-full bg-primary rounded-pill transition-all duration-300" style="width: 75%"></div>
                                 </div>
-                                <p class="text-small text-secondary mt-2">Memuat naik...</p>
+                                <p class="text-small text-secondary mt-2">{{ __('imports.pdf.ai_processing') }}</p>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-3 mt-6 flex-wrap">
                             <button type="submit" class="btn btn-primary" :disabled="!fileName || uploading">
-                                <i class="fa-solid fa-upload mr-1.5 text-[12px]"></i> Muat Naik & Ekstrak
+                                <i class="fa-solid fa-upload mr-1.5 text-[12px]"></i> {{ __('imports.pdf.upload_extract') }}
                             </button>
                             <a href="{{ route('import-pdf.history') }}" class="btn btn-outline">
-                                <i class="fa-solid fa-clock-rotate-left mr-1.5 text-[12px]"></i> Sejarah PDF
+                                <i class="fa-solid fa-clock-rotate-left mr-1.5 text-[12px]"></i> {{ __('imports.pdf.recent_pdf_title') }}
                             </a>
                         </div>
                     </form>
@@ -241,13 +241,11 @@
                     <div class="bg-muted/50 p-4 rounded-[10px] flex items-start gap-3">
                         <i class="fa-solid fa-circle-info text-primary text-[14px] mt-0.5"></i>
                         <div class="text-small text-text leading-relaxed">
-                            <p class="font-semibold mb-1">Bagaimana ia berfungsi?</p>
+                            <p class="font-semibold mb-1">{{ __('imports.pdf.how_title') }}</p>
                             <ol class="list-decimal ml-4 space-y-0.5 text-secondary">
-                                <li>Muat naik borang (PDF, JPG, atau PNG)</li>
-                                <li>AI mengekstrak teks dari dokumen</li>
-                                <li>Sistem mengesan medan secara pintar</li>
-                                <li>Semak dan edit data dalam pratinjau</li>
-                                <li>Simpan ke pangkalan data profil asnaf</li>
+                                @foreach(__('imports.pdf.how_steps') as $step)
+                                    <li>{{ $step }}</li>
+                                @endforeach
                             </ol>
                         </div>
                     </div>
@@ -255,20 +253,20 @@
             </x-app-card>
 
             <x-app-card class="p-6" :hover="false">
-                <x-section-header title="Medan yang Dikesan" description="Sistem mengecam medan berikut secara automatik" icon="fa-magnifying-glass" />
+                <x-section-header :title="__('imports.pdf.detected_title')" :description="__('imports.pdf.detected_description')" icon="fa-magnifying-glass" />
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     @php
                         $detectedFields = [
-                            ['label' => 'Nama', 'aliases' => 'Nama Pemohon, Full Name', 'icon' => 'fa-user'],
-                            ['label' => 'No IC', 'aliases' => 'NRIC, IC Number, MyKad', 'icon' => 'fa-id-card'],
-                            ['label' => 'No Telefon', 'aliases' => 'Phone, Mobile, No. HP', 'icon' => 'fa-phone'],
-                            ['label' => 'Alamat', 'aliases' => 'Address, Home Address', 'icon' => 'fa-location-dot'],
-                            ['label' => 'Pendapatan', 'aliases' => 'Income, Monthly Salary', 'icon' => 'fa-money-bill'],
-                            ['label' => 'Bil. Tanggungan', 'aliases' => 'Dependents', 'icon' => 'fa-people-group'],
-                            ['label' => 'Sewa', 'aliases' => 'Rent, House Rent', 'icon' => 'fa-house'],
-                            ['label' => 'Utiliti', 'aliases' => 'Utilities', 'icon' => 'fa-bolt'],
-                            ['label' => 'Hubungan', 'aliases' => 'Relationship', 'icon' => 'fa-user-group'],
-                            ['label' => 'IC Ketua Rumah', 'aliases' => 'Head of Family IC', 'icon' => 'fa-id-card'],
+                            ['label' => __('imports.detected.name'), 'aliases' => 'Nama Pemohon, Full Name', 'icon' => 'fa-user'],
+                            ['label' => __('imports.detected.ic'), 'aliases' => 'NRIC, IC Number, MyKad', 'icon' => 'fa-id-card'],
+                            ['label' => __('imports.detected.phone'), 'aliases' => 'Phone, Mobile, No. HP', 'icon' => 'fa-phone'],
+                            ['label' => __('imports.detected.address'), 'aliases' => 'Address, Home Address', 'icon' => 'fa-location-dot'],
+                            ['label' => __('imports.detected.income'), 'aliases' => 'Income, Monthly Salary', 'icon' => 'fa-money-bill'],
+                            ['label' => __('imports.detected.dependents'), 'aliases' => 'Dependents', 'icon' => 'fa-people-group'],
+                            ['label' => __('imports.detected.rent'), 'aliases' => 'Rent, House Rent', 'icon' => 'fa-house'],
+                            ['label' => __('imports.detected.utilities'), 'aliases' => 'Utilities', 'icon' => 'fa-bolt'],
+                            ['label' => __('imports.detected.relationship'), 'aliases' => 'Relationship', 'icon' => 'fa-user-group'],
+                            ['label' => __('imports.detected.head_ic'), 'aliases' => 'Head of Family IC', 'icon' => 'fa-id-card'],
                         ];
                     @endphp
                     @foreach($detectedFields as $field)
@@ -288,45 +286,52 @@
 
         <div class="space-y-6">
             <x-app-card class="p-6" :hover="false" elevated>
-                <x-section-header title="Sejarah PDF" description="5 import terkini" icon="fa-clock-rotate-left" />
+                <x-section-header :title="__('imports.pdf.recent_pdf_title')" :description="__('imports.pdf.recent_pdf_description')" icon="fa-clock-rotate-left" />
                 @if($pdfHistory->isEmpty())
-                    <x-empty-state icon="fa-file-pdf" title="Belum ada import PDF" description="Sejarah import PDF akan dipaparkan di sini." />
+                    <x-empty-state icon="fa-file-pdf" :title="__('imports.pdf.empty_pdf_title')" :description="__('imports.pdf.empty_pdf_description')" />
                 @else
                     <ul class="space-y-2">
                         @foreach($pdfHistory->take(5) as $h)
                             <li class="p-3 rounded-[10px] hover:bg-muted transition-apple">
                                 <div class="flex items-center justify-between gap-2">
                                     <p class="text-body text-text font-medium truncate flex-1" title="{{ $h->original_filename }}">{{ $h->original_filename }}</p>
-                                    <x-status-badge :status="match($h->status) { 'extracted','committed' => 'success', 'failed' => 'danger', default => 'warning' }" size="sm">{{ $h->status }}</x-status-badge>
+                                    <x-status-badge :status="match($h->status) { 'extracted','committed' => 'success', 'failed' => 'danger', default => 'warning' }" size="sm">{{ match($h->status) {
+                                        'extracted' => __('imports.status.extracted'),
+                                        'needs_review' => __('imports.status.needs_review'),
+                                        'committed' => __('imports.status.committed'),
+                                        'failed' => __('imports.status.failed'),
+                                        'processing' => __('imports.status.processing'),
+                                        default => $h->status,
+                                    } }}</x-status-badge>
                                 </div>
-                                <p class="text-eyebrow text-tertiary mt-1.5">{{ $h->created_at->format('d M Y, h:i A') }}</p>
+                                <p class="text-eyebrow text-tertiary mt-1.5">{{ $h->created_at->locale(app()->getLocale())->translatedFormat('d M Y, h:i A') }}</p>
                             </li>
                         @endforeach
                     </ul>
                     <div class="mt-4 pt-3 border-t border-divider">
-                        <a href="{{ route('import-pdf.history') }}" class="text-[12px] font-semibold text-primary hover:underline">Lihat Semua <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i></a>
+                        <a href="{{ route('import-pdf.history') }}" class="text-[12px] font-semibold text-primary hover:underline">{{ __('imports.csv.view_all') }} <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i></a>
                     </div>
                 @endif
             </x-app-card>
 
             <x-app-card class="p-6" :hover="false" elevated>
-                <x-section-header title="Statistik OCR" icon="fa-chart-simple" />
+                <x-section-header :title="__('imports.pdf.ocr_stats_title')" icon="fa-chart-simple" />
                 <div class="grid grid-cols-2 gap-3">
                     <div class="text-center p-3 rounded-[10px] bg-muted/50">
                         <p class="text-metric-sm text-text tabular-nums">{{ $pdfStats['total'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">Jumlah</p>
+                        <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.total') }}</p>
                     </div>
                     <div class="text-center p-3 rounded-[10px] bg-muted/50">
                         <p class="text-metric-sm text-success tabular-nums">{{ $pdfStats['committed'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">Disimpan</p>
+                        <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.committed') }}</p>
                     </div>
                     <div class="text-center p-3 rounded-[10px] bg-muted/50">
                         <p class="text-metric-sm text-warning tabular-nums">{{ $pdfStats['extracted'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">Diekstrak</p>
+                        <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.extracted') }}</p>
                     </div>
                     <div class="text-center p-3 rounded-[10px] bg-muted/50">
                         <p class="text-metric-sm text-danger tabular-nums">{{ $pdfStats['failed'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">Gagal</p>
+                        <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.failed') }}</p>
                     </div>
                 </div>
             </x-app-card>
@@ -336,10 +341,10 @@
 
 {{-- TAB: Sejarah Import (Combined) --}}
 <div x-show="tab === 'history'" x-cloak class="animate-fade-in">
-    <x-section-header title="Sejarah Import" description="Gabungan import CSV dan PDF — 15 terkini" icon="fa-clock-rotate-left" />
+    <x-section-header :title="__('imports.data.combined_title')" :description="__('imports.data.combined_description')" icon="fa-clock-rotate-left" />
 
     @if($combinedHistory->isEmpty())
-        <x-empty-state icon="fa-clock-rotate-left" title="Tiada sejarah import" description="Sejarah import CSV dan PDF akan dipaparkan di sini." />
+        <x-empty-state icon="fa-clock-rotate-left" :title="__('imports.data.combined_empty_title')" :description="__('imports.data.combined_empty_description')" />
     @else
         <div class="space-y-0">
             @foreach($combinedHistory as $item)
@@ -357,12 +362,12 @@
                         <p class="text-small text-secondary mt-0.5">{{ $item->detail }}</p>
                     </div>
                     <div class="shrink-0 flex items-center gap-3">
-                        <span class="text-eyebrow text-tertiary">{{ \Carbon\Carbon::parse($item->date)->format('d M Y') }}</span>
+                        <span class="text-eyebrow text-tertiary">{{ \Carbon\Carbon::parse($item->date)->locale(app()->getLocale())->translatedFormat('d M Y') }}</span>
                         <x-status-badge :status="$item->status" size="sm">
-                            {{ $item->status === 'success' ? 'Berjaya' : ($item->status === 'danger' ? 'Gagal' : 'Separa') }}
+                            {{ $item->status === 'success' ? __('imports.data.success') : ($item->status === 'danger' ? __('imports.status.failed') : __('imports.status.partial')) }}
                         </x-status-badge>
                         @if($item->url)
-                            <a href="{{ $item->url }}" class="text-[11px] text-primary font-semibold hover:underline">Lihat</a>
+                            <a href="{{ $item->url }}" class="text-[11px] text-primary font-semibold hover:underline">{{ __('imports.data.view') }}</a>
                         @endif
                     </div>
                 </div>

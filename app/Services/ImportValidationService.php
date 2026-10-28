@@ -49,7 +49,7 @@ class ImportValidationService
                     'field' => $field,
                     'status' => 'error',
                     'severity' => 'error',
-                    'message' => 'Required field is missing',
+                    'message' => __('imports.validation.required_missing'),
                 ];
             }
         }
@@ -73,7 +73,7 @@ class ImportValidationService
             if (in_array($field, $requiredFields)) {
                 $result['status'] = 'error';
                 $result['severity'] = 'error';
-                $result['message'] = 'Field is required but missing';
+                $result['message'] = __('imports.validation.field_required_missing');
             }
 
             return $result;
@@ -118,7 +118,7 @@ class ImportValidationService
                 if (mb_strlen($value) < 5) {
                     $result['status'] = 'warning';
                     $result['severity'] = 'warning';
-                    $result['message'] = 'Address seems too short';
+                    $result['message'] = __('imports.validation.address_too_short');
                 }
                 break;
         }
@@ -126,15 +126,15 @@ class ImportValidationService
         if ($confidence < 50) {
             $result['status'] = 'error';
             $result['severity'] = 'error';
-            $result['message'] = "Very low confidence ({$confidence}%)";
+            $result['message'] = __('imports.validation.very_low_confidence', ['confidence' => $confidence]);
         } elseif ($confidence < 70) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = "Low confidence ({$confidence}%) — please verify";
+            $result['message'] = __('imports.validation.low_confidence', ['confidence' => $confidence]);
         } elseif ($confidence < 90) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = "Moderate confidence ({$confidence}%)";
+            $result['message'] = __('imports.validation.moderate_confidence', ['confidence' => $confidence]);
         }
 
         return $result;
@@ -147,7 +147,7 @@ class ImportValidationService
         if (! preg_match('/^\d{12}$/', $digits)) {
             $result['status'] = 'error';
             $result['severity'] = 'error';
-            $result['message'] = 'Invalid IC format — should be 12 digits';
+            $result['message'] = __('imports.validation.invalid_ic');
 
             return $result;
         }
@@ -162,25 +162,25 @@ class ImportValidationService
         if ($mm < 1 || $mm > 12) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = 'IC has invalid month';
+            $result['message'] = __('imports.validation.ic_invalid_month');
         }
 
         if ($dd < 1 || $dd > 31) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = 'IC has invalid day';
+            $result['message'] = __('imports.validation.ic_invalid_day');
         }
 
         if ($stateCode < 1 || $stateCode > 59) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = 'IC has unrecognized state code';
+            $result['message'] = __('imports.validation.ic_invalid_state');
         }
 
         if ($confidence < 90) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = 'IC confidence low — please verify digits';
+            $result['message'] = __('imports.validation.ic_low_confidence');
         }
 
         return $result;
@@ -193,7 +193,7 @@ class ImportValidationService
         if (strlen($digits) < 6) {
             $result['status'] = 'error';
             $result['severity'] = 'error';
-            $result['message'] = 'Phone number too short';
+            $result['message'] = __('imports.validation.phone_too_short');
 
             return $result;
         }
@@ -201,13 +201,13 @@ class ImportValidationService
         if (strlen($digits) > 13) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = 'Phone number seems too long';
+            $result['message'] = __('imports.validation.phone_too_long');
         }
 
         if ($confidence < 70) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = 'Phone number confidence low — please verify';
+            $result['message'] = __('imports.validation.phone_low_confidence');
         }
 
         return $result;
@@ -220,7 +220,7 @@ class ImportValidationService
         if (! is_numeric($cleaned)) {
             $result['status'] = 'error';
             $result['severity'] = 'error';
-            $result['message'] = 'Value is not a valid number';
+            $result['message'] = __('imports.validation.not_a_number');
 
             return $result;
         }
@@ -230,13 +230,13 @@ class ImportValidationService
         if ($num < $min) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = "Value is below minimum ({$min})";
+            $result['message'] = __('imports.validation.below_minimum', ['min' => $min]);
         }
 
         if ($max !== null && $num > $max) {
             $result['status'] = 'warning';
             $result['severity'] = 'warning';
-            $result['message'] = "Value exceeds maximum ({$max})";
+            $result['message'] = __('imports.validation.exceeds_maximum', ['max' => $max]);
         }
 
         return $result;
@@ -249,7 +249,7 @@ class ImportValidationService
         if (strlen($digits) !== 5) {
             $result['status'] = 'error';
             $result['severity'] = 'error';
-            $result['message'] = 'Postcode must be 5 digits';
+            $result['message'] = __('imports.validation.postcode_invalid');
         }
 
         return $result;
@@ -267,7 +267,7 @@ class ImportValidationService
 
         $result['status'] = 'warning';
         $result['severity'] = 'warning';
-        $result['message'] = 'Value not in expected list — please verify';
+        $result['message'] = __('imports.validation.not_in_list');
 
         return $result;
     }
@@ -285,7 +285,7 @@ class ImportValidationService
 
         $result['status'] = 'warning';
         $result['severity'] = 'warning';
-        $result['message'] = 'Value should be Yes/No — please verify';
+        $result['message'] = __('imports.validation.should_be_yes_no');
 
         return $result;
     }

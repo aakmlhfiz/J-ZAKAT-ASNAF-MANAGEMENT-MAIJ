@@ -69,7 +69,7 @@ class ImportHouseholdLookupService
             ->latest('approved_date')
             ->get()
             ->map(fn ($a) => [
-                'member_name' => $a->member?->nama ?? 'Unknown',
+                'member_name' => $a->member?->nama ?? __('ocr.unknown'),
                 'jenis_bantuan' => $a->jenis_bantuan,
                 'amount' => $a->amount,
                 'frequency' => $a->frequency,
@@ -81,7 +81,7 @@ class ImportHouseholdLookupService
             'found' => true,
             'household_id' => $household->household_id,
             'id' => $household->id,
-            'head_of_household' => $headMember?->nama ?? 'Unknown',
+            'head_of_household' => $headMember?->nama ?? __('ocr.unknown'),
             'head_ic' => $headMember?->ic,
             'matched_member' => [
                 'nama' => $member->nama,

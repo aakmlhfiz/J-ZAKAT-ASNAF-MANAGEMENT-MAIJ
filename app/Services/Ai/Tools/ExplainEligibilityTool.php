@@ -29,7 +29,7 @@ class ExplainEligibilityTool extends AbstractTool
 
         if (! $p) {
             return [
-                'reply' => 'Sila berikan No. IC atau nama penuh pemohon. Contoh: *Adakah 011212083433 layak?*',
+                'reply' => __('ai.tools.explain_eligibility.needs_input_reply'),
                 'data' => ['type' => 'text', 'needs_input' => true],
             ];
         }
@@ -47,24 +47,31 @@ class ExplainEligibilityTool extends AbstractTool
 
         $items = [];
         if ($pendapatan < $hadKifayah) {
-            $items[] = '✓ Pendapatan (RM '.number_format($pendapatan, 2).') lebih rendah daripada Had Kifayah (RM '.number_format($hadKifayah, 2).') — jurang RM '.number_format($gap, 2);
+            $items[] = __('ai.tools.explain_eligibility.income_below', [
+                'income' => number_format($pendapatan, 2),
+                'had_kifayah' => number_format($hadKifayah, 2),
+                'gap' => number_format($gap, 2),
+            ]);
         } else {
-            $items[] = '✗ Pendapatan (RM '.number_format($pendapatan, 2).') melebihi Had Kifayah (RM '.number_format($hadKifayah, 2).')';
+            $items[] = __('ai.tools.explain_eligibility.income_above', [
+                'income' => number_format($pendapatan, 2),
+                'had_kifayah' => number_format($hadKifayah, 2),
+            ]);
         }
         if ($totalKandungan >= 3) {
-            $items[] = "✓ Bilangan tanggungan tinggi ({$totalKandungan} orang)";
+            $items[] = trans_choice('ai.tools.explain_eligibility.dependants_high', $totalKandungan);
         } elseif ($totalKandungan > 0) {
-            $items[] = "○ Bilangan tanggungan sederhana ({$totalKandungan} orang)";
+            $items[] = trans_choice('ai.tools.explain_eligibility.dependants_medium', $totalKandungan);
         } else {
-            $items[] = "○ Bilangan tanggungan tidak direkodkan (guna bilangan_tanggungan: {$tanggungan})";
+            $items[] = __('ai.tools.explain_eligibility.dependants_none', ['count' => $tanggungan]);
         }
         if ($totalPerbelanjaan > 0) {
-            $items[] = '✓ Perbelanjaan tetap (utiliti + pengangkutan + perubatan): RM '.number_format($totalPerbelanjaan, 2);
+            $items[] = __('ai.tools.explain_eligibility.fixed_expenses', ['amount' => number_format($totalPerbelanjaan, 2)]);
         } else {
-            $items[] = '○ Tiada sewa / utiliti / pengangkutan / perubatan direkodkan';
+            $items[] = __('ai.tools.explain_eligibility.no_expenses');
         }
         if ($p->perumahan === 'sewa') {
-            $items[] = '○ Tempat tinggal: rumah sewa (tambahan kadar sewa)';
+            $items[] = __('ai.tools.explain_eligibility.rental');
         }
 
         $status = $p->status_kelayakan;
@@ -73,10 +80,10 @@ class ExplainEligibilityTool extends AbstractTool
             : ($status === 'Layak' ? 92 : ($status === 'Tidak Layak' ? 78 : 50));
 
         return [
-            'reply' => "Berikut adalah penjelasan kelayakan untuk **{$p->nama}** ({$p->ic}):",
+            'reply' => __('ai.tools.explain_eligibility.reply', ['name' => $p->nama, 'ic' => $p->ic]),
             'data' => [
                 'type' => 'checklist',
-                'title' => 'Keputusan Kelayakan',
+                'title' => __('ai.tools.explain_eligibility.title'),
                 'status' => $status,
                 'confidence' => $confidence,
                 'items' => $items,
@@ -89,7 +96,7 @@ class ExplainEligibilityTool extends AbstractTool
 
     public function label(): string
     {
-        return 'Terangkan kelayakan pemohon';
+        return __('ai.tools.explain_eligibility.label');
     }
 
     public function icon(): string

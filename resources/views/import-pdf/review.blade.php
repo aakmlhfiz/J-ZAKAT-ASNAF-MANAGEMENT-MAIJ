@@ -1,6 +1,6 @@
 @extends('layouts.app', [
-    'title' => 'Semakan Ekstrak OCR',
-    'subtitle' => 'Semak dan edit data yang diekstrak sebelum disimpan',
+    'title' => __('imports.review.meta_title'),
+    'subtitle' => __('imports.review.meta_subtitle'),
 ])
 
 @php
@@ -11,38 +11,38 @@
     $extracted = $extracted ?? [];
 
     $fieldDefs = [
-        ['f' => 'nama', 'label' => 'Nama Pemohon', 'type' => 'text', 'cat' => 'Maklumat Pemohon'],
-        ['f' => 'ic', 'label' => 'No. Kad Pengenalan', 'type' => 'text', 'cat' => 'Maklumat Pemohon'],
-        ['f' => 'ic_ketua_rumah', 'label' => 'IC Ketua Rumah', 'type' => 'text', 'cat' => 'Maklumat Pemohon'],
-        ['f' => 'hubungan', 'label' => 'Hubungan', 'type' => 'text', 'cat' => 'Maklumat Pemohon'],
-        ['f' => 'status_perkahwinan', 'label' => 'Status Perkahwinan', 'type' => 'text', 'cat' => 'Maklumat Pemohon'],
-        ['f' => 'merokok', 'label' => 'Merokok', 'type' => 'text', 'cat' => 'Maklumat Pemohon'],
-        ['f' => 'kesihatan', 'label' => 'Status Kesihatan', 'type' => 'text', 'cat' => 'Maklumat Pemohon'],
-        ['f' => 'telefon', 'label' => 'No. Telefon', 'type' => 'text', 'cat' => 'Maklumat Hubungan'],
-        ['f' => 'no_telefon_bimbit', 'label' => 'No. Telefon Bimbit', 'type' => 'text', 'cat' => 'Maklumat Hubungan'],
-        ['f' => 'no_telefon_rumah', 'label' => 'No. Telefon Rumah', 'type' => 'text', 'cat' => 'Maklumat Hubungan'],
-        ['f' => 'alamat', 'label' => 'Alamat', 'type' => 'text', 'cat' => 'Maklumat Alamat'],
-        ['f' => 'daerah', 'label' => 'Daerah', 'type' => 'text', 'cat' => 'Maklumat Alamat'],
-        ['f' => 'bandar', 'label' => 'Bandar', 'type' => 'text', 'cat' => 'Maklumat Alamat'],
-        ['f' => 'poskod', 'label' => 'Poskod', 'type' => 'text', 'cat' => 'Maklumat Alamat'],
-        ['f' => 'dun', 'label' => 'DUN', 'type' => 'text', 'cat' => 'Maklumat Alamat'],
-        ['f' => 'parlimen', 'label' => 'Parlimen', 'type' => 'text', 'cat' => 'Maklumat Alamat'],
-        ['f' => 'pendapatan', 'label' => 'Pendapatan Bulanan (RM)', 'type' => 'number', 'cat' => 'Maklumat Kewangan'],
-        ['f' => 'bilangan_tanggungan', 'label' => 'Bilangan Tanggungan', 'type' => 'number', 'cat' => 'Maklumat Kewangan'],
-        ['f' => 'sewa', 'label' => 'Sewa Rumah (RM)', 'type' => 'number', 'cat' => 'Maklumat Kewangan'],
-        ['f' => 'utiliti', 'label' => 'Bil Utiliti (RM)', 'type' => 'number', 'cat' => 'Maklumat Kewangan'],
-        ['f' => 'pengangkutan', 'label' => 'Pengangkutan (RM)', 'type' => 'number', 'cat' => 'Maklumat Kewangan'],
-        ['f' => 'perubatan', 'label' => 'Perubatan (RM)', 'type' => 'number', 'cat' => 'Maklumat Kewangan'],
-        ['f' => 'sebab_memohon', 'label' => 'Sebab Memohon', 'type' => 'text', 'cat' => 'Maklumat Bantuan'],
+        ['f' => 'nama', 'label' => __('imports.field_labels.nama'), 'type' => 'text', 'cat' => 'applicant'],
+        ['f' => 'ic', 'label' => __('imports.field_labels.ic'), 'type' => 'text', 'cat' => 'applicant'],
+        ['f' => 'ic_ketua_rumah', 'label' => __('imports.field_labels.ic_ketua_rumah'), 'type' => 'text', 'cat' => 'applicant'],
+        ['f' => 'hubungan', 'label' => __('imports.field_labels.hubungan'), 'type' => 'text', 'cat' => 'applicant'],
+        ['f' => 'status_perkahwinan', 'label' => __('imports.field_labels.status_perkahwinan'), 'type' => 'text', 'cat' => 'applicant'],
+        ['f' => 'merokok', 'label' => __('imports.field_labels.merokok'), 'type' => 'text', 'cat' => 'applicant'],
+        ['f' => 'kesihatan', 'label' => __('imports.field_labels.kesihatan'), 'type' => 'text', 'cat' => 'applicant'],
+        ['f' => 'telefon', 'label' => __('imports.field_labels.telefon'), 'type' => 'text', 'cat' => 'contact'],
+        ['f' => 'no_telefon_bimbit', 'label' => __('imports.field_labels.no_telefon_bimbit'), 'type' => 'text', 'cat' => 'contact'],
+        ['f' => 'no_telefon_rumah', 'label' => __('imports.field_labels.no_telefon_rumah'), 'type' => 'text', 'cat' => 'contact'],
+        ['f' => 'alamat', 'label' => __('imports.field_labels.alamat'), 'type' => 'text', 'cat' => 'address'],
+        ['f' => 'daerah', 'label' => __('imports.field_labels.daerah'), 'type' => 'text', 'cat' => 'address'],
+        ['f' => 'bandar', 'label' => __('imports.field_labels.bandar'), 'type' => 'text', 'cat' => 'address'],
+        ['f' => 'poskod', 'label' => __('imports.field_labels.poskod'), 'type' => 'text', 'cat' => 'address'],
+        ['f' => 'dun', 'label' => __('imports.field_labels.dun'), 'type' => 'text', 'cat' => 'address'],
+        ['f' => 'parlimen', 'label' => __('imports.field_labels.parlimen'), 'type' => 'text', 'cat' => 'address'],
+        ['f' => 'pendapatan', 'label' => __('imports.field_labels.pendapatan'), 'type' => 'number', 'cat' => 'financial'],
+        ['f' => 'bilangan_tanggungan', 'label' => __('imports.field_labels.bilangan_tanggungan'), 'type' => 'number', 'cat' => 'financial'],
+        ['f' => 'sewa', 'label' => __('imports.field_labels.sewa'), 'type' => 'number', 'cat' => 'financial'],
+        ['f' => 'utiliti', 'label' => __('imports.field_labels.utiliti'), 'type' => 'number', 'cat' => 'financial'],
+        ['f' => 'pengangkutan', 'label' => __('imports.field_labels.pengangkutan'), 'type' => 'number', 'cat' => 'financial'],
+        ['f' => 'perubatan', 'label' => __('imports.field_labels.perubatan'), 'type' => 'number', 'cat' => 'financial'],
+        ['f' => 'sebab_memohon', 'label' => __('imports.field_labels.sebab_memohon'), 'type' => 'text', 'cat' => 'assistance_review'],
     ];
 @endphp
 
 @section('content')
 
-<x-page-header title="Semakan Ekstrak" subtitle="{{ $import->original_filename ?? 'Data diekstrak dari dokumen' }}" eyebrow="Semakan & pengesahan" icon="fa-magnifying-glass">
+<x-page-header :title="__('imports.review.title')" :subtitle="$import->original_filename ?? __('imports.preview.subtitle_default')" :eyebrow="__('imports.review.eyebrow')" icon="fa-magnifying-glass">
     <x-slot:actions>
-        <x-app-button variant="outline" size="md" icon="fa-file-pdf" href="{{ route('import-pdf.file', $import->id) }}">Lihat Fail Asal</x-app-button>
-        <x-app-button variant="outline" size="md" icon="fa-plus" href="{{ route('import-pdf.index') }}">Muat Naik Lain</x-app-button>
+        <x-app-button variant="outline" size="md" icon="fa-file-pdf" href="{{ route('import-pdf.file', $import->id) }}">{{ __('imports.preview.view_original') }}</x-app-button>
+        <x-app-button variant="outline" size="md" icon="fa-plus" href="{{ route('import-pdf.index') }}">{{ __('imports.preview.upload_another') }}</x-app-button>
     </x-slot:actions>
 </x-page-header>
 
@@ -52,11 +52,11 @@
             <div class="w-16 h-16 rounded-[20px] bg-primary-soft mx-auto flex items-center justify-center mb-5">
                 <i class="fa-solid fa-spinner fa-spin-pulse text-primary text-[24px]"></i>
             </div>
-            <p class="text-h3 text-text">Sedang Memproses</p>
-            <p class="text-body text-secondary mt-2">AI sedang mengekstrak teks dan mengenal pasti medan dari dokumen anda.</p>
-            <p class="text-small text-tertiary mt-4">Halaman akan dikemas kini secara automatik.</p>
+            <p class="text-h3 text-text">{{ __('imports.review.processing_title') }}</p>
+            <p class="text-body text-secondary mt-2">{{ __('imports.review.processing_text') }}</p>
+            <p class="text-small text-tertiary mt-4">{{ __('imports.review.processing_auto') }}</p>
             <div x-show="stalled" x-cloak class="mt-6 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 max-w-md mx-auto text-small">
-                Pemprosesan mengambil masa lama. <a class="underline" href="{{ route('import-pdf.index') }}">Muat naik semula</a> atau semak enjin OCR.
+                {{ __('imports.review.stalled_text') }} <a class="underline" href="{{ route('import-pdf.index') }}">{{ __('imports.review.upload_again_link') }}</a> {{ __('imports.review.stalled_suffix') }}
             </div>
         </div>
     </div>
@@ -67,46 +67,46 @@
         </div>
         <p class="text-body text-text font-medium flex-1">{{ $error }}</p>
     </div>
-    <x-app-button variant="outline" icon="fa-rotate" href="{{ route('import-pdf.index') }}">Muat Naik Semula</x-app-button>
+    <x-app-button variant="outline" icon="fa-rotate" href="{{ route('import-pdf.index') }}">{{ __('imports.review.upload_again') }}</x-app-button>
 @else
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {{-- LEFT: original file + raw OCR text + extras --}}
         <div class="space-y-6">
             <x-app-card class="p-6" :hover="false">
-                <x-section-header title="Dokumen Asal" icon="fa-file-pdf" />
+                <x-section-header :title="__('imports.review.original_document')" icon="fa-file-pdf" />
                 @php
                     $isImage = str_starts_with($import->mime_type ?? '', 'image/');
                 @endphp
                 @if($isImage)
                     <a href="{{ route('import-pdf.file', $import->id) }}" target="_blank">
-                        <img src="{{ route('import-pdf.file', $import->id) }}" alt="Dokumen asal" class="w-full rounded-[12px] border border-divider">
+                        <img src="{{ route('import-pdf.file', $import->id) }}" alt="{{ __('imports.review.original_document_alt') }}" class="w-full rounded-[12px] border border-divider">
                     </a>
                 @else
                     <a href="{{ route('import-pdf.file', $import->id) }}" target="_blank" class="btn btn-outline w-full">
-                        <i class="fa-solid fa-file-pdf mr-2"></i> Buka PDF Asal
+                        <i class="fa-solid fa-file-pdf mr-2"></i> {{ __('imports.review.open_pdf') }}
                     </a>
                 @endif
             </x-app-card>
 
             <x-app-card class="p-6" :hover="false">
-                <x-section-header title="Teks OCR Mentah" icon="fa-scroll" />
+                <x-section-header :title="__('imports.review.raw_ocr_text')" icon="fa-scroll" />
                 <div class="flex items-center gap-2 mb-2">
                     <button type="button" onclick="navigator.clipboard.writeText(@json($import->ocr_text ?? '')).then(() => { const b = this; b.classList.add('text-success'); setTimeout(() => b.classList.remove('text-success'), 1500); })"
                             class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-primary hover:bg-primary-soft px-2 py-1 rounded-[6px]">
-                        <i class="fa-solid fa-copy text-[10px]"></i> Salin teks
+                        <i class="fa-solid fa-copy text-[10px]"></i> {{ __('imports.review.copy_text') }}
                     </button>
                 </div>
                 <details>
-                    <summary class="cursor-pointer text-small text-primary font-medium">Klik untuk papar / sembunyi teks</summary>
-                    <pre class="mt-3 p-4 rounded-[10px] bg-muted text-[12px] text-text whitespace-pre-wrap max-h-96 overflow-auto">{{ $import->ocr_text ?? 'Tiada teks.' }}</pre>
+                    <summary class="cursor-pointer text-small text-primary font-medium">{{ __('imports.review.toggle_text') }}</summary>
+                    <pre class="mt-3 p-4 rounded-[10px] bg-muted text-[12px] text-text whitespace-pre-wrap max-h-96 overflow-auto">{{ $import->ocr_text ?? __('imports.review.no_text') }}</pre>
                 </details>
             </x-app-card>
 
             <x-app-card class="p-6" :hover="false" elevated accent="primary">
-                <x-section-header title="Keyakinan AI" icon="fa-bullseye" />
+                <x-section-header :title="__('imports.review.confidence_title')" icon="fa-bullseye" />
                 <div class="text-center py-3">
                     <p class="text-[42px] font-extrabold text-text tracking-tight tabular-nums">{{ number_format($confidence, 0) }}<span class="text-tertiary text-h3">%</span></p>
-                    <p class="text-small text-secondary mt-1">purata keyakinan keseluruhan</p>
+                    <p class="text-small text-secondary mt-1">{{ __('imports.review.confidence_average') }}</p>
                 </div>
                 <div class="h-3 bg-muted rounded-pill overflow-hidden mt-3">
                     <div class="h-full rounded-pill transition-all duration-500 @if($confidence >= 90) bg-success @elseif($confidence >= 70) bg-warning @else bg-danger @endif" style="width: {{ max(3, $confidence) }}%"></div>
@@ -120,8 +120,8 @@
                 @csrf
                 <x-app-card class="p-6" :hover="false">
                     <div class="flex items-center justify-between mb-5">
-                        <x-section-header title="Data Diekstrak" description="Semak dan edit medan yang dikesan oleh AI" icon="fa-database" />
-                        <div class="text-eyebrow text-tertiary">Enjin: {{ $import->ocr_engine ?? '—' }}</div>
+                        <x-section-header :title="__('imports.review.extracted_title')" :description="__('imports.review.extracted_description')" icon="fa-database" />
+                        <div class="text-eyebrow text-tertiary">{{ __('imports.review.engine') }} {{ $import->ocr_engine ?? '—' }}</div>
                     </div>
 
                     @php $currentCat = ''; @endphp
@@ -130,7 +130,7 @@
                             @php $currentCat = $def['cat']; @endphp
                             <div class="flex items-center gap-2 py-2 px-2 bg-muted/50 rounded-t-[10px] -mx-3 -mt-3 mb-2">
                                 <i class="fa-solid fa-circle-dot text-tertiary text-[11px]"></i>
-                                <span class="text-eyebrow text-tertiary font-semibold">{{ $def['cat'] }}</span>
+                                <span class="text-eyebrow text-tertiary font-semibold">{{ __('imports.categories.'.$def['cat']) }}</span>
                             </div>
                         @endif
                         @php
@@ -146,7 +146,7 @@
                                     {{ $def['label'] }}
                                     @if($needsReview)
                                         <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-pill bg-warning-soft text-warning align-middle ml-1">
-                                            <i class="fa-solid fa-circle-exclamation text-[8px]"></i> Semakan
+                                            <i class="fa-solid fa-circle-exclamation text-[8px]"></i> {{ __('imports.review.needs_check') }}
                                         </span>
                                     @endif
                                 </label>
@@ -165,38 +165,38 @@
                     @if(count($members) > 0)
                         <div class="flex items-center gap-2 py-2 px-2 bg-muted/50 rounded-t-[10px] -mx-3 mt-3 mb-2">
                             <i class="fa-solid fa-people-roof text-tertiary text-[11px]"></i>
-                            <span class="text-eyebrow text-tertiary font-semibold">Ahli Isi Rumah ({{ count($members) }})</span>
+                            <span class="text-eyebrow text-tertiary font-semibold">{{ __('imports.review.household_members', ['count' => count($members)]) }}</span>
                         </div>
                         <div x-data="membersEditor(@json($members))" class="space-y-2">
                             <template x-for="(m, i) in members" :key="i">
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2 p-2 border border-divider/60 rounded-[10px] items-center">
                                     <input type="text" name="household_members[i][nama]" x-model="m.nama"
-                                           class="input-base w-full text-sm" placeholder="Nama">
+                                           class="input-base w-full text-sm" placeholder="{{ __('imports.review.placeholder_name') }}">
                                     <input type="text" name="household_members[i][ic]" x-model="m.ic"
-                                           class="input-base w-full text-sm font-mono" placeholder="No. K/P">
+                                           class="input-base w-full text-sm font-mono" placeholder="{{ __('imports.review.placeholder_ic') }}">
                                     <input type="text" name="household_members[i][hubungan]" x-model="m.hubungan"
-                                           class="input-base w-full text-sm" placeholder="Hubungan">
+                                           class="input-base w-full text-sm" placeholder="{{ __('imports.review.placeholder_relationship') }}">
                                     <input type="number" name="household_members[i][umur]" x-model="m.umur"
-                                           class="input-base w-full text-sm" placeholder="Umur" min="0" max="120">
+                                           class="input-base w-full text-sm" placeholder="{{ __('imports.review.placeholder_age') }}" min="0" max="120">
                                     <input type="text" name="household_members[i][pekerjaan]" x-model="m.pekerjaan"
-                                           class="input-base w-full text-sm" placeholder="Pekerjaan">
+                                           class="input-base w-full text-sm" placeholder="{{ __('imports.review.placeholder_occupation') }}">
                                     <input type="number" step="0.01" min="0" name="household_members[i][pendapatan_bulanan]" x-model="m.pendapatan_bulanan"
-                                           class="input-base w-full text-sm" placeholder="Pendapatan (RM)">
+                                           class="input-base w-full text-sm" placeholder="{{ __('imports.review.placeholder_income') }}">
                                     <input type="text" name="household_members[i][pendidikan]" x-model="m.pendidikan"
-                                           class="input-base w-full text-sm" placeholder="Pendidikan">
+                                           class="input-base w-full text-sm" placeholder="{{ __('imports.review.placeholder_education') }}">
                                     <input type="text" name="household_members[i][status_kesihatan]" x-model="m.status_kesihatan"
-                                           class="input-base w-full text-sm" placeholder="Kesihatan">
+                                           class="input-base w-full text-sm" placeholder="{{ __('imports.review.placeholder_health') }}">
                                     <div class="md:col-span-4 flex justify-end">
                                         <button type="button" @click="members.splice(i, 1)"
                                                 class="inline-flex items-center gap-1 text-[11px] font-semibold text-danger hover:bg-danger-soft px-2 py-1 rounded-[6px]">
-                                            <i class="fa-solid fa-trash text-[10px]"></i> Buang
+                                            <i class="fa-solid fa-trash text-[10px]"></i> {{ __('imports.review.remove') }}
                                         </button>
                                     </div>
                                 </div>
                             </template>
                             <button type="button" @click="addRow()"
                                     class="inline-flex items-center gap-1.5 text-[12px] font-semibold text-primary hover:bg-primary-soft px-2.5 py-1.5 rounded-[8px]">
-                                <i class="fa-solid fa-circle-plus text-[11px]"></i> Tambah Ahli
+                                <i class="fa-solid fa-circle-plus text-[11px]"></i> {{ __('imports.review.add_member') }}
                             </button>
                         </div>
                     @endif
@@ -219,8 +219,8 @@
                     @endif
 
                     <div class="flex items-center gap-3 mt-6 pt-4 border-t border-divider">
-                        <x-app-button type="submit" variant="primary" size="lg" icon="fa-check-circle">Sah & Simpan</x-app-button>
-                        <x-app-button variant="ghost" size="lg" href="{{ route('import-pdf.index') }}">Batal</x-app-button>
+                        <x-app-button type="submit" variant="primary" size="lg" icon="fa-check-circle">{{ __('imports.review.save') }}</x-app-button>
+                        <x-app-button variant="ghost" size="lg" href="{{ route('import-pdf.index') }}">{{ __('imports.review.cancel') }}</x-app-button>
                     </div>
                 </x-app-card>
             </form>

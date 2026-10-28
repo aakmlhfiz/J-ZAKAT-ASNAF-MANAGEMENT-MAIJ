@@ -1,15 +1,15 @@
 @extends('portal.layouts.app')
-@section('title', 'Imbas Borang Bantuan MAIJ — Portal Pemohon')
-@section('page-title', 'Imbas Borang Bantuan MAIJ')
+@section('title', __('ocr.scan.meta_title'))
+@section('page-title', __('ocr.scan.page_title'))
 
 @section('content')
 @php $user = auth('portal')->user(); @endphp
 
 <div class="max-w-4xl">
     <div class="mb-6">
-        <h1 class="text-title text-text">Imbas Borang Bantuan MAIJ</h1>
+        <h1 class="text-title text-text">{{ __('ocr.scan.title') }}</h1>
         <p class="text-body text-secondary mt-1">
-            Muat naik Borang Agihan Zakat rasmi MAIJ (PDF, JPG atau PNG). Sistem AI akan mengekstrak maklumat secara automatik, menjana skor kelayakan, dan menghantar permohonan untuk semakan.
+            {{ __('ocr.scan.intro') }}
         </p>
     </div>
 
@@ -17,14 +17,11 @@
         <div class="flex items-start gap-3 mb-5 p-4 rounded-[14px] bg-primary-soft/40 border border-primary/10">
             <i class="fa-solid fa-circle-info text-primary text-[14px] mt-0.5"></i>
             <div class="text-small text-text leading-relaxed">
-                <p class="font-semibold mb-1">Bagaimana ia berfungsi?</p>
+                <p class="font-semibold mb-1">{{ __('ocr.scan.how_title') }}</p>
                 <ol class="list-decimal ml-4 space-y-0.5 text-secondary">
-                    <li>Muat naik Borang Bantuan MAIJ (PDF, JPG atau PNG)</li>
-                    <li>Sistem mengekstrak teks menggunakan OCR + AI</li>
-                    <li>AI mengecam medan termasuk seksyen 5 (Maklumat Tambahan), 8 (Harta), 10 (Pendapatan & Perbelanjaan)</li>
-                    <li>Semak & sahkan maklumat yang diekstrak</li>
-                    <li>Sistem menjalankan penilaian Had Kifayah & menjana Skor AI</li>
-                    <li>Permohonan dihantar untuk semakan pentadbir</li>
+                    @foreach(__('ocr.scan.how_steps') as $step)
+                        <li>{{ $step }}</li>
+                    @endforeach
                 </ol>
             </div>
         </div>
@@ -46,8 +43,8 @@
                     <i class="fa-solid fa-file-contract text-primary text-[24px]"></i>
                 </div>
 
-                <p class="text-body text-text font-medium" x-text="fileName || 'Tarik Borang Bantuan MAIJ ke sini atau klik untuk pilih'"></p>
-                <p class="text-small text-secondary mt-2">Format disokong: PDF, JPG, PNG · Saiz maksimum: 10MB</p>
+                <p class="text-body text-text font-medium" x-text="fileName || @js(__('ocr.scan.drop_label'))"></p>
+                <p class="text-small text-secondary mt-2">{{ __('ocr.scan.formats') }}</p>
 
                 <div x-show="fileName" x-cloak class="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-pill bg-muted">
                     <i class="fa-solid fa-file text-primary text-[12px]"></i>
@@ -68,36 +65,36 @@
                     <template x-if="!uploading">
                         <span class="inline-flex items-center gap-2">
                             <i class="fa-solid fa-magic-wand-sparkles text-[14px]"></i>
-                            <span>Imbas & Ekstrak Maklumat</span>
+                            <span>{{ __('ocr.scan.extract_button') }}</span>
                         </span>
                     </template>
                     <template x-if="uploading">
                         <span class="inline-flex items-center gap-2">
                             <i class="fa-solid fa-spinner fa-spin text-[14px]"></i>
-                            <span>AI sedang memproses...</span>
+                            <span>{{ __('ocr.scan.processing') }}</span>
                         </span>
                     </template>
                 </button>
                 <a href="{{ route('user.applications.index') }}" class="btn btn-outline">
                     <i class="fa-solid fa-arrow-left text-[13px]"></i>
-                    <span>Kembali</span>
+                    <span>{{ __('ocr.scan.back') }}</span>
                 </a>
             </div>
 
             <div x-show="uploading" x-cloak class="mt-4 p-4 rounded-[14px] bg-primary-soft/40 border border-primary/15 text-small text-text">
                 <i class="fa-solid fa-circle-info text-primary mr-2"></i>
-                Pemprosesan boleh mengambil masa 10–60 saat. Jangan tutup tetingkap ini.
+                {{ __('ocr.scan.processing_hint') }}
             </div>
             <div x-show="uploadTimeout" x-cloak class="mt-4 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 text-small text-text">
                 <i class="fa-solid fa-triangle-exclamation text-warning mr-2"></i>
-                Pengesahan mengambil masa lebih lama daripada biasa. Anda boleh klik Kembali dan pergi — pemprosesan akan diteruskan di latar belakang.
+                {{ __('ocr.scan.timeout_warning') }}
             </div>
         </form>
     </x-app-card>
 
     @if($recent->isNotEmpty())
         <x-app-card class="p-6" :hover="false">
-            <h2 class="text-body font-semibold text-text mb-4">Imbas Terakhir</h2>
+            <h2 class="text-body font-semibold text-text mb-4">{{ __('ocr.scan.recent_title') }}</h2>
             <ul class="space-y-2">
                 @foreach($recent as $r)
                     <li class="flex items-center justify-between gap-3 p-3 rounded-[12px] hover:bg-muted transition-apple">
@@ -107,22 +104,22 @@
                             </div>
                             <div class="min-w-0">
                                 <p class="text-small font-medium text-text truncate">{{ $r->original_filename }}</p>
-                                <p class="text-eyebrow text-tertiary mt-0.5">{{ $r->created_at->format('d M Y, h:i A') }}</p>
+                                <p class="text-eyebrow text-tertiary mt-0.5">{{ $r->created_at->locale(app()->getLocale())->translatedFormat('d M Y, h:i A') }}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
                             @php
                                 $statusMap = [
-                                    'processing' => ['label' => 'Memproses', 'tone' => 'warning'],
-                                    'extracted' => ['label' => 'Diekstrak', 'tone' => 'success'],
-                                    'needs_review' => ['label' => 'Perlu Semakan', 'tone' => 'warning'],
-                                    'committed' => ['label' => 'Dihantar', 'tone' => 'success'],
-                                    'failed' => ['label' => 'Gagal', 'tone' => 'danger'],
+                                    'processing' => ['label' => __('imports.status.processing'), 'tone' => 'warning'],
+                                    'extracted' => ['label' => __('imports.status.extracted'), 'tone' => 'success'],
+                                    'needs_review' => ['label' => __('imports.status.needs_review'), 'tone' => 'warning'],
+                                    'committed' => ['label' => __('imports.status.sent'), 'tone' => 'success'],
+                                    'failed' => ['label' => __('imports.status.failed'), 'tone' => 'danger'],
                                 ];
                                 $meta = $statusMap[$r->status] ?? ['label' => $r->status, 'tone' => 'secondary'];
                             @endphp
                             <x-status-badge :status="$meta['tone']" size="sm">{{ $meta['label'] }}</x-status-badge>
-                            <a href="{{ route('user.applications.scan.preview', $r->id) }}" class="btn btn-sm btn-ghost">
+                            <a href="{{ route('user.applications.scan.preview', $r->id) }}" class="btn btn-sm btn-ghost" title="{{ __('ocr.scan.view_scan') }}">
                                 <i class="fa-solid fa-arrow-right text-[11px]"></i>
                             </a>
                         </div>
@@ -131,7 +128,6 @@
             </ul>
         </x-app-card>
     @endif
-</div>
 </div>
 @endsection
 

@@ -32,7 +32,7 @@ class ImportDuplicateDetectionService
                     $householdInfo = [
                         'household_id' => $h->household_id,
                         'id' => $h->id,
-                        'head_of_household' => $h->ketua?->nama ?? 'Unknown',
+                        'head_of_household' => $h->ketua?->nama ?? __('imports.duplicates.unknown'),
                         'total_members' => $h->total_members,
                         'member_count' => $h->members()->count(),
                         'member_relationship' => $householdMember->hubungan,
@@ -44,8 +44,8 @@ class ImportDuplicateDetectionService
                 $warnings[] = [
                     'type' => 'duplicate_ic',
                     'severity' => 'high',
-                    'title' => 'Existing Applicant Found',
-                    'description' => "{$nama} (IC: {$ic}) already exists in the system.",
+                    'title' => __('imports.duplicates.existing_applicant_title'),
+                    'description' => __('imports.duplicates.existing_applicant_description', ['name' => $nama, 'ic' => $ic]),
                     'details' => [
                         'existing_name' => $existingProfil->nama,
                         'status_kelayakan' => $existingProfil->status_kelayakan,
@@ -65,12 +65,16 @@ class ImportDuplicateDetectionService
                     $warnings[] = [
                         'type' => 'ic_in_household',
                         'severity' => 'high',
-                        'title' => 'IC Found in Existing Household',
-                        'description' => "This IC belongs to {$memberInHousehold->nama} in Household {$h->household_id} as {$memberInHousehold->hubungan}.",
+                        'title' => __('imports.duplicates.ic_in_household_title'),
+                        'description' => __('imports.duplicates.ic_in_household_description', [
+                            'name' => $memberInHousehold->nama,
+                            'household' => $h->household_id,
+                            'relationship' => $memberInHousehold->hubungan,
+                        ]),
                         'details' => [
                             'household_id' => $h->household_id,
                             'id' => $h->id,
-                            'head_of_household' => $h->ketua?->nama ?? 'Unknown',
+                            'head_of_household' => $h->ketua?->nama ?? __('imports.duplicates.unknown'),
                             'member_relationship' => $memberInHousehold->hubungan,
                             'total_members' => $h->total_members,
                         ],
@@ -91,8 +95,8 @@ class ImportDuplicateDetectionService
                 $warnings[] = [
                     'type' => 'duplicate_address',
                     'severity' => 'medium',
-                    'title' => 'Similar Address Detected',
-                    'description' => "Address matches {$addressMatches->count()} existing applicant(s): {$names}.",
+                    'title' => __('imports.duplicates.similar_address_title'),
+                    'description' => __('imports.duplicates.similar_address_description', ['count' => $addressMatches->count(), 'names' => $names]),
                     'details' => [
                         'matching_applicants' => $addressMatches->map(fn ($p) => ['nama' => $p->nama, 'ic' => $p->ic])->toArray(),
                     ],
@@ -112,8 +116,8 @@ class ImportDuplicateDetectionService
                 $warnings[] = [
                     'type' => 'active_assistance',
                     'severity' => 'medium',
-                    'title' => 'Active Assistance Detected',
-                    'description' => "This person currently receives: {$items}.",
+                    'title' => __('imports.duplicates.active_assistance_title'),
+                    'description' => __('imports.duplicates.active_assistance_description', ['items' => $items]),
                     'details' => [
                         'assistance_items' => $activeAssistance->map(fn ($a) => [
                             'jenis_bantuan' => $a->jenis_bantuan,
@@ -132,8 +136,8 @@ class ImportDuplicateDetectionService
                 $warnings[] = [
                     'type' => 'ketua_household_exists',
                     'severity' => 'low',
-                    'title' => 'Head of Household Found',
-                    'description' => "Head IC {$ic_ketua} has existing household {$ketuaHousehold->household->household_id}.",
+                    'title' => __('imports.duplicates.head_found_title'),
+                    'description' => __('imports.duplicates.head_found_description', ['ic' => $ic_ketua, 'household' => $ketuaHousehold->household->household_id]),
                     'details' => [
                         'household_id' => $ketuaHousehold->household->household_id,
                         'head_name' => $ketuaHousehold->nama,

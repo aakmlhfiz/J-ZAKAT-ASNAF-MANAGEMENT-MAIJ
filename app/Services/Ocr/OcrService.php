@@ -50,7 +50,7 @@ class OcrService
         if (! file_exists($filePath)) {
             $import->update([
                 'status' => 'failed',
-                'error_message' => 'Fail tidak dijumpai pada storan. Sila muat naik semula dokumen ini.',
+                'error_message' => __('ocr.errors.file_missing'),
             ]);
 
             return;
@@ -444,16 +444,14 @@ class OcrService
         $isPdf = ($import->mime_type ?? null) === 'application/pdf';
 
         if ($isPdf) {
-            return 'Tiada teks dapat diekstrak. PDF ini kemungkinan diimbas (imej) — ia memerlukan Tesseract/ImageMagick. '
-                .'Pasang Tesseract OCR dan/atau ImageMagick, kemudian cuba proses semula.';
+            return __('ocr.errors.no_text_pdf');
         }
 
         if (! TesseractExtractor::isAvailable()) {
-            return 'Tiada teks dapat diekstrak. Enjin OCR (Tesseract) tidak dipasang pada pelayan. '
-                .'Pasang Tesseract OCR (https://github.com/UB-Mannheim/tesseract/wiki) dan cuba semula.';
+            return __('ocr.errors.no_text_no_tesseract');
         }
 
-        return 'No text could be extracted from the file. The image may be too low quality or the PDF may not contain readable text.';
+        return __('ocr.errors.no_text_generic');
     }
 
     /**
@@ -482,10 +480,10 @@ class OcrService
     public function friendlyErrorMessage(\Throwable $e): string
     {
         if (! TesseractExtractor::isAvailable() && str_contains($e->getMessage(), 'Tesseract')) {
-            return 'Pemprosesan OCR gagal: enjin Tesseract tidak dipasang pada pelayan. Pasang Tesseract OCR dan cuba semula.';
+            return __('ocr.errors.tesseract_missing');
         }
 
-        return 'Pemprosesan OCR gagal semasa mengekstrak teks. Sila cuba proses semula atau muat naik dokumen yang lebih jelas.';
+        return __('ocr.errors.processing_failed');
     }
 
     /**

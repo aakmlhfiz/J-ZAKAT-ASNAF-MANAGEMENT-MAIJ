@@ -25,14 +25,14 @@ class OpenAiProvider implements AiProvider
 
         if (! $apiKey) {
             return [
-                'reply' => 'OpenAI provider is not configured. Set AI_OPENAI_API_KEY in .env and AI_PROVIDER=openai to enable real LLM responses.',
+                'reply' => __('ai.providers.openai.not_configured'),
                 'data' => ['type' => 'text', 'stub' => true],
             ];
         }
 
         // TODO: implement real OpenAI function-calling flow.
         return [
-            'reply' => '[OpenAI stub] Would call ChatGPT here with the system prompt and 5 tool definitions. See TODO in OpenAiProvider.',
+            'reply' => __('ai.providers.openai.stub'),
             'data' => ['type' => 'text', 'stub' => true],
         ];
     }

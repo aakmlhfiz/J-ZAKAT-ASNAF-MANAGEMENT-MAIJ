@@ -23,10 +23,15 @@ class ProfileController extends Controller
         $stats = [
             'login_count' => LoginLog::where('user_id', $userId)->successful()->count(),
             'last_login' => LoginLog::where('user_id', $userId)->successful()->latest()->first(),
-            'account_created_date' => $user->created_at->format('d M Y'),
-            'account_created_ago' => $user->created_at->diffForHumans(),
-            'role_label' => $user->roleLabel(),
-            'status_label' => $user->statusLabel(),
+            'account_created_date' => $user->created_at->locale(app()->getLocale())->translatedFormat('d M Y'),
+            'account_created_ago' => $user->created_at->locale(app()->getLocale())->diffForHumans(),
+            'role_label' => __('profile.hero.role_admin'),
+            'status_label' => match ($user->status) {
+                'active' => __('profile.status.active'),
+                'inactive' => __('profile.status.inactive'),
+                'suspended' => __('profile.status.suspended'),
+                default => $user->statusLabel(),
+            },
             'department' => $user->department ?? 'MAIJ',
         ];
 
@@ -81,7 +86,7 @@ class ProfileController extends Controller
             ActivityLogger::photoUploaded($user, $request);
         }
 
-        return back()->with('success', 'Gambar profil berjaya dikemaskini.');
+        return back()->with('success', __('profile.messages.photo_updated'));
     }
 
     public function updateInfo(Request $request)
@@ -112,7 +117,7 @@ class ProfileController extends Controller
             AuditLogger::profileUpdated($user, $request, $changes);
         }
 
-        return back()->with('success', 'Maklumat peribadi berjaya dikemaskini.');
+        return back()->with('success', __('profile.messages.info_updated'));
     }
 
     public function updatePassword(Request $request)
@@ -125,7 +130,7 @@ class ProfileController extends Controller
         $user = auth('web')->user();
 
         if (! Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Kata laluan semasa tidak tepat.'])->withInput();
+            return back()->withErrors(['current_password' => __('profile.messages.current_password_incorrect')])->withInput();
         }
 
         $user->password = Hash::make($request->password);
@@ -135,7 +140,7 @@ class ProfileController extends Controller
         ActivityLogger::passwordChanged($user, $request);
         AuditLogger::passwordChanged($user, $request);
 
-        return back()->with('success', 'Kata laluan berjaya ditukar.');
+        return back()->with('success', __('profile.messages.password_updated'));
     }
 
     public function updateSettings(Request $request)
@@ -186,10 +191,10 @@ class ProfileController extends Controller
         $valid = $service->enable($user, $request->code, $request);
 
         if (! $valid) {
-            return response()->json(['ok' => false, 'message' => 'Kod tidak sah. Sila cuba lagi.'], 422);
+            return response()->json(['ok' => false, 'message' => __('profile.messages.invalid_code')], 422);
         }
 
-        return response()->json(['ok' => true, 'message' => '2FA berjaya diaktifkan.']);
+        return response()->json(['ok' => true, 'message' => __('profile.messages.two_factor_enabled')]);
     }
 
     public function disableTwoFactor(Request $request)
@@ -198,13 +203,13 @@ class ProfileController extends Controller
         $user = auth('web')->user();
 
         if (! Hash::check($request->current_password, $user->password)) {
-            return response()->json(['ok' => false, 'message' => 'Kata laluan tidak tepat.'], 422);
+            return response()->json(['ok' => false, 'message' => __('profile.messages.password_incorrect')], 422);
         }
 
         $service = app(TwoFactorService::class);
         $service->disable($user, $request);
 
-        return response()->json(['ok' => true, 'message' => '2FA telah dinyahaktifkan.']);
+        return response()->json(['ok' => true, 'message' => __('profile.messages.two_factor_disabled')]);
     }
 
     public function downloadData()
@@ -234,20 +239,20 @@ class ProfileController extends Controller
             ->where('id', '!=', $currentSessionId)
             ->delete();
 
-        return response()->json(['ok' => true, 'message' => 'Semua peranti lain telah dilog keluar.']);
+        return response()->json(['ok' => true, 'message' => __('profile.messages.all_devices_logged_out')]);
     }
 
     private function permissionsForRole(): array
     {
         return [
-            ['label' => 'Dashboard', 'active' => true],
-            ['label' => 'Permohonan', 'active' => true],
-            ['label' => 'Semakan', 'active' => true],
-            ['label' => 'Laporan', 'active' => true],
-            ['label' => 'Tetapan', 'active' => true],
-            ['label' => 'Import CSV', 'active' => true],
-            ['label' => 'Had Kifayah', 'active' => true],
-            ['label' => 'AI Assistant', 'active' => true],
+            ['label' => __('profile.permissions.dashboard'), 'active' => true],
+            ['label' => __('profile.permissions.applications'), 'active' => true],
+            ['label' => __('profile.permissions.review'), 'active' => true],
+            ['label' => __('profile.permissions.reports'), 'active' => true],
+            ['label' => __('profile.permissions.settings'), 'active' => true],
+            ['label' => __('profile.permissions.import_csv'), 'active' => true],
+            ['label' => __('profile.permissions.had_kifayah'), 'active' => true],
+            ['label' => __('profile.permissions.ai_assistant'), 'active' => true],
         ];
     }
 }

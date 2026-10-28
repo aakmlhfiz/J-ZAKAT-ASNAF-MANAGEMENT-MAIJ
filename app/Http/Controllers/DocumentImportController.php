@@ -66,13 +66,13 @@ class DocumentImportController extends Controller
         $path = (string) config('ocr.document_intelligence.template_pdf');
 
         if (! $path || ! file_exists($path)) {
-            abort(404, 'Template borang tidak dijumpai.');
+            abort(404, __('imports.messages.pdf_template_missing'));
         }
 
         ActivityLog::create([
             'user_id' => auth('web')->id(),
             'activity' => 'ocr_template_downloaded',
-            'description' => 'Muat turun template borang MAIJ: '.basename($path),
+            'description' => __('imports.messages.pdf_template_activity', ['file' => basename($path)]),
             'ip_address' => $request->ip(),
         ]);
 
@@ -130,10 +130,10 @@ class DocumentImportController extends Controller
                 'in:generic,borang_bantuan_maij',
             ],
         ], [
-            'file.required' => 'Sila pilih fail untuk dimuat naik.',
-            'file.mimes' => 'Format fail tidak disokong. Sila muat naik PDF, JPG, atau PNG.',
-            'file.max' => 'Saiz fail melebihi had maksimum '.($maxSize / 1024).'MB.',
-            'document_type.in' => 'Jenis dokumen tidak sah.',
+            'file.required' => __('imports.messages.pdf_file_required'),
+            'file.mimes' => __('imports.messages.pdf_file_mimes'),
+            'file.max' => __('imports.messages.pdf_file_max', ['size' => $maxSize / 1024]),
+            'document_type.in' => __('imports.messages.pdf_document_type_invalid'),
         ]);
 
         if ($validator->fails()) {
@@ -150,12 +150,22 @@ class DocumentImportController extends Controller
             if (in_array($duplicate->status, ['extracted', 'needs_review'])) {
                 $route = route('import-pdf.preview', $duplicate->id);
 
-                return back()->with('info', "Fail ini telah dimuat naik sebelum ini. <a href=\"{$route}\" class=\"underline\">Lihat keputusan</a>.");
+                return back()->with('info', __('imports.messages.pdf_duplicate_info', ['url' => $route]));
             }
 
             $route = route('import-pdf.preview', $duplicate->id);
 
-            return back()->with('info', "Fail ini telah dimuat naik sebelumnya (status: {$duplicate->status}). <a href=\"{$route}\" class=\"underline\">Lihat rekod</a>.");
+            return back()->with('info', __('imports.messages.pdf_duplicate_previous', [
+                'status' => match ($duplicate->status) {
+                    'extracted' => __('imports.status.extracted'),
+                    'needs_review' => __('imports.status.needs_review'),
+                    'committed' => __('imports.status.committed'),
+                    'failed' => __('imports.status.failed'),
+                    'processing' => __('imports.status.processing'),
+                    default => $duplicate->status,
+                },
+                'url' => $route,
+            ]));
         }
 
         $ext = $file->getClientOriginalExtension();
@@ -204,8 +214,8 @@ class DocumentImportController extends Controller
         return redirect()
             ->route('import-pdf.preview', $import->id)
             ->with('success', $fastPath
-                ? 'Data berjaya diekstrak dari fail.'
-                : 'Fail sedang diproses. AI sedang mengekstrak data...');
+                ? __('imports.messages.pdf_extracted')
+                : __('imports.messages.pdf_processing_started'));
     }
 
     public function preview(string $id): View
@@ -298,7 +308,7 @@ class DocumentImportController extends Controller
         $import = DocumentImport::findOrFail($id);
 
         if (! in_array($import->status, ['extracted', 'needs_review'])) {
-            return response()->json(['error' => 'Data not ready for validation'], 400);
+            return response()->json(['error' => __('imports.messages.pdf_validation_not_ready')], 400);
         }
 
         $validationService = new ImportValidationService;
@@ -324,7 +334,7 @@ class DocumentImportController extends Controller
     {
         $ic = $request->get('ic');
         if (! $ic || strlen(preg_replace('/\D/', '', $ic)) < 12) {
-            return response()->json(['found' => false, 'error' => 'Invalid IC'], 400);
+            return response()->json(['found' => false, 'error' => __('imports.messages.pdf_invalid_ic')], 400);
         }
 
         $ic = preg_replace('/\D/', '', $ic);
@@ -343,12 +353,19 @@ class DocumentImportController extends Controller
         $import = DocumentImport::findOrFail($id);
 
         if (! in_array($import->status, ['extracted', 'needs_review'])) {
-            return back()->with('error', 'Data belum sedia diekstrak. Status: '.$import->status);
+            return back()->with('error', __('imports.messages.pdf_not_ready', ['status' => match ($import->status) {
+                'extracted' => __('imports.status.extracted'),
+                'needs_review' => __('imports.status.needs_review'),
+                'committed' => __('imports.status.committed'),
+                'failed' => __('imports.status.failed'),
+                'processing' => __('imports.status.processing'),
+                default => $import->status,
+            }]));
         }
 
         $hasCriticalLowConfidence = $this->checkLowConfidenceFields($import);
         if ($hasCriticalLowConfidence && ! $request->has('force_import')) {
-            return back()->with('error', 'Terdapat medan dengan keyakinan rendah (<30%). Sila semak dan edit sebelum menyimpan, atau tandakan "Paksa Simpan".');
+            return back()->with('error', __('imports.messages.pdf_low_confidence'));
         }
 
         $data = $request->validate([
@@ -396,7 +413,7 @@ class DocumentImportController extends Controller
 
             return back()->with(
                 'error',
-                "No. IC <strong>{$ic}</strong> ({$existingProfil->nama}) sudah wujud dalam sistem. <a href=\"{$profileLink}\" class=\"underline\">Lihat profil sedia ada</a>."
+                __('imports.messages.pdf_existing_profile', ['ic' => $ic, 'name' => $existingProfil->nama, 'url' => $profileLink])
             )->withInput();
         }
 
@@ -405,7 +422,17 @@ class DocumentImportController extends Controller
         if ($existingApplication && ! $request->has('force_import')) {
             return back()->with(
                 'error',
-                "Permohonan sedia ada dikesan untuk No. IC <strong>{$ic}</strong> (status: {$existingApplication->status}). Sila semak sebelum import."
+                __('imports.messages.pdf_existing_application', [
+                    'ic' => $ic,
+                    'status' => match ($existingApplication->status) {
+                        'draft' => __('imports.status.pending'),
+                        'submitted' => __('imports.status.sent'),
+                        'under_review' => __('common.status.dalam_semakan'),
+                        'approved' => __('common.status.layak'),
+                        'rejected' => __('common.status.tidak_layak'),
+                        default => $existingApplication->status,
+                    },
+                ])
             )->withInput();
         }
 
@@ -499,7 +526,7 @@ class DocumentImportController extends Controller
             DB::rollBack();
             report($e);
 
-            return back()->with('error', 'Ralat semasa menyimpan data: '.$e->getMessage())->withInput();
+            return back()->with('error', __('imports.messages.pdf_save_failed', ['error' => $e->getMessage()]))->withInput();
         }
 
         AuditLogger::pdfCommitted(auth('web')->user(), $import, $profil, $request);
@@ -507,8 +534,11 @@ class DocumentImportController extends Controller
         NotificationService::notifyRoles(
             ['admin', 'pegawai'],
             'pdf_imported',
-            'Import PDF berjaya',
-            "{$profil->nama} · ".now()->subMinutes(rand(0, 2))->diffForHumans(),
+            __('imports.messages.pdf_notification_title'),
+            __('imports.messages.pdf_notification_body', [
+                'name' => $profil->nama,
+                'time' => now()->subMinutes(rand(0, 2))->diffForHumans(),
+            ]),
             'fa-solid fa-file-pdf',
             'success',
             route('viewprofile', $profil->ic)
@@ -523,7 +553,7 @@ class DocumentImportController extends Controller
 
         return redirect()
             ->route('viewprofile', $profil->ic)
-            ->with('success', "Data berjaya disimpan. Keputusan: {$profil->status_kelayakan} (skor AI: {$profil->ai_score}%).");
+            ->with('success', __('imports.messages.pdf_committed', ['status' => $profil->status_kelayakan, 'score' => $profil->ai_score]));
     }
 
     public function reprocess(Request $request, string $id): RedirectResponse
@@ -534,7 +564,7 @@ class DocumentImportController extends Controller
         $import = DocumentImport::findOrFail($id);
 
         if ($import->status === 'committed') {
-            return back()->with('info', 'Rekod ini telah disimpan — tidak perlu diproses semula.');
+            return back()->with('info', __('imports.messages.pdf_already_committed'));
         }
 
         $import->update([
@@ -548,7 +578,7 @@ class DocumentImportController extends Controller
 
         return redirect()
             ->route('import-pdf.preview', $import->id)
-            ->with('success', 'Pemprosesan semula selesai.');
+            ->with('success', __('imports.messages.pdf_reprocessed'));
     }
 
     public function history(Request $request): View
@@ -598,7 +628,7 @@ class DocumentImportController extends Controller
         $disk = config('ocr.disk', 'local');
 
         if (! Storage::disk($disk)->exists($import->stored_path)) {
-            abort(404, 'Fail tidak dijumpai.');
+            abort(404, __('imports.messages.pdf_file_missing'));
         }
 
         return response()->file(
@@ -625,7 +655,7 @@ class DocumentImportController extends Controller
 
         return redirect()
             ->route('import-pdf.index')
-            ->with('success', 'Rekod import telah dipadam.');
+            ->with('success', __('imports.messages.pdf_deleted'));
     }
 
     private function checkLowConfidenceFields(DocumentImport $import): bool

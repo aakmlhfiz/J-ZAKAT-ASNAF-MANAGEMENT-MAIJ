@@ -35,7 +35,7 @@ class AiController extends Controller
             ]);
         } catch (ValidationException $e) {
             return response()->json([
-                'reply' => 'Sila taip soalan yang sah.',
+                'reply' => __('ai.errors.invalid_question'),
                 'data' => ['type' => 'text', 'error' => 'validation'],
                 'errors' => $e->errors(),
             ], 422);
@@ -49,7 +49,7 @@ class AiController extends Controller
             Log::error('AI chat failed', ['error' => $e->getMessage()]);
 
             return response()->json([
-                'reply' => 'Maaf, berlaku ralat semasa memproses permintaan AI. Sila cuba lagi sebentar.',
+                'reply' => __('ai.errors.server'),
                 'data' => ['type' => 'text', 'error' => 'server'],
             ], 500);
         }

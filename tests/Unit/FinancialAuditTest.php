@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Services\Ocr\DocumentIntelligence\FinancialAudit;
 use App\Services\Ocr\DocumentIntelligence\MaiFormTemplate;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class FinancialAuditTest extends TestCase
 {

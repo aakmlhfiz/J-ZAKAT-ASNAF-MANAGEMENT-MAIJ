@@ -2,12 +2,12 @@
 
 @php
     $statusLabel = match($status) {
-        'processing'   => 'Memproses...',
-        'extracted'    => 'Sedia untuk pratinjau',
-        'needs_review' => 'Perlu semakan manual',
-        'committed'    => 'Data disimpan',
-        'failed'       => 'Gagal',
-        default        => 'Menunggu',
+        'processing'   => __('imports.status.processing').'...',
+        'extracted'    => __('imports.status.ready'),
+        'needs_review' => __('imports.status.manual_review'),
+        'committed'    => __('imports.status.saved'),
+        'failed'       => __('imports.status.failed'),
+        default        => __('imports.status.pending'),
     };
     $statusIcon = match($status) {
         'processing'   => 'fa-spinner fa-spin-pulse',
@@ -33,12 +33,12 @@
             <i class="fa-solid {{ $statusIcon }} text-primary"></i>
         </div>
         <div>
-            <p class="text-body text-text font-semibold">Status Pengekstrakan</p>
+            <p class="text-body text-text font-semibold">{{ __('imports.preview.extraction_status') }}</p>
             <p class="text-small text-secondary">{{ $statusLabel }}</p>
         </div>
         @if($confidence !== null)
             <div class="ml-auto text-right">
-                <p class="text-eyebrow text-tertiary">Keyakinan</p>
+                <p class="text-eyebrow text-tertiary">{{ __('imports.preview.confidence') }}</p>
                 <p class="text-metric-sm text-text tabular-nums">{{ $confidence }}<span class="text-secondary text-body">%</span></p>
             </div>
         @endif
@@ -55,6 +55,6 @@
         <div class="h-2 bg-muted rounded-pill overflow-hidden">
             <div class="h-full bg-primary rounded-pill transition-all duration-700" style="width: {{ max(5, $progress) }}%"></div>
         </div>
-        <p class="text-eyebrow text-tertiary mt-2">AI sedang mengekstrak teks dan mengenal pasti medan...</p>
+        <p class="text-eyebrow text-tertiary mt-2">{{ __('imports.preview.extraction_processing') }}</p>
     @endif
 </x-app-card>

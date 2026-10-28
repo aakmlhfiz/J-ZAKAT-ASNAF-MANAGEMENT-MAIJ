@@ -27,15 +27,15 @@ class GetDashboardStatsTool extends AbstractTool
         $pctTidak = $total > 0 ? round(($tidak / $total) * 100, 1) : 0;
 
         return [
-            'reply' => 'Berikut adalah statistik pemohon semasa:',
+            'reply' => __('ai.tools.dashboard_stats.reply'),
             'data' => [
                 'type' => 'stats',
-                'title' => 'Statistik Pemohon',
+                'title' => __('ai.tools.dashboard_stats.title'),
                 'stats' => [
-                    ['label' => 'Jumlah Pemohon', 'value' => $total,    'color' => 'primary', 'pct' => '100%'],
-                    ['label' => 'Layak',          'value' => $layak,    'color' => 'success', 'pct' => "{$pctLayak}%"],
-                    ['label' => 'Tidak Layak',    'value' => $tidak,    'color' => 'danger',  'pct' => "{$pctTidak}%"],
-                    ['label' => 'Dalam Semakan',  'value' => $semakan,  'color' => 'warning', 'pct' => $total > 0 ? round(($semakan / $total) * 100, 1).'%' : '—'],
+                    ['label' => __('ai.tools.dashboard_stats.total'),        'value' => $total,    'color' => 'primary', 'pct' => '100%'],
+                    ['label' => __('ai.tools.dashboard_stats.eligible'),     'value' => $layak,    'color' => 'success', 'pct' => "{$pctLayak}%"],
+                    ['label' => __('ai.tools.dashboard_stats.not_eligible'), 'value' => $tidak,    'color' => 'danger',  'pct' => "{$pctTidak}%"],
+                    ['label' => __('ai.tools.dashboard_stats.under_review'), 'value' => $semakan,  'color' => 'warning', 'pct' => $total > 0 ? round(($semakan / $total) * 100, 1).'%' : '—'],
                 ],
             ],
         ];
@@ -43,7 +43,7 @@ class GetDashboardStatsTool extends AbstractTool
 
     public function label(): string
     {
-        return 'Statistik dashboard';
+        return __('ai.tools.dashboard_stats.label');
     }
 
     public function icon(): string

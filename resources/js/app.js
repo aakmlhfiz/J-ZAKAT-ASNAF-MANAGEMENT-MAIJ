@@ -92,7 +92,7 @@ document.addEventListener('alpine:init', () => {
                 this.messages.push({
                     id: Date.now() + 1,
                     role: 'ai',
-                    text: data.reply || '',
+                    text: data.reply || this.t('no_reply', 'Maaf, saya tidak dapat menjana jawapan buat masa ini.'),
                     data: data.data || { type: 'text' },
                     provider: data.provider,
                     time: this.now(),
@@ -102,7 +102,7 @@ document.addEventListener('alpine:init', () => {
             } catch (e) {
                 this.messages.push({
                     id: Date.now() + 1, role: 'ai',
-                    text: 'Maaf, berlaku ralat sambungan. Sila cuba lagi.',
+                    text: this.t('error', 'Maaf, berlaku ralat sambungan. Sila cuba lagi.'),
                     data: { type: 'text', error: true }, time: this.now(),
                 });
             } finally {
@@ -122,7 +122,30 @@ document.addEventListener('alpine:init', () => {
             if (el) { setTimeout(() => { el.scrollTop = el.scrollHeight; }, 30); }
         },
 
-        now() { return new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' }); },
+        now() {
+            const locale = (window.aiChatStrings && window.aiChatStrings.locale) === 'en' ? 'en-MY' : 'ms-MY';
+            return new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+        },
+
+        // Localized UI copy is injected by the ai-chat-widget Blade component.
+        aiStrings() { return window.aiChatStrings || {}; },
+        t(key, fallback) {
+            const s = this.aiStrings();
+            return s[key] !== undefined ? s[key] : fallback;
+        },
+        statusLabel(status) {
+            const s = this.aiStrings();
+            const map = {
+                'Layak': s.status_layak || 'Layak',
+                'Tidak Layak': s.status_tidak_layak || 'Tidak Layak',
+                'Dalam Semakan': s.status_dalam_semakan || 'Dalam Semakan',
+            };
+            return map[status] || status || '';
+        },
+        providerLabel() {
+            const providers = this.aiStrings().providers || {};
+            return providers[this.provider] || this.provider;
+        },
         escapeHtml(s) {
             return (s ?? '').toString()
                 .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -139,6 +162,8 @@ document.addEventListener('alpine:init', () => {
         renderData(d) {
             if (!d || !d.type) return '';
             const esc = (s) => this.escapeHtml(s);
+            const label = (key, fallback) => this.t(key, fallback);
+            const statusLabel = (status) => this.statusLabel(status);
             if (d.type === 'stats') {
                 const items = (d.stats || []).map((s) => {
                     const colorMap = { primary: 'bg-primary/10 text-primary', success: 'bg-success/10 text-success', danger: 'bg-danger/10 text-danger', warning: 'bg-warning/10 text-warning' };
@@ -149,13 +174,13 @@ document.addEventListener('alpine:init', () => {
                         ${s.pct ? `<p class="text-[10px] opacity-70 mt-1">${esc(s.pct)}</p>` : ''}
                     </div>`;
                 }).join('');
-                return `<h4 class="text-small font-semibold mb-2">${esc(d.title || 'Statistik')}</h4>
+                return `<h4 class="text-small font-semibold mb-2">${esc(d.title || label('card_stats', 'Statistik'))}</h4>
                         <div class="grid grid-cols-2 gap-2">${items}</div>`;
             }
             if (d.type === 'summary') {
                 const rows = Object.entries(d.fields || {}).map(([k, v]) => `<div class="flex items-baseline justify-between gap-3"><span class="text-secondary text-[11px] uppercase tracking-wider">${esc(k)}</span><span class="font-medium text-right">${esc(v)}</span></div>`).join('');
                 const reason = d.reason ? `<div class="mt-3 pt-3 border-t border-divider text-small"><i class="fa-solid fa-lightbulb text-warning mr-1.5"></i>${esc(d.reason)}</div>` : '';
-                return `<h4 class="text-small font-semibold mb-2">Profil Pemohon</h4>
+                return `<h4 class="text-small font-semibold mb-2">${esc(label('card_profile', 'Profil Pemohon'))}</h4>
                         <div class="space-y-1.5">${rows}</div>${reason}`;
             }
             if (d.type === 'checklist') {
@@ -167,9 +192,9 @@ document.addEventListener('alpine:init', () => {
                     const icon = ok ? 'fa-check text-success' : (bad ? 'fa-xmark text-danger' : 'fa-circle text-secondary');
                     return `<li class="flex items-start gap-2"><i class="fa-solid ${icon} text-[11px] mt-1 shrink-0"></i><span>${esc(it.replace(/^[✓✗○]\s*/, ''))}</span></li>`;
                 }).join('');
-                return `<h4 class="text-small font-semibold mb-2">${esc(d.title || 'Penjelasan')}</h4>
+                return `<h4 class="text-small font-semibold mb-2">${esc(d.title || label('card_explanation', 'Penjelasan'))}</h4>
                         ${d.status ? `<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-pill text-[11px] font-semibold mb-2 ${scls}">
-                            <span class="w-1.5 h-1.5 rounded-full bg-current"></span>${esc(d.status)}
+                            <span class="w-1.5 h-1.5 rounded-full bg-current"></span>${esc(statusLabel(d.status))}
                             ${d.confidence ? `<span class="text-secondary">· ${esc(d.confidence)}%</span>` : ''}
                         </div>` : ''}
                         <ul class="space-y-1.5">${items}</ul>`;
@@ -181,9 +206,9 @@ document.addEventListener('alpine:init', () => {
                     const [k, ...rest] = it.split(':');
                     return `<li class="flex items-baseline justify-between gap-2"><span class="text-secondary text-[11px]">${esc(k)}</span><span class="font-medium">${esc(rest.join(':').trim())}</span></li>`;
                 }).join('');
-                return `<h4 class="text-small font-semibold mb-2">${esc(d.title || 'Keputusan')}</h4>
+                return `<h4 class="text-small font-semibold mb-2">${esc(d.title || label('card_result', 'Keputusan'))}</h4>
                         ${d.status ? `<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-pill text-[11px] font-semibold mb-2 ${scls}">
-                            <span class="w-1.5 h-1.5 rounded-full bg-current"></span>${esc(d.status)} · Skor AI ${esc(d.ai_score ?? d.confidence ?? 0)}%
+                            <span class="w-1.5 h-1.5 rounded-full bg-current"></span>${esc(statusLabel(d.status))} · ${esc(label('card_ai_score', 'Skor AI'))} ${esc(d.ai_score ?? d.confidence ?? 0)}%
                         </div>` : ''}
                         <ul class="space-y-1">${items}</ul>`;
             }
@@ -194,14 +219,15 @@ document.addEventListener('alpine:init', () => {
                         <p class="text-[10px] text-secondary">${esc(r.ic)}</p>
                     </div>
                 </li>`).join('');
-                return `<h4 class="text-small font-semibold mb-2">Hasil Carian (${esc(d.count)})</h4><ul class="space-y-1">${items}</ul>`;
+                const heading = label('card_search_results', 'Hasil Carian (:count)').replace(':count', esc(d.count));
+                return `<h4 class="text-small font-semibold mb-2">${esc(heading)}</h4><ul class="space-y-1">${items}</ul>`;
             }
             if (d.type === 'suggestions') {
                 const items = (d.suggestions || []).map((s) => `<button type="button" @click="draft = ${esc(JSON.stringify(s.prompt))}; $dispatch('ai-send')" class="w-full text-left px-3 py-2 surface flex items-center gap-2.5 hover:border-primary transition-apple">
                     <span class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0"><i class="fa-solid ${esc(s.icon)} text-[10px]"></i></span>
                     <span class="text-small font-medium truncate flex-1">${esc(s.label)}</span>
                 </button>`).join('');
-                return `<h4 class="text-small font-semibold mb-2">Cuba tanya saya</h4><div class="grid grid-cols-1 gap-1.5">${items}</div>`;
+                return `<h4 class="text-small font-semibold mb-2">${esc(label('card_suggestions', 'Cuba tanya saya'))}</h4><div class="grid grid-cols-1 gap-1.5">${items}</div>`;
             }
             return '';
         },

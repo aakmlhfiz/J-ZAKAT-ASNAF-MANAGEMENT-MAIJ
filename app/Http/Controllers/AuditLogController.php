@@ -93,9 +93,19 @@ class AuditLogController extends Controller
         return response()->streamDownload(function () use ($query) {
             $out = fopen('php://output', 'w');
             fputcsv($out, [
-                'ID', 'Created At', 'User ID', 'User Role', 'User Email',
-                'Category', 'Action', 'Description', 'IP Address', 'Browser',
-                'Device', 'OS', 'Metadata',
+                __('audit.export.id'),
+                __('audit.export.created_at'),
+                __('audit.export.user_id'),
+                __('audit.export.user_role'),
+                __('audit.export.user_email'),
+                __('audit.export.category'),
+                __('audit.export.action'),
+                __('audit.export.description'),
+                __('audit.export.ip_address'),
+                __('audit.export.browser'),
+                __('audit.export.device'),
+                __('audit.export.os'),
+                __('audit.export.metadata'),
             ]);
             $query->latest('created_at')->chunk(500, function ($rows) use ($out) {
                 foreach ($rows as $r) {

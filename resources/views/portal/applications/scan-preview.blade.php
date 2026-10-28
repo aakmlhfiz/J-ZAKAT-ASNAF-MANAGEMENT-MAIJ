@@ -1,6 +1,6 @@
 @extends('portal.layouts.app')
-@section('title', 'Pratinjau Imbas Borang — Portal Pemohon')
-@section('page-title', 'Pratinjau Imbas Borang')
+@section('title', __('ocr.preview.meta_title'))
+@section('page-title', __('ocr.preview.page_title'))
 
 @section('content')
 @php
@@ -14,43 +14,43 @@
     $application = $application ?? null;
 
     $fieldDefs = [
-        ['field' => 'nama', 'label' => 'Nama Pemohon', 'icon' => 'fa-user', 'type' => 'text', 'category' => 'Maklumat Pemohon'],
-        ['field' => 'ic', 'label' => 'No. Kad Pengenalan', 'icon' => 'fa-id-card', 'type' => 'text', 'category' => 'Maklumat Pemohon'],
-        ['field' => 'status_perkahwinan', 'label' => 'Status Perkahwinan', 'icon' => 'fa-ring', 'type' => 'text', 'category' => 'Maklumat Pemohon'],
-        ['field' => 'merokok', 'label' => 'Merokok', 'icon' => 'fa-smoking', 'type' => 'text', 'category' => 'Maklumat Pemohon'],
-        ['field' => 'telefon', 'label' => 'No. Telefon', 'icon' => 'fa-phone', 'type' => 'text', 'category' => 'Maklumat Hubungan'],
-        ['field' => 'no_telefon_bimbit', 'label' => 'No. Telefon Bimbit', 'icon' => 'fa-mobile-screen', 'type' => 'text', 'category' => 'Maklumat Hubungan'],
-        ['field' => 'no_telefon_rumah', 'label' => 'No. Telefon Rumah', 'icon' => 'fa-phone', 'type' => 'text', 'category' => 'Maklumat Hubungan'],
-        ['field' => 'alamat', 'label' => 'Alamat', 'icon' => 'fa-location-dot', 'type' => 'text', 'category' => 'Maklumat Alamat'],
-        ['field' => 'daerah', 'label' => 'Daerah', 'icon' => 'fa-map', 'type' => 'text', 'category' => 'Maklumat Alamat'],
-        ['field' => 'bandar', 'label' => 'Bandar', 'icon' => 'fa-city', 'type' => 'text', 'category' => 'Maklumat Alamat'],
-        ['field' => 'poskod', 'label' => 'Poskod', 'icon' => 'fa-hashtag', 'type' => 'text', 'category' => 'Maklumat Alamat'],
-        ['field' => 'dun', 'label' => 'DUN', 'icon' => 'fa-landmark', 'type' => 'text', 'category' => 'Maklumat Alamat'],
-        ['field' => 'parlimen', 'label' => 'Parlimen', 'icon' => 'fa-landmark', 'type' => 'text', 'category' => 'Maklumat Alamat'],
-        ['field' => 'pendapatan', 'label' => 'Pendapatan Bulanan (RM)', 'icon' => 'fa-money-bill', 'type' => 'number', 'category' => 'Maklumat Kewangan'],
-        ['field' => 'bilangan_tanggungan', 'label' => 'Bilangan Tanggungan', 'icon' => 'fa-people-group', 'type' => 'number', 'category' => 'Maklumat Kewangan'],
-        ['field' => 'sewa', 'label' => 'Sewa Rumah (RM)', 'icon' => 'fa-house', 'type' => 'number', 'category' => 'Maklumat Kewangan'],
-        ['field' => 'utiliti', 'label' => 'Bil Utiliti (RM)', 'icon' => 'fa-bolt', 'type' => 'number', 'category' => 'Maklumat Kewangan'],
-        ['field' => 'pengangkutan', 'label' => 'Pengangkutan (RM)', 'icon' => 'fa-car-side', 'type' => 'number', 'category' => 'Maklumat Kewangan'],
-        ['field' => 'perubatan', 'label' => 'Perubatan (RM)', 'icon' => 'fa-briefcase-medical', 'type' => 'number', 'category' => 'Maklumat Kewangan'],
-        ['field' => 'bantuan_sara_hidup', 'label' => 'Bantuan Sara Hidup', 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => 'Jenis Bantuan'],
-        ['field' => 'bantuan_perubatan', 'label' => 'Bantuan Perubatan', 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => 'Jenis Bantuan'],
-        ['field' => 'bantuan_berdikari', 'label' => 'Bantuan Berdikari', 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => 'Jenis Bantuan'],
-        ['field' => 'bantuan_perumahan', 'label' => 'Bantuan Perumahan', 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => 'Jenis Bantuan'],
-        ['field' => 'menjelaskan_hutang', 'label' => 'Menjelaskan Hutang', 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => 'Jenis Bantuan'],
-        ['field' => 'perubatan_jenis_rawatan', 'label' => 'Jenis Rawatan Perubatan', 'icon' => 'fa-briefcase-medical', 'type' => 'text', 'category' => 'Borang MAIJ §5B'],
-        ['field' => 'perubatan_jenis_penyakit', 'label' => 'Jenis Penyakit', 'icon' => 'fa-virus', 'type' => 'text', 'category' => 'Borang MAIJ §5B'],
-        ['field' => 'perubatan_kos_rawatan', 'label' => 'Kos Rawatan (RM)', 'icon' => 'fa-money-bill', 'type' => 'text', 'category' => 'Borang MAIJ §5B'],
-        ['field' => 'jenis_bantuan_perumahan', 'label' => 'Bantuan Perumahan (Bina Baru/Baik Pulih)', 'icon' => 'fa-house-medical', 'type' => 'text', 'category' => 'Borang MAIJ §5D'],
-        ['field' => 'status_tanah', 'label' => 'Status Tanah', 'icon' => 'fa-vector-square', 'type' => 'text', 'category' => 'Borang MAIJ §5D'],
-        ['field' => 'jumlah_hutang', 'label' => 'Jumlah Hutang (RM)', 'icon' => 'fa-money-bill', 'type' => 'text', 'category' => 'Borang MAIJ §5E'],
-        ['field' => 'harta_rumah', 'label' => 'Harta: Rumah', 'icon' => 'fa-house', 'type' => 'text', 'category' => 'Borang MAIJ §8'],
-        ['field' => 'harta_kereta', 'label' => 'Harta: Kereta', 'icon' => 'fa-car', 'type' => 'text', 'category' => 'Borang MAIJ §8'],
-        ['field' => 'harta_motosikal', 'label' => 'Harta: Motosikal', 'icon' => 'fa-motorcycle', 'type' => 'text', 'category' => 'Borang MAIJ §8'],
-        ['field' => 'pendapatan_diri', 'label' => 'Pendapatan: Diri (RM)', 'icon' => 'fa-user', 'type' => 'text', 'category' => 'Borang MAIJ §10'],
-        ['field' => 'pendapatan_pencen_perkeso', 'label' => 'Pendapatan: Pencen/PERKESO (RM)', 'icon' => 'fa-hand-holding-usd', 'type' => 'text', 'category' => 'Borang MAIJ §10'],
-        ['field' => 'perbelanjaan_makan_minum', 'label' => 'Perbelanjaan: Makan/Minum (RM)', 'icon' => 'fa-utensils', 'type' => 'text', 'category' => 'Borang MAIJ §10'],
-        ['field' => 'perbelanjaan_sewa_ansuran', 'label' => 'Perbelanjaan: Sewa/Ansuran (RM)', 'icon' => 'fa-house-crack', 'type' => 'text', 'category' => 'Borang MAIJ §10'],
+        ['field' => 'nama', 'label' => __('imports.field_labels.nama'), 'icon' => 'fa-user', 'type' => 'text', 'category' => __('imports.categories.applicant')],
+        ['field' => 'ic', 'label' => __('imports.field_labels.ic'), 'icon' => 'fa-id-card', 'type' => 'text', 'category' => __('imports.categories.applicant')],
+        ['field' => 'status_perkahwinan', 'label' => __('imports.field_labels.status_perkahwinan'), 'icon' => 'fa-ring', 'type' => 'text', 'category' => __('imports.categories.applicant')],
+        ['field' => 'merokok', 'label' => __('imports.field_labels.merokok'), 'icon' => 'fa-smoking', 'type' => 'text', 'category' => __('imports.categories.applicant')],
+        ['field' => 'telefon', 'label' => __('imports.field_labels.telefon'), 'icon' => 'fa-phone', 'type' => 'text', 'category' => __('imports.categories.contact')],
+        ['field' => 'no_telefon_bimbit', 'label' => __('imports.field_labels.no_telefon_bimbit'), 'icon' => 'fa-mobile-screen', 'type' => 'text', 'category' => __('imports.categories.contact')],
+        ['field' => 'no_telefon_rumah', 'label' => __('imports.field_labels.no_telefon_rumah'), 'icon' => 'fa-phone', 'type' => 'text', 'category' => __('imports.categories.contact')],
+        ['field' => 'alamat', 'label' => __('imports.field_labels.alamat'), 'icon' => 'fa-location-dot', 'type' => 'text', 'category' => __('imports.categories.address')],
+        ['field' => 'daerah', 'label' => __('imports.field_labels.daerah'), 'icon' => 'fa-map', 'type' => 'text', 'category' => __('imports.categories.address')],
+        ['field' => 'bandar', 'label' => __('imports.field_labels.bandar'), 'icon' => 'fa-city', 'type' => 'text', 'category' => __('imports.categories.address')],
+        ['field' => 'poskod', 'label' => __('imports.field_labels.poskod'), 'icon' => 'fa-hashtag', 'type' => 'text', 'category' => __('imports.categories.address')],
+        ['field' => 'dun', 'label' => __('imports.field_labels.dun'), 'icon' => 'fa-landmark', 'type' => 'text', 'category' => __('imports.categories.address')],
+        ['field' => 'parlimen', 'label' => __('imports.field_labels.parlimen'), 'icon' => 'fa-landmark', 'type' => 'text', 'category' => __('imports.categories.address')],
+        ['field' => 'pendapatan', 'label' => __('imports.field_labels.pendapatan'), 'icon' => 'fa-money-bill', 'type' => 'number', 'category' => __('imports.categories.financial')],
+        ['field' => 'bilangan_tanggungan', 'label' => __('imports.field_labels.bilangan_tanggungan'), 'icon' => 'fa-people-group', 'type' => 'number', 'category' => __('imports.categories.financial')],
+        ['field' => 'sewa', 'label' => __('imports.field_labels.sewa'), 'icon' => 'fa-house', 'type' => 'number', 'category' => __('imports.categories.financial')],
+        ['field' => 'utiliti', 'label' => __('imports.field_labels.utiliti'), 'icon' => 'fa-bolt', 'type' => 'number', 'category' => __('imports.categories.financial')],
+        ['field' => 'pengangkutan', 'label' => __('imports.field_labels.pengangkutan'), 'icon' => 'fa-car-side', 'type' => 'number', 'category' => __('imports.categories.financial')],
+        ['field' => 'perubatan', 'label' => __('imports.field_labels.perubatan'), 'icon' => 'fa-briefcase-medical', 'type' => 'number', 'category' => __('imports.categories.financial')],
+        ['field' => 'bantuan_sara_hidup', 'label' => __('imports.field_labels.bantuan_sara_hidup'), 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => __('imports.categories.assistance')],
+        ['field' => 'bantuan_perubatan', 'label' => __('imports.field_labels.bantuan_perubatan'), 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => __('imports.categories.assistance')],
+        ['field' => 'bantuan_berdikari', 'label' => __('imports.field_labels.bantuan_berdikari'), 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => __('imports.categories.assistance')],
+        ['field' => 'bantuan_perumahan', 'label' => __('imports.field_labels.bantuan_perumahan'), 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => __('imports.categories.assistance')],
+        ['field' => 'menjelaskan_hutang', 'label' => __('imports.field_labels.menjelaskan_hutang'), 'icon' => 'fa-hand-holding-heart', 'type' => 'text', 'category' => __('imports.categories.assistance')],
+        ['field' => 'perubatan_jenis_rawatan', 'label' => __('imports.field_labels.perubatan_jenis_rawatan'), 'icon' => 'fa-briefcase-medical', 'type' => 'text', 'category' => __('imports.categories.maij_5b')],
+        ['field' => 'perubatan_jenis_penyakit', 'label' => __('imports.field_labels.perubatan_jenis_penyakit'), 'icon' => 'fa-virus', 'type' => 'text', 'category' => __('imports.categories.maij_5b')],
+        ['field' => 'perubatan_kos_rawatan', 'label' => __('imports.field_labels.perubatan_kos_rawatan'), 'icon' => 'fa-money-bill', 'type' => 'text', 'category' => __('imports.categories.maij_5b')],
+        ['field' => 'jenis_bantuan_perumahan', 'label' => __('imports.field_labels.jenis_bantuan_perumahan'), 'icon' => 'fa-house-medical', 'type' => 'text', 'category' => __('imports.categories.maij_5d')],
+        ['field' => 'status_tanah', 'label' => __('imports.field_labels.status_tanah'), 'icon' => 'fa-vector-square', 'type' => 'text', 'category' => __('imports.categories.maij_5d')],
+        ['field' => 'jumlah_hutang', 'label' => __('imports.field_labels.jumlah_hutang'), 'icon' => 'fa-money-bill', 'type' => 'text', 'category' => __('imports.categories.maij_5e')],
+        ['field' => 'harta_rumah', 'label' => __('imports.field_labels.harta_rumah'), 'icon' => 'fa-house', 'type' => 'text', 'category' => __('imports.categories.maij_8')],
+        ['field' => 'harta_kereta', 'label' => __('imports.field_labels.harta_kereta'), 'icon' => 'fa-car', 'type' => 'text', 'category' => __('imports.categories.maij_8')],
+        ['field' => 'harta_motosikal', 'label' => __('imports.field_labels.harta_motosikal'), 'icon' => 'fa-motorcycle', 'type' => 'text', 'category' => __('imports.categories.maij_8')],
+        ['field' => 'pendapatan_diri', 'label' => __('imports.field_labels.pendapatan_diri'), 'icon' => 'fa-user', 'type' => 'text', 'category' => __('imports.categories.maij_10')],
+        ['field' => 'pendapatan_pencen_perkeso', 'label' => __('imports.field_labels.pendapatan_pencen_perkeso'), 'icon' => 'fa-hand-holding-usd', 'type' => 'text', 'category' => __('imports.categories.maij_10')],
+        ['field' => 'perbelanjaan_makan_minum', 'label' => __('imports.field_labels.perbelanjaan_makan_minum'), 'icon' => 'fa-utensils', 'type' => 'text', 'category' => __('imports.categories.maij_10')],
+        ['field' => 'perbelanjaan_sewa_ansuran', 'label' => __('imports.field_labels.perbelanjaan_sewa_ansuran'), 'icon' => 'fa-house-crack', 'type' => 'text', 'category' => __('imports.categories.maij_10')],
     ];
 
     $groupedFields = [];
@@ -74,12 +74,12 @@
 <div class="max-w-4xl">
     <div class="mb-5 flex items-center justify-between gap-3 flex-wrap">
         <div>
-            <h1 class="text-title text-text">Pratinjau Imbas Borang</h1>
+            <h1 class="text-title text-text">{{ __('ocr.preview.title') }}</h1>
             <p class="text-small text-secondary mt-1">{{ $import->original_filename }}</p>
         </div>
         <a href="{{ route('user.applications.scan.index') }}" class="btn btn-outline btn-sm">
             <i class="fa-solid fa-arrow-left text-[12px]"></i>
-            <span>Imbas Lain</span>
+            <span>{{ __('ocr.preview.scan_another') }}</span>
         </a>
     </div>
 
@@ -88,7 +88,7 @@
             <div class="flex items-start gap-3" style="color: var(--color-danger);">
                 <i class="fa-solid fa-circle-exclamation text-[18px] mt-0.5"></i>
                 <div>
-                    <p class="text-body font-semibold">Imbas Gagal</p>
+                    <p class="text-body font-semibold">{{ __('ocr.preview.error_title') }}</p>
                     <p class="text-small text-secondary mt-1">{{ $error }}</p>
                 </div>
             </div>
@@ -100,21 +100,21 @@
             <div class="w-16 h-16 mx-auto rounded-full bg-primary-soft flex items-center justify-center mb-4">
                 <i class="fa-solid fa-spinner fa-spin text-primary text-[24px]"></i>
             </div>
-            <h2 class="text-body font-semibold text-text">AI Sedang Mengekstrak Borang...</h2>
-            <p class="text-small text-secondary mt-2">Sila tunggu sebentar. Proses ini mengambil masa 10-30 saat.</p>
+            <h2 class="text-body font-semibold text-text">{{ __('ocr.preview.processing_title') }}</h2>
+            <p class="text-small text-secondary mt-2">{{ __('ocr.preview.processing_text') }}</p>
             <div class="mt-6 max-w-xs mx-auto h-2 bg-muted rounded-pill overflow-hidden">
                 <div class="h-full bg-primary transition-all duration-300" :style="`width: ${progress}%`"></div>
             </div>
 
             <div x-show="elapsed >= 20" x-cloak class="mt-8 p-5 rounded-[16px] bg-warning-soft/40 border border-warning/20 max-w-md mx-auto">
-                <p class="text-body font-semibold text-text">Pemprosesan mengambil masa lama.</p>
-                <p class="text-small text-secondary mt-1">Jika ia tidak selesai, pastikan enjin OCR (Tesseract) dipasang dan pekerja queue sedang berjalan:
+                <p class="text-body font-semibold text-text">{{ __('ocr.preview.slow_title') }}</p>
+                <p class="text-small text-secondary mt-1">{{ __('ocr.preview.slow_text') }}
                     <code class="font-mono">php artisan queue:work</code></p>
                 <form method="POST" action="{{ route('user.applications.scan.reprocess', $import->id) }}" class="mt-4">
                     @csrf
                     <button type="submit" class="btn btn-warning">
                         <i class="fa-solid fa-rotate text-[13px]"></i>
-                        <span>Cuba Semula</span>
+                        <span>{{ __('ocr.preview.retry') }}</span>
                     </button>
                 </form>
             </div>
@@ -126,14 +126,14 @@
                     <i class="fa-solid fa-check-circle text-success text-[20px]"></i>
                 </div>
                 <div class="flex-1">
-                    <h2 class="text-body font-semibold text-text">Borang Berjaya Dihantar</h2>
+                    <h2 class="text-body font-semibold text-text">{{ __('ocr.preview.committed_title') }}</h2>
                     <p class="text-small text-secondary mt-1">
-                        Permohonan anda telah dihantar untuk semakan pentadbir. Skor AI & status kelayakan telah dijana secara automatik.
+                        {{ __('ocr.preview.committed_text') }}
                     </p>
                     @if($application)
                         <a href="{{ route('user.applications.show', $application->id) }}" class="btn btn-primary btn-sm mt-3">
                             <i class="fa-solid fa-arrow-right text-[12px]"></i>
-                            <span>Lihat Permohonan</span>
+                            <span>{{ __('ocr.preview.view_application') }}</span>
                         </a>
                     @endif
                 </div>
@@ -147,13 +147,13 @@
                         <i class="fa-solid fa-magnifying-glass text-primary text-[14px]"></i>
                     </div>
                     <div>
-                        <p class="text-small font-semibold text-text">Keyakinan Pengekstrakan AI</p>
-                        <p class="text-eyebrow text-tertiary mt-0.5">{{ number_format($confidence, 1) }}% · Sila semak & sahkan maklumat di bawah</p>
+                        <p class="text-small font-semibold text-text">{{ __('ocr.preview.confidence_title') }}</p>
+                        <p class="text-eyebrow text-tertiary mt-0.5">{{ __('ocr.preview.confidence_hint', ['confidence' => number_format($confidence, 1)]) }}</p>
                     </div>
                 </div>
                 @php
                     $tone = $confidence >= 80 ? 'success' : ($confidence >= 50 ? 'warning' : 'danger');
-                    $label = $confidence >= 80 ? 'Tinggi' : ($confidence >= 50 ? 'Sederhana' : 'Rendah');
+                    $label = $confidence >= 80 ? __('ocr.preview.confidence_high') : ($confidence >= 50 ? __('ocr.preview.confidence_medium') : __('ocr.preview.confidence_low'));
                 @endphp
                 <x-status-badge :status="$tone">{{ $label }}</x-status-badge>
             </div>
@@ -163,49 +163,49 @@
             @csrf
 
             <x-app-card class="p-6 mb-5" :hover="false">
-                <h2 class="text-body font-semibold text-text mb-4">Maklumat Utama (Sila Sahkan)</h2>
+                <h2 class="text-body font-semibold text-text mb-4">{{ __('ocr.preview.main_title') }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">Nama Penuh <span class="text-danger">*</span></label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.full_name') }} <span class="text-danger">*</span></label>
                         <input type="text" name="full_name" value="{{ old('full_name', $valueFor('nama')) }}" required
                             class="input-base w-full @error('full_name') input-error @enderror">
                         @error('full_name') <p class="text-small text-danger mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">No. Kad Pengenalan <span class="text-danger">*</span></label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.ic_no') }} <span class="text-danger">*</span></label>
                         <input type="text" name="ic_no" value="{{ old('ic_no', $valueFor('ic')) }}" required maxlength="14"
                             class="input-base w-full @error('ic_no') input-error @enderror">
                         @error('ic_no') <p class="text-small text-danger mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">No. Telefon <span class="text-danger">*</span></label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.phone') }} <span class="text-danger">*</span></label>
                         <input type="text" name="phone" value="{{ old('phone', $valueFor('no_telefon_bimbit') ?? $valueFor('telefon')) }}" required
                             class="input-base w-full @error('phone') input-error @enderror">
                         @error('phone') <p class="text-small text-danger mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">E-mel <span class="text-danger">*</span></label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.email') }} <span class="text-danger">*</span></label>
                         <input type="email" name="email" value="{{ old('email', $user->email) }}" required
                             class="input-base w-full @error('email') input-error @enderror">
                         @error('email') <p class="text-small text-danger mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">Bilangan Ahli Rumah <span class="text-danger">*</span></label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.household_count') }} <span class="text-danger">*</span></label>
                         <input type="number" name="household_count" value="{{ old('household_count', $valueFor('bilangan_tanggungan') ?: 1) }}" required min="1" max="20"
                             class="input-base w-full @error('household_count') input-error @enderror">
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">Pendapatan Bulanan (RM) <span class="text-danger">*</span></label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.monthly_income') }} <span class="text-danger">*</span></label>
                         <input type="number" name="monthly_income" value="{{ old('monthly_income', $valueFor('pendapatan')) }}" required min="0" step="0.01"
                             class="input-base w-full @error('monthly_income') input-error @enderror">
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">Pendapatan Pasangan (RM)</label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.spouse_income') }}</label>
                         <input type="number" name="spouse_income" value="{{ old('spouse_income', $valueFor('pendapatan_pasangan') ?: 0) }}" min="0" step="0.01"
                             class="input-base w-full">
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">Pekerjaan</label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.occupation') }}</label>
                         <input type="text" name="occupation" value="{{ old('occupation', $valueFor('pekerjaan_pemohon_jawatan')) }}"
                             class="input-base w-full">
                     </div>
@@ -213,41 +213,32 @@
             </x-app-card>
 
             <x-app-card class="p-6 mb-5" :hover="false">
-                <h2 class="text-body font-semibold text-text mb-4">Alamat</h2>
+                <h2 class="text-body font-semibold text-text mb-4">{{ __('ocr.preview.address_title') }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="sm:col-span-3">
-                        <label class="block text-small font-medium text-text mb-1.5">Alamat</label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.address') }}</label>
                         <input type="text" name="address" value="{{ old('address', $valueFor('alamat')) }}" class="input-base w-full">
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">Daerah</label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.district') }}</label>
                         <input type="text" name="district" value="{{ old('district', $valueFor('daerah')) }}" class="input-base w-full">
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">Negeri</label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.state') }}</label>
                         <input type="text" name="state" value="{{ old('state') }}" class="input-base w-full">
                     </div>
                     <div>
-                        <label class="block text-small font-medium text-text mb-1.5">Poskod</label>
+                        <label class="block text-small font-medium text-text mb-1.5">{{ __('ocr.preview.postcode') }}</label>
                         <input type="text" name="postcode" value="{{ old('postcode', $valueFor('poskod')) }}" maxlength="5" class="input-base w-full">
                     </div>
                 </div>
             </x-app-card>
 
             <x-app-card class="p-6 mb-5" :hover="false">
-                <h2 class="text-body font-semibold text-text mb-1">Maklumat Tambahan (Borang MAIJ)</h2>
-                <p class="text-small text-secondary mb-4">Maklumat ini diekstrak secara automatik dari Borang Agihan Zakat. Sebahagian daripadanya akan disimpan dalam profil bantuan.</p>
+                <h2 class="text-body font-semibold text-text mb-1">{{ __('ocr.preview.additional_title') }}</h2>
+                <p class="text-small text-secondary mb-4">{{ __('ocr.preview.additional_description') }}</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    @foreach([
-                        'jumlah_sara_hidup' => 'Jumlah Sara Hidup (RM)',
-                        'perubatan_jenis_penyakit' => 'Jenis Penyakit',
-                        'perubatan_tempat_rawatan' => 'Tempat Rawatan',
-                        'perubatan_kos_rawatan' => 'Kos Rawatan (RM)',
-                        'jenis_bantuan_perumahan' => 'Bantuan Perumahan',
-                        'status_tanah' => 'Status Tanah',
-                        'jumlah_hutang' => 'Jumlah Hutang (RM)',
-                        'sebab_memohon_bantuan' => 'Sebab Memohon',
-                    ] as $field => $label)
+                    @foreach(__('ocr.preview.additional_fields') as $field => $label)
                         @if($valueFor($field))
                             <div class="p-3 rounded-[12px] bg-muted/50">
                                 <p class="text-eyebrow text-tertiary">{{ $label }}</p>
@@ -257,7 +248,7 @@
                     @endforeach
                 </div>
                 @if(empty(array_filter(array_map($valueFor, ['jumlah_sara_hidup', 'perubatan_jenis_penyakit', 'perubatan_kos_rawatan', 'jenis_bantuan_perumahan', 'jumlah_hutang']))))
-                    <p class="text-small text-tertiary italic">Tiada maklumat tambahan diekstrak dari borang.</p>
+                    <p class="text-small text-tertiary italic">{{ __('ocr.preview.no_additional') }}</p>
                 @endif
             </x-app-card>
 
@@ -265,8 +256,8 @@
                 <label class="flex items-start gap-3 cursor-pointer">
                     <input type="checkbox" name="confirm" value="1" required class="mt-1">
                     <div class="text-small text-text">
-                        <p class="font-semibold">Saya mengesahkan maklumat di atas adalah benar.</p>
-                        <p class="text-secondary mt-1">Setelah disahkan, sistem akan menjana Skor AI (Had Kifayah) dan menghantar permohonan untuk semakan pentadbir.</p>
+                        <p class="font-semibold">{{ __('ocr.preview.confirm_title') }}</p>
+                        <p class="text-secondary mt-1">{{ __('ocr.preview.confirm_text') }}</p>
                     </div>
                 </label>
                 @error('confirm') <p class="text-small text-danger mt-2">{{ $message }}</p> @enderror
@@ -275,11 +266,11 @@
             <div class="flex items-center gap-3 flex-wrap">
                 <button type="submit" class="btn btn-primary btn-lg">
                     <i class="fa-solid fa-paper-plane text-[14px]"></i>
-                    <span>Sahkan & Hantar Permohonan</span>
+                    <span>{{ __('ocr.preview.submit') }}</span>
                 </button>
                 <a href="{{ route('user.applications.scan.index') }}" class="btn btn-outline btn-lg">
                     <i class="fa-solid fa-xmark text-[13px]"></i>
-                    <span>Batal</span>
+                    <span>{{ __('ocr.preview.cancel') }}</span>
                 </a>
             </div>
         </form>

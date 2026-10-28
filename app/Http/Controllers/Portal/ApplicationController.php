@@ -163,7 +163,7 @@ class ApplicationController extends Controller
 
         foreach (Admin::all() as $admin) {
             try {
-                Mail::to($admin->email)->send(new ApplicationSubmittedMail($user, $application));
+                Mail::to($admin->email)->send(new ApplicationSubmittedMail($user, $application, $admin->language));
             } catch (\Throwable $e) {
                 Log::warning('Gagal menghantar emel permohonan baharu kepada pentadbir.', [
                     'admin_id' => $admin->id,

@@ -15,12 +15,17 @@ class ApplicationReceivedMail extends Mailable
 
     public function __construct(
         public Application $application,
-    ) {}
+        ?string $locale = null,
+    ) {
+        $locale ??= $this->application->user?->language;
+
+        $this->locale($locale ?? app()->getLocale());
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Permohonan Diterima — J-ZAKAT',
+            subject: __('emails.application_received.subject'),
         );
     }
 

@@ -29,7 +29,7 @@ class GroqProvider implements AiProvider
 
         if ($apiKey === '') {
             return [
-                'reply' => 'Groq belum dikonfigurasi. Tetapkan AI_GROQ_API_KEY dalam .env dan AI_PROVIDER=groq.',
+                'reply' => __('ai.providers.groq.not_configured'),
                 'data' => ['type' => 'text', 'error' => 'not_configured'],
             ];
         }
@@ -59,7 +59,7 @@ class GroqProvider implements AiProvider
             } catch (Throwable $e) {
                 Log::error('Groq request failed', ['error' => $e->getMessage()]);
 
-                return $this->error('Perkhidmatan AI Groq tidak dapat dihubungi. Sila cuba lagi sebentar.');
+                return $this->error(__('ai.providers.groq.unreachable'));
             }
 
             if ($response->failed()) {
@@ -68,7 +68,7 @@ class GroqProvider implements AiProvider
                     'body' => mb_substr($response->body(), 0, 500),
                 ]);
 
-                return $this->error('Perkhidmatan AI Groq sedang menghadapi masalah. Sila cuba lagi sebentar.');
+                return $this->error(__('ai.providers.groq.error'));
             }
 
             $payload = $response->json();
@@ -79,7 +79,7 @@ class GroqProvider implements AiProvider
                 $reply = trim((string) data_get($choice, 'content', ''));
 
                 if ($reply === '') {
-                    $reply = 'Maaf, saya tidak dapat menjana jawapan buat masa ini.';
+                    $reply = __('ai.errors.no_reply');
                 }
 
                 return [
@@ -111,7 +111,7 @@ class GroqProvider implements AiProvider
                     ]);
 
                     $result = [
-                        'reply' => 'Maaf, alat data tidak dapat dilaksanakan buat masa ini.',
+                        'reply' => __('ai.errors.tool_execution'),
                         'data' => ['type' => 'text', 'error' => 'tool'],
                     ];
                 }
@@ -134,7 +134,7 @@ class GroqProvider implements AiProvider
             ];
         }
 
-        return $this->error('Saya tidak dapat menyelesaikan permintaan ini. Sila cuba soalan yang lebih spesifik.');
+        return $this->error(__('ai.providers.groq.unresolved'));
     }
 
     public function name(): string
@@ -149,7 +149,7 @@ class GroqProvider implements AiProvider
     {
         $messages = [[
             'role' => 'system',
-            'content' => (string) config('ai.system_prompt'),
+            'content' => $this->systemPrompt(),
         ]];
 
         foreach ($history as $item) {
@@ -170,6 +170,21 @@ class GroqProvider implements AiProvider
         $messages[] = ['role' => 'user', 'content' => $message];
 
         return $messages;
+    }
+
+    /**
+     * Resolve the system prompt for the current application locale, falling
+     * back to config('ai.system_prompt') when no translation is published.
+     */
+    private function systemPrompt(): string
+    {
+        $prompt = __('ai.system_prompt');
+
+        if (! is_string($prompt) || $prompt === '') {
+            $prompt = (string) config('ai.system_prompt');
+        }
+
+        return $prompt;
     }
 
     /**

@@ -47,7 +47,7 @@ class AuthController extends Controller
 
         foreach (Admin::all() as $admin) {
             try {
-                Mail::to($admin->email)->send(new NewApplicantRegisteredMail($user));
+                Mail::to($admin->email)->send(new NewApplicantRegisteredMail($user, $admin->language));
             } catch (\Throwable $e) {
                 Log::warning('Gagal menghantar emel pemohon baharu kepada pentadbir.', [
                     'admin_id' => $admin->id,
