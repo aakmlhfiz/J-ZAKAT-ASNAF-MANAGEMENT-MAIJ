@@ -16,7 +16,6 @@
 
 <x-page-header title="{{ __('applications.history.title') }}" subtitle="{{ trans_choice('applications.history.records_found', $items->total()) }}" eyebrow="{{ __('applications.history.eyebrow') }}" icon="fa-table-list">
     <x-slot:actions>
-        <x-app-button variant="outline" size="md" icon="fa-file-import" href="{{ route('importcsv') }}">{{ __('applications.history.import_csv') }}</x-app-button>
         <x-app-button variant="primary" size="md" icon="fa-plus" href="{{ route('profilasnaf') }}">{{ __('applications.history.add') }}</x-app-button>
     </x-slot:actions>
 </x-page-header>

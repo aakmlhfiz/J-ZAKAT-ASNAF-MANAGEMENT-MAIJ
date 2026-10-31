@@ -14,7 +14,6 @@
         'hadkifayah'        => [['label' => __('navigation.breadcrumbs.ai_assessment'), 'href' => null], ['label' => __('navigation.breadcrumbs.had_kifayah'), 'href' => null]],
         'hadkifayah.settings' => [['label' => __('navigation.breadcrumbs.system'), 'href' => null], ['label' => __('navigation.breadcrumbs.had_kifayah_settings'), 'href' => null]],
         'ai-assessment'     => [['label' => __('navigation.breadcrumbs.ai_assessment'), 'href' => null], ['label' => __('navigation.breadcrumbs.ai_assessment'), 'href' => null]],
-        'importcsv'         => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('navigation.breadcrumbs.import_csv'), 'href' => null]],
         'import-pdf.index'  => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('navigation.breadcrumbs.import_pdf'), 'href' => null]],
         'ocr.index'         => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('document_ocr.admin.title'), 'href' => null]],
         'ocr.show'          => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => route('ocr.index')], ['label' => __('document_ocr.admin.title'), 'href' => route('ocr.index')], ['label' => __('document_ocr.admin.review'), 'href' => null]],

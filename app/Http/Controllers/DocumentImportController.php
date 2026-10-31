@@ -8,7 +8,6 @@ use App\Models\Application;
 use App\Models\DocumentImport;
 use App\Models\Household;
 use App\Models\HouseholdMember;
-use App\Models\ImportHistory;
 use App\Models\ProfilAsnaf;
 use App\Services\AuditLogger;
 use App\Services\EligibilityService;
@@ -47,14 +46,7 @@ class DocumentImportController extends Controller
             'processing' => DocumentImport::where('status', 'processing')->count(),
         ];
 
-        $csvHistory = ImportHistory::latest()->limit(10)->get();
-        $csvStats = [
-            'total' => ImportHistory::sum('jumlah_rekod') ?: 0,
-            'berjaya' => ImportHistory::sum('berjaya') ?: 0,
-            'gagal' => ImportHistory::sum('gagal') ?: 0,
-        ];
-
-        return view('import-pdf.index', compact('history', 'stats', 'csvHistory', 'csvStats'));
+        return view('import-pdf.index', compact('history', 'stats'));
     }
 
     /**

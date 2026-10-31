@@ -33,7 +33,6 @@ class RedesignSmokeTest extends TestCase
             '/app/hadkifayah/settings',
             '/app/ai-assessment',
             '/app/ai',
-            '/app/importcsv',
             '/app/import-data',
             '/app/import-pdf',
             '/app/import-pdf/history',

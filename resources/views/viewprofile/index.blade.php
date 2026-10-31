@@ -5,7 +5,6 @@
 @section('content')
 <x-page-header title="{{ __('asnaf.list.title') }}" subtitle="{{ __('asnaf.list.subtitle') }}" eyebrow="{{ __('asnaf.list.eyebrow') }}" icon="fa-id-card">
     <x-slot:actions>
-        <x-app-button variant="outline" size="md" icon="fa-file-import" href="{{ route('importcsv') }}">{{ __('asnaf.list.import') }}</x-app-button>
         <x-app-button variant="primary" size="md" icon="fa-plus" href="{{ route('profilasnaf') }}">{{ __('asnaf.list.add') }}</x-app-button>
     </x-slot:actions>
 </x-page-header>

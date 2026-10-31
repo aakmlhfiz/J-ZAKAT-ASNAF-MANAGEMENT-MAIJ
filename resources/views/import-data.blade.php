@@ -11,7 +11,7 @@
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('importTabs', () => ({
-            tab: 'csv',
+            tab: 'pdf',
 
             selectTab(t) {
                 this.tab = t;
@@ -58,11 +58,6 @@
 
 {{-- Tabs --}}
 <div class="flex flex-wrap gap-1 mb-6 border-b border-divider pb-0">
-    <button @click="selectTab('csv')"
-        class="relative px-5 py-2.5 text-[13px] font-semibold transition-apple rounded-t-[10px] -mb-px"
-        :class="tab === 'csv' ? 'text-primary bg-card border border-divider border-b-card' : 'text-secondary hover:text-text hover:bg-muted'">
-        <i class="fa-solid fa-file-csv text-[12px] mr-1.5"></i> {{ __('imports.tabs.csv') }}
-    </button>
     <button @click="selectTab('pdf')"
         class="relative px-5 py-2.5 text-[13px] font-semibold transition-apple rounded-t-[10px] -mb-px"
         :class="tab === 'pdf' ? 'text-primary bg-card border border-divider border-b-card' : 'text-secondary hover:text-text hover:bg-muted'">
@@ -73,114 +68,6 @@
         :class="tab === 'history' ? 'text-primary bg-card border border-divider border-b-card' : 'text-secondary hover:text-text hover:bg-muted'">
         <i class="fa-solid fa-clock-rotate-left text-[12px] mr-1.5"></i> {{ __('imports.tabs.history') }}
     </button>
-</div>
-
-{{-- TAB: CSV --}}
-<div x-show="tab === 'csv'" x-cloak class="animate-fade-in">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 space-y-6">
-            <x-app-card class="p-6" :hover="false">
-                <x-section-header :title="__('imports.csv.upload_title')" :description="__('imports.csv.upload_description')" icon="fa-cloud-arrow-up" />
-                <form method="POST" action="{{ route('importcsv.store') }}" enctype="multipart/form-data">
-                    @csrf
-                    <x-file-dropzone name="csv" accept=".csv" :label="__('imports.csv.dropzone_label')" :hint="__('imports.csv.dropzone_hint')" />
-                    <div class="flex items-center gap-3 mt-6 flex-wrap">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa-solid fa-upload mr-1.5 text-[12px]"></i> {{ __('imports.csv.upload_import') }}
-                        </button>
-                        <a href="{{ route('importcsv.template') }}" class="btn btn-outline">
-                            <i class="fa-solid fa-download mr-1.5 text-[12px]"></i> {{ __('imports.csv.download_template') }}
-                        </a>
-                    </div>
-                </form>
-            </x-app-card>
-
-            <x-app-card class="p-6" :hover="false">
-                <x-section-header :title="__('imports.csv.format_title')" :description="__('imports.csv.format_description')" icon="fa-table-list" />
-                <div class="overflow-x-auto">
-                    <table class="app-table is-compact">
-                        <thead>
-                            <tr>
-                                <th>{{ __('imports.csv.col_column') }}</th>
-                                <th>{{ __('imports.csv.col_type') }}</th>
-                                <th>{{ __('imports.csv.col_description') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="font-medium text-text">nama</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.nama') }}</td></tr>
-                            <tr><td class="font-medium text-text">ic</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.ic') }}</td></tr>
-                            <tr><td class="font-medium text-text">ic_ketua_rumah</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.ic_ketua_rumah') }}</td></tr>
-                            <tr><td class="font-medium text-text">hubungan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.hubungan') }}</td></tr>
-                            <tr><td class="font-medium text-text">pendapatan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.pendapatan') }}</td></tr>
-                            <tr><td class="font-medium text-text">bilangan_tanggungan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.bilangan_tanggungan') }}</td></tr>
-                            <tr><td class="font-medium text-text">sewa</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.sewa') }}</td></tr>
-                            <tr><td class="font-medium text-text">utiliti</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.utiliti') }}</td></tr>
-                            <tr><td class="font-medium text-text">telefon</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.telefon') }}</td></tr>
-                            <tr><td class="font-medium text-text">alamat</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-danger-soft text-danger">{{ __('imports.csv.required') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.alamat') }}</td></tr>
-                            <tr><td class="font-medium text-text">n_isteri_suami</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_isteri_suami') }}</td></tr>
-                            <tr><td class="font-medium text-text">n_ibu_bapa</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_ibu_bapa') }}</td></tr>
-                            <tr><td class="font-medium text-text">n_dewasa_tidak_bekerja</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_dewasa_tidak_bekerja') }}</td></tr>
-                            <tr><td class="font-medium text-text">n_dewasa_bekerja_tanggung</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_dewasa_bekerja_tanggung') }}</td></tr>
-                            <tr><td class="font-medium text-text">n_ipt</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_ipt') }}</td></tr>
-                            <tr><td class="font-medium text-text">n_remaja</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_remaja') }}</td></tr>
-                            <tr><td class="font-medium text-text">n_kanak_rendah</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_kanak_rendah') }}</td></tr>
-                            <tr><td class="font-medium text-text">n_kanak_tadika</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.n_kanak_tadika') }}</td></tr>
-                            <tr><td class="font-medium text-text">perumahan</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.perumahan') }}</td></tr>
-                            <tr><td class="font-medium text-text">pengangkutan_input</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.pengangkutan_input') }}</td></tr>
-                            <tr><td class="font-medium text-text">perubatan_input</td><td><span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-pill bg-warning-soft text-warning">{{ __('imports.csv.optional') }}</span></td><td class="text-secondary">{{ __('imports.csv_columns.perubatan_input') }}</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="bg-muted/50 p-4 rounded-[10px] mt-4 flex items-start gap-3">
-                    <i class="fa-solid fa-circle-info text-primary text-[14px] mt-0.5"></i>
-                    <p class="text-small text-text leading-relaxed">{!! __('imports.csv.optional_note_short') !!}</p>
-                </div>
-            </x-app-card>
-        </div>
-
-        <div class="space-y-6">
-            <x-app-card class="p-6" :hover="false" elevated>
-                <x-section-header :title="__('imports.csv.history_csv_title')" :description="__('imports.csv.history_description')" icon="fa-clock-rotate-left" />
-                <div class="grid grid-cols-3 gap-3 mb-5">
-                    <div class="text-center p-3 rounded-[10px] bg-muted/50">
-                        <p class="text-metric-sm text-text tabular-nums">{{ $csvStats['total'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.total') }}</p>
-                    </div>
-                    <div class="text-center p-3 rounded-[10px] bg-muted/50">
-                        <p class="text-metric-sm text-success tabular-nums">{{ $csvStats['berjaya'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">{{ __('common.status.success') }}</p>
-                    </div>
-                    <div class="text-center p-3 rounded-[10px] bg-muted/50">
-                        <p class="text-metric-sm text-danger tabular-nums">{{ $csvStats['gagal'] }}</p>
-                        <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.failed') }}</p>
-                    </div>
-                </div>
-                @if($csvHistory->isEmpty())
-                    <x-empty-state icon="fa-file-csv" :title="__('imports.csv.empty_csv_title')" :description="__('imports.csv.empty_description')" />
-                @else
-                    <ul class="space-y-2">
-                        @foreach($csvHistory as $h)
-                            <li class="p-3 rounded-[10px] hover:bg-muted transition-apple">
-                                <div class="flex items-center justify-between gap-3">
-                                    <p class="text-body text-text font-medium truncate flex-1">{{ $h->nama_fail }}</p>
-                                    <span class="text-eyebrow text-tertiary shrink-0">{{ $h->created_at->locale(app()->getLocale())->translatedFormat('d M Y') }}</span>
-                                </div>
-                                <div class="mt-1.5 flex items-center gap-2 text-small">
-                                    <span class="text-secondary tabular-nums">{{ __('imports.records', ['count' => $h->jumlah_rekod]) }}</span>
-                                    <span class="text-tertiary">·</span>
-                                    <span class="text-success font-semibold">{{ __('imports.ok', ['count' => $h->berjaya]) }}</span>
-                                    @if($h->gagal > 0)
-                                        <span class="text-tertiary">·</span>
-                                        <span class="text-danger font-semibold">{{ __('imports.failed_count', ['count' => $h->gagal]) }}</span>
-                                    @endif
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            </x-app-card>
-        </div>
-    </div>
 </div>
 
 {{-- TAB: PDF / OCR --}}
@@ -309,7 +196,7 @@
                         @endforeach
                     </ul>
                     <div class="mt-4 pt-3 border-t border-divider">
-                        <a href="{{ route('import-pdf.history') }}" class="text-[12px] font-semibold text-primary hover:underline">{{ __('imports.csv.view_all') }} <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i></a>
+                        <a href="{{ route('import-pdf.history') }}" class="text-[12px] font-semibold text-primary hover:underline">{{ __('imports.pdf.history_button') }} <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i></a>
                     </div>
                 @endif
             </x-app-card>
@@ -349,13 +236,13 @@
         <div class="space-y-0">
             @foreach($combinedHistory as $item)
                 <div class="flex items-center gap-4 py-3.5 px-4 rounded-[8px] hover:bg-muted/50 transition-fast border-b border-divider last:border-0">
-                    <div class="w-9 h-9 rounded-full {{ $item->type === 'csv' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger' }} flex items-center justify-center shrink-0">
-                        <i class="fa-solid {{ $item->type === 'csv' ? 'fa-file-csv' : 'fa-file-pdf' }} text-[14px]"></i>
+                    <div class="w-9 h-9 rounded-full bg-danger/10 text-danger flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-file-pdf text-[14px]"></i>
                     </div>
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-2 flex-wrap">
                             <p class="text-body font-semibold text-text truncate">{{ $item->title }}</p>
-                            <span class="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold rounded-pill {{ $item->type === 'csv' ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger' }}">
+                            <span class="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold rounded-pill bg-danger-soft text-danger">
                                 {{ strtoupper($item->type) }}
                             </span>
                         </div>

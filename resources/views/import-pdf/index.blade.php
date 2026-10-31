@@ -18,28 +18,6 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2 space-y-6">
         <x-app-card class="p-6" :hover="false">
-            <x-section-header :title="__('imports.pdf.csv_import_title')" :description="__('imports.pdf.csv_import_description')" icon="fa-file-csv" />
-
-            <form method="POST" action="{{ route('importcsv.store') }}" enctype="multipart/form-data">
-                @csrf
-                <x-file-dropzone name="csv" accept=".csv" :label="__('imports.csv.dropzone_label')" :hint="__('imports.csv.dropzone_hint')" />
-
-                @error('csv')
-                    <p class="text-eyebrow text-danger mt-3">{{ $message }}</p>
-                @enderror
-
-                <div class="flex items-center gap-3 mt-6 flex-wrap">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa-solid fa-upload mr-1.5 text-[12px]"></i> {{ __('imports.csv.upload_import') }}
-                    </button>
-                    <a href="{{ route('importcsv.template') }}" class="btn btn-outline">
-                        <i class="fa-solid fa-download mr-1.5 text-[12px]"></i> {{ __('imports.csv.download_template') }}
-                    </a>
-                </div>
-            </form>
-        </x-app-card>
-
-        <x-app-card class="p-6" :hover="false">
             <x-section-header :title="__('imports.pdf.upload_form_title')" :description="__('imports.pdf.upload_form_description')" icon="fa-cloud-arrow-up" />
 
             <div x-data="ocrScanner()" class="space-y-5" @dragover.prevent="dragging = true" @dragleave.prevent="dragging = false" @drop.prevent="handleDrop($event)">
@@ -226,32 +204,6 @@
         <x-app-card class="p-6" :hover="false" elevated>
             <x-section-header :title="__('imports.pdf.history_title')" :description="__('imports.pdf.history_description')" icon="fa-clock-rotate-left" />
 
-            <div class="mb-4">
-                <p class="text-eyebrow text-tertiary uppercase tracking-wide font-semibold mb-2"><i class="fa-solid fa-file-csv text-[10px] mr-1"></i> CSV</p>
-                @if($csvHistory->isEmpty())
-                    <p class="text-small text-tertiary italic">{{ __('imports.pdf.empty_csv_history') }}</p>
-                @else
-                    <ul class="space-y-2">
-                        @foreach($csvHistory->take(5) as $h)
-                            <li class="p-3 rounded-[12px] hover:bg-muted transition-apple">
-                                <div class="flex items-center justify-between gap-2">
-                                    <p class="text-body text-text font-medium truncate flex-1" title="{{ $h->nama_fail }}">{{ $h->nama_fail }}</p>
-                                    <span class="text-eyebrow text-tertiary shrink-0">{{ $h->created_at->locale(app()->getLocale())->translatedFormat('d M Y') }}</span>
-                                </div>
-                                <div class="mt-1.5 flex items-center gap-2 text-small">
-                                    <span class="text-secondary tabular-nums">{{ __('imports.records', ['count' => $h->jumlah_rekod]) }}</span>
-                                    <span class="text-tertiary">·</span>
-                                    <span class="text-success font-semibold">{{ __('imports.ok', ['count' => $h->berjaya]) }}</span>
-                                    @if($h->gagal > 0)
-                                        <span class="text-tertiary">·</span>
-                                        <span class="text-danger font-semibold">{{ __('imports.failed_count', ['count' => $h->gagal]) }}</span>
-                                    @endif
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
 
             <div class="pt-4 border-t border-divider">
                 <p class="text-eyebrow text-tertiary uppercase tracking-wide font-semibold mb-2"><i class="fa-solid fa-file-pdf text-[10px] mr-1"></i> PDF / OCR</p>
@@ -289,7 +241,7 @@
                         @endforeach
                     </ul>
                     <div class="mt-4 pt-3 border-t border-divider">
-                        <x-app-button variant="ghost" size="sm" block icon="fa-arrow-right" href="{{ route('import-pdf.history') }}">{{ __('imports.csv.view_all') }}</x-app-button>
+                        <x-app-button variant="ghost" size="sm" block icon="fa-arrow-right" href="{{ route('import-pdf.history') }}">{{ __('imports.pdf.history_button') }}</x-app-button>
                     </div>
                 @endif
             </div>
@@ -318,21 +270,6 @@
                 </div>
             </div>
 
-            <p class="text-eyebrow text-tertiary uppercase tracking-wide font-semibold mb-2 pt-4 border-t border-divider"><i class="fa-solid fa-file-csv text-[10px] mr-1"></i> CSV</p>
-            <div class="grid grid-cols-3 gap-3">
-                <div class="text-center p-3 soft-panel">
-                    <p class="text-metric-sm text-text tabular-nums">{{ $csvStats['total'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.pdf.records_label') }}</p>
-                </div>
-                <div class="text-center p-3 soft-panel">
-                    <p class="text-metric-sm text-success tabular-nums">{{ $csvStats['berjaya'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">{{ __('common.status.success') }}</p>
-                </div>
-                <div class="text-center p-3 soft-panel">
-                    <p class="text-metric-sm text-danger tabular-nums">{{ $csvStats['gagal'] }}</p>
-                    <p class="text-eyebrow text-tertiary mt-1">{{ __('imports.status.failed') }}</p>
-                </div>
-            </div>
         </x-app-card>
     </div>
 </div>

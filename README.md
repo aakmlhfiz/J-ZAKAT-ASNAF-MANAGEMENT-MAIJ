@@ -7,7 +7,6 @@ Sistem pengurusan kelayakan asnaf pintar untuk **Majlis Agama Islam Johor (MAIJ)
 - **Profil Asnaf** — Pengurusan CRUD pemohon, carian, penapisan, dan padam pukal
 - **Had Kifayah** — Kalkulator MAIDAM-style dengan kadar boleh konfigurasikan setiap kategori
 - **Penilaian AI** - Pembantu AI dengan Groq (function calling) dan fallback Mock; OpenAI, Gemini dan Ollama masih stub
-- **Import CSV** — Import pukal pemohon dengan validasi dan rollback
 - **Import PDF/OCR** — Ekstrak data dari dokumen IC dan slip gaji menggunakan Tesseract/pdfparser
 - **Surat Kelulusan** — Jana PDF kelulusan/penolakan dan hantar emel automatik
 - **Audit Log** — Log masuk, log aktiviti, log keselamatan dengan 3-tier audit

@@ -172,10 +172,9 @@
                 ['route' => 'profilasnaf', 'icon' => 'user-plus', 'label' => __('dashboard.quick.register'), 'desc' => __('dashboard.quick.register_desc'), 'bg' => 'bg-primary-soft', 'color' => 'text-primary'],
                 ['route' => 'hadkifayah', 'icon' => 'calculator', 'label' => __('dashboard.quick.calculate'), 'desc' => __('dashboard.quick.calculate_desc'), 'bg' => 'bg-success-soft', 'color' => 'text-success'],
                 ['route' => 'ai.page', 'icon' => 'bot', 'label' => __('dashboard.quick.ai'), 'desc' => __('dashboard.quick.ai_desc'), 'bg' => 'bg-warning-soft', 'color' => 'text-warning'],
-                ['route' => 'importcsv', 'icon' => 'file-import', 'label' => __('dashboard.quick.import'), 'desc' => __('dashboard.quick.import_desc'), 'bg' => 'bg-info-soft', 'color' => 'text-info'],
             ];
         @endphp
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
             @foreach($quickActions as $a)
                 <a href="{{ route($a['route']) }}" class="group flex flex-col items-start gap-3 p-4 rounded-[8px] bg-card border border-divider hover:border-primary/50 hover:shadow-card transition-apple">
                     <div class="w-10 h-10 rounded-[12px] {{ $a['bg'] }} {{ $a['color'] }} flex items-center justify-center group-hover:scale-110 transition-fast">

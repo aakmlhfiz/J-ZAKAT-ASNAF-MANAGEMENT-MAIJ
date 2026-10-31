@@ -19,7 +19,6 @@ use App\Http\Controllers\HadKifayahController;
 use App\Http\Controllers\HadKifayahSettingController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HouseholdController;
-use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ImportDataController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MoneyAuditController;
@@ -149,10 +148,6 @@ Route::middleware(['auth:web'])->prefix('app')->group(function () {
     Route::post('/viewprofile/{ic}/reject', [ViewProfileController::class, 'reject'])->name('viewprofile.reject');
     Route::get('/viewprofile/{ic}/letter', [ViewProfileController::class, 'downloadLetter'])->name('viewprofile.letter');
 
-    Route::get('/importcsv', [ImportController::class, 'index'])->name('importcsv');
-    Route::post('/importcsv', [ImportController::class, 'store'])->middleware('throttle:import')->name('importcsv.store');
-    Route::get('/importcsv/template', [ImportController::class, 'template'])->name('importcsv.template');
-
     Route::get('/import-data', [ImportDataController::class, 'index'])->name('import-data');
 
     Route::get('/import-pdf', [DocumentImportController::class, 'index'])->name('import-pdf.index');
@@ -278,7 +273,6 @@ Route::redirect('/dashboard', '/app/dashboard');
 Route::redirect('/profilasnaf', '/app/profilasnaf');
 Route::redirect('/profil-asnaf', '/app/profilasnaf');
 Route::redirect('/history', '/app/history');
-Route::redirect('/importcsv', '/app/import-data');
 Route::redirect('/import-pdf', '/app/import-data');
 Route::redirect('/hadkifayah', '/app/hadkifayah');
 Route::redirect('/settings', '/app/settings');
