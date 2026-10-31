@@ -13,6 +13,7 @@ return [
         'delete' => 'Padam',
         'view' => 'Lihat',
         'search' => 'Cari',
+        'reset' => 'Set Semula',
         'close' => 'Tutup',
         'back' => 'Kembali',
         'export' => 'Eksport',

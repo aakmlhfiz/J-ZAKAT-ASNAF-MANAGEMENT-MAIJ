@@ -54,7 +54,8 @@
                 ['route' => 'ai-assessment', 'icon' => 'brain', 'label' => __('navigation.sidebar.items.ai_assessment')],
             ]],
             'data' => ['label' => __('navigation.sidebar.groups.data'), 'items' => [
-                ['route' => 'import-pdf.index', 'icon' => 'scan-line', 'label' => __('navigation.sidebar.items.import_pdf')],
+                ['route' => 'ocr.index', 'icon' => 'scan-line', 'label' => __('navigation.sidebar.items.ocr_documents')],
+                ['route' => 'import-pdf.index', 'icon' => 'file-check', 'label' => __('navigation.sidebar.items.import_pdf')],
                 ['route' => 'reports', 'icon' => 'chart-column', 'label' => __('navigation.sidebar.items.reports')],
             ]],
             'system' => ['label' => __('navigation.sidebar.groups.system'), 'items' => [

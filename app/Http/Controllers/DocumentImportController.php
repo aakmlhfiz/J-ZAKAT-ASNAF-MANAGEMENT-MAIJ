@@ -173,7 +173,7 @@ class DocumentImportController extends Controller
         $filename = "{$uuid}.{$ext}";
         $path = config('ocr.path', 'ocr');
 
-        $storedPath = $file->storeAs($path, $filename, 'local');
+        $storedPath = $file->storeAs($path, $filename, config('ocr.disk', 'local'));
 
         $import = DocumentImport::create([
             'user_id' => auth('web')->id(),
@@ -218,9 +218,13 @@ class DocumentImportController extends Controller
                 : __('imports.messages.pdf_processing_started'));
     }
 
-    public function preview(string $id): View
+    public function preview(string $id): View|RedirectResponse
     {
         $import = DocumentImport::findOrFail($id);
+
+        if (! $import->type()->isBorang() && ! in_array($import->document_type, [null, '', 'generic'], true)) {
+            return redirect()->route('ocr.show', $import->id);
+        }
 
         if ($import->status === 'processing') {
             return view('import-pdf.preview', [
@@ -271,9 +275,13 @@ class DocumentImportController extends Controller
         ]);
     }
 
-    public function review(string $id): View
+    public function review(string $id): View|RedirectResponse
     {
         $import = DocumentImport::findOrFail($id);
+
+        if (! $import->type()->isBorang() && ! in_array($import->document_type, [null, '', 'generic'], true)) {
+            return redirect()->route('ocr.show', $import->id);
+        }
 
         if ($import->status === 'processing') {
             return view('import-pdf.review', [
@@ -351,6 +359,11 @@ class DocumentImportController extends Controller
     public function commit(Request $request, string $id): RedirectResponse
     {
         $import = DocumentImport::findOrFail($id);
+
+        if (! $import->type()->isBorang() && ! in_array($import->document_type, [null, '', 'generic'], true)) {
+            return redirect()->route('ocr.show', $import->id)
+                ->with('info', __('document_ocr.review.extracted_description'));
+        }
 
         if (! in_array($import->status, ['extracted', 'needs_review'])) {
             return back()->with('error', __('imports.messages.pdf_not_ready', ['status' => match ($import->status) {
@@ -567,11 +580,14 @@ class DocumentImportController extends Controller
             return back()->with('info', __('imports.messages.pdf_already_committed'));
         }
 
+        app(\App\Services\Document\DocumentPreviewService::class)->clear($import);
+
         $import->update([
             'status' => 'processing',
             'error_message' => null,
             'ocr_started_at' => now(),
             'ocr_completed_at' => null,
+            'progress' => 0,
         ]);
 
         ProcessDocumentImport::dispatchSync($import->id);
@@ -621,10 +637,6 @@ class DocumentImportController extends Controller
     {
         $import = DocumentImport::findOrFail($id);
 
-        if ($import->user_id !== auth('web')->id()) {
-            abort(403);
-        }
-
         $disk = config('ocr.disk', 'local');
 
         if (! Storage::disk($disk)->exists($import->stored_path)) {
@@ -633,7 +645,10 @@ class DocumentImportController extends Controller
 
         return response()->file(
             Storage::disk($disk)->path($import->stored_path),
-            ['Content-Type' => $import->mime_type]
+            [
+                'Content-Type' => $import->mime_type,
+                'X-Content-Type-Options' => 'nosniff',
+            ]
         );
     }
 
@@ -641,11 +656,16 @@ class DocumentImportController extends Controller
     {
         $import = DocumentImport::findOrFail($id);
 
-        if ($import->user_id !== auth('web')->id()) {
+        $admin = auth('web')->user();
+        $isSuperAdmin = $admin && in_array($admin->email, (array) config('app.super_admin_emails'), true);
+
+        if ((int) $import->user_id !== (int) $admin?->id && ! $isSuperAdmin) {
             abort(403);
         }
 
         $disk = config('ocr.disk', 'local');
+
+        app(\App\Services\Document\DocumentPreviewService::class)->clear($import);
 
         if (Storage::disk($disk)->exists($import->stored_path)) {
             Storage::disk($disk)->delete($import->stored_path);

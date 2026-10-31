@@ -410,3 +410,76 @@ Then upload a test PDF through `http://127.0.0.1:8000/app/import-pdf`.
 | `upload_max_filesize (too small for configured limit of …)` in `ocr:check` | `php.ini` `upload_max_filesize` is below `OCR_MAX_FILE_SIZE` (KB). Raise the php.ini value to at least the same size, restart `php artisan serve`. |
 | Page hangs on "Memuat naik…" with no progress | PHP's built-in server is single-threaded on Windows (`PHP_CLI_SERVER_WORKERS` is unsupported). The status-poller can't run while a long request is in flight. Since the OCR fast-path + async queue are in place, this should no longer happen; if it does, restart `php artisan serve` and confirm the queue worker (`php artisan queue:work`) is running. |
 | `Undefined constant "uploading"` in `laravel.log` | Stale Blade view cache or `x-app-button` prop collision — run `php artisan view:clear` and reload. |
+
+## 6. Supporting-document OCR and verification
+
+The applicant portal now OCR-processes MyKad, salary slips, employer/income
+letters, bank statements, utility bills, rental agreements, medical documents,
+birth certificates and other supporting documents.
+
+### Flow
+
+1. Applicant uploads a PDF/JPG/PNG in **Dokumen Saya** (`/user/documents`), selects
+   a document type and optionally links an existing application.
+2. The file is stored on the private local disk and a queued
+   `ProcessDocumentImport` job extracts the text.
+3. `DocumentExtractionService` routes the text to a document-type extractor
+   (`MyKadExtractor`, `SalarySlipExtractor`, `BankStatementExtractor`, etc.).
+4. Successful generic OCR always becomes **Awaiting Verification**
+   (`needs_review`). It is never automatically treated as verified.
+5. The applicant reviews the original document and editable fields at
+   `/user/documents/{id}/review`, then confirms and saves.
+6. Officers can review, correct, verify or reject documents at `/app/ocr`.
+
+### Engine and confidence
+
+- Local hybrid remains the default: PDF text layer → Tesseract → Imagick
+  page rendering → optional OCRmyPDF, with Mistral available through
+  `OCR_DRIVER=mistral`.
+- Generic legal/scan pages use real Tesseract TSV word confidence where
+  available. PDF text-layer values report confidence as unavailable instead of
+  inventing a score. The UI displays `Not available` for missing confidence.
+- Amounts, dates and ICs are validated server-side. Salary-slip totals and
+  rental dates produce warnings when the extracted numbers are inconsistent.
+
+### Security
+
+- All uploads and previews are served through authorised routes; there are no
+  public document URLs.
+- Applicants can only access their own documents. Officers can access documents
+  through the authenticated admin OCR section.
+- Sensitive numbers are masked in audit metadata and general lists.
+- Upload, view, download, verification and rejection actions are audit-logged.
+
+### Verification and Had Kifayah
+
+- Values are applied only after explicit confirmation.
+- Existing values are not overwritten unless the officer/applicant selects the
+  replace option.
+- Applied values are recorded in `document_verified_values` with their source
+  document, page and OCR confidence.
+- Salary/employer letters can update application income; utility bills, rental
+  agreements and medical expenses can update the linked profile; household
+  aggregates are recalculated from members to avoid double counting.
+- OCR never approves or rejects a zakat application by itself.
+
+### Required commands
+
+```powershell
+php artisan migrate
+php artisan queue:work --queue=default --tries=1 --timeout=300
+npm run build
+```
+
+Optional environment settings:
+
+```env
+DOCUMENT_OCR_CONFIDENCE=true
+DOCUMENT_OCR_PREVIEW=true
+DOCUMENT_OCR_PREVIEW_DPI=150
+DOCUMENT_OCR_PREVIEW_MAX_PAGES=30
+```
+
+No Google Cloud Vision or Azure credentials are required. They are not
+integrated; Tesseract/PDF parser/Imagick/OCRmyPDF are available locally and
+Mistral remains optional.

@@ -29,8 +29,9 @@ class DocumentImportStatusController extends Controller
                 : 0,
             'total_fields' => count($import->extracted_data ?? []),
             'stalled' => (bool) $stalled,
-            'review_url' => in_array($import->status, ['extracted', 'needs_review'])
-                ? route('import-pdf.review', $import->id)
+            'document_type' => $import->document_type,
+            'review_url' => in_array($import->status, ['extracted', 'needs_review', 'committed'])
+                ? ($import->isGenericDocument() ? route('ocr.show', $import->id) : route('import-pdf.review', $import->id))
                 : null,
         ]);
     }
@@ -43,6 +44,7 @@ class DocumentImportStatusController extends Controller
             'needs_review' => 100,
             'committed' => 100,
             'failed' => 100,
+            'rejected' => 100,
             default => 0,
         };
     }
@@ -52,7 +54,7 @@ class DocumentImportStatusController extends Controller
         if (in_array($status, ['extracted', 'needs_review', 'committed'])) {
             return 'done';
         }
-        if ($status === 'failed') {
+        if (in_array($status, ['failed', 'rejected'], true)) {
             return 'failed';
         }
 

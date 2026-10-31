@@ -16,6 +16,8 @@
         'ai-assessment'     => [['label' => __('navigation.breadcrumbs.ai_assessment'), 'href' => null], ['label' => __('navigation.breadcrumbs.ai_assessment'), 'href' => null]],
         'importcsv'         => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('navigation.breadcrumbs.import_csv'), 'href' => null]],
         'import-pdf.index'  => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('navigation.breadcrumbs.import_pdf'), 'href' => null]],
+        'ocr.index'         => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('document_ocr.admin.title'), 'href' => null]],
+        'ocr.show'          => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => route('ocr.index')], ['label' => __('document_ocr.admin.title'), 'href' => route('ocr.index')], ['label' => __('document_ocr.admin.review'), 'href' => null]],
         'import-pdf.preview'=> [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('navigation.breadcrumbs.import_pdf'), 'href' => route('import-pdf.index')], ['label' => __('navigation.breadcrumbs.preview'), 'href' => null]],
         'import-pdf.history'=> [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('navigation.breadcrumbs.import_pdf'), 'href' => route('import-pdf.index')], ['label' => __('navigation.breadcrumbs.history'), 'href' => null]],
         'reports'           => [['label' => __('navigation.breadcrumbs.data_management'), 'href' => null], ['label' => __('navigation.breadcrumbs.reports'), 'href' => null]],

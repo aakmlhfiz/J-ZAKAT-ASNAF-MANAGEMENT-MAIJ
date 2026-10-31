@@ -25,6 +25,7 @@ return [
             'ai_assistant' => 'AI Assistant',
             'had_kifayah' => 'Had Kifayah',
             'ai_assessment' => 'Penilaian AI',
+            'ocr_documents' => 'Dokumen OCR',
             'import_pdf' => 'Import PDF',
             'reports' => 'Laporan',
             'profile' => 'Profil',

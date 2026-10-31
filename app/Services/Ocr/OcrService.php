@@ -2,8 +2,10 @@
 
 namespace App\Services\Ocr;
 
+use App\Enums\DocumentType;
 use App\Models\DocumentImport;
 use App\Models\ProfilAsnaf;
+use App\Services\Document\DocumentExtractionService;
 use App\Services\EligibilityService;
 use App\Services\Ocr\Contracts\TextExtractor;
 use App\Services\Ocr\DocumentIntelligence\BorangFormUnderstanding;
@@ -27,16 +29,20 @@ class OcrService
 
     private BorangBantuanRecognizer $borangRecognizer;
 
+    private DocumentExtractionService $documentExtraction;
+
     private string $driver;
 
     public function __construct(
         ?RegexFieldRecognizer $regexRecognizer = null,
         ?SmartFieldRecognizer $smartRecognizer = null,
         ?BorangBantuanRecognizer $borangRecognizer = null,
+        ?DocumentExtractionService $documentExtraction = null,
     ) {
         $this->regexRecognizer = $regexRecognizer ?? new RegexFieldRecognizer;
         $this->smartRecognizer = $smartRecognizer ?? new SmartFieldRecognizer;
         $this->borangRecognizer = $borangRecognizer ?? new BorangBantuanRecognizer;
+        $this->documentExtraction = $documentExtraction ?? new DocumentExtractionService;
         $this->driver = config('ocr.default', 'hybrid');
     }
 
@@ -245,6 +251,42 @@ class OcrService
         }
 
         $this->setProgress($import, 70);
+
+        $documentType = DocumentType::fromStored($import->document_type);
+        $rawDocumentType = $import->document_type;
+        $legacyGenericImport = $rawDocumentType === null
+            || $rawDocumentType === ''
+            || $rawDocumentType === 'generic';
+
+        // Generic supporting documents use the per-type extraction layer. The
+        // MAIJ form and legacy generic admin imports keep their existing
+        // regex/template pipeline below.
+        if (! $legacyGenericImport && ! $documentType->isBorang()) {
+            $generic = $this->documentExtraction->extract($import, $ocrText, $pageInfo, $extractor);
+
+            $import->update([
+                'status' => 'needs_review',
+                'progress' => 100,
+                'ocr_text' => $ocrText,
+                'ocr_engine' => $extractor->name(),
+                'ocr_completed_at' => now(),
+                'extracted_data' => $generic['fields'],
+                'ocr_result' => $generic['ocr_result'],
+                'overall_confidence' => $generic['overall_confidence'],
+                'page_count' => $pageInfo['page_count'],
+            ]);
+
+            logger()->info('Generic document OCR completed', [
+                'import_id' => $import->id,
+                'document_type' => $documentType->value,
+                'engine' => $extractor->name(),
+                'elapsed_seconds' => round(microtime(true) - $startedAt, 2),
+                'confidence' => $generic['overall_confidence'],
+                'warnings' => count($generic['warnings']),
+            ]);
+
+            return;
+        }
 
         // Single recognition pass: regex → AI enhance (once), then borang
         // merging reuses those results instead of re-running regex + LLM.

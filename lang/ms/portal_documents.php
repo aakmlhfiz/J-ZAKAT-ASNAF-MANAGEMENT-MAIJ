@@ -11,6 +11,8 @@ return [
             'type' => 'Jenis Dokumen',
             'file' => 'Fail',
             'submit' => 'Muat Naik',
+            'optional' => 'Pilihan',
+            'uploading' => 'Memuat naik...',
         ],
 
         'types' => [
@@ -28,10 +30,11 @@ return [
         'status' => [
             'uploaded' => 'Dimuat Naik',
             'processing' => 'Memproses',
-            'extracted' => 'Diekstrak',
-            'needs_review' => 'Perlu Semakan',
+            'extracted' => 'Teks Diekstrak',
+            'needs_review' => 'Menunggu Pengesahan',
             'committed' => 'Disahkan',
-            'failed' => 'Ditolak',
+            'failed' => 'Gagal',
+            'rejected' => 'Ditolak',
         ],
 
         'fallback_type' => 'Dokumen Sokongan',
@@ -65,6 +68,7 @@ return [
 
     'flash' => [
         'uploaded' => 'Dokumen berjaya dimuat naik.',
+        'duplicate' => 'Dokumen yang sama telah dimuat naik sebelum ini. Anda dibawa ke rekod sedia ada.',
         'file_not_found' => 'Fail tidak dijumpai pada storan.',
         'reprocess_only_borang' => 'Hanya Borang Bantuan MAIJ boleh diproses semula.',
         'already_committed' => 'Rekod ini telah dihantar — tidak perlu diproses semula.',

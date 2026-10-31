@@ -25,6 +25,7 @@ return [
             'ai_assistant' => 'AI Assistant',
             'had_kifayah' => 'Had Kifayah',
             'ai_assessment' => 'AI Assessment',
+            'ocr_documents' => 'OCR Documents',
             'import_pdf' => 'Import PDF',
             'reports' => 'Reports',
             'profile' => 'Profile',

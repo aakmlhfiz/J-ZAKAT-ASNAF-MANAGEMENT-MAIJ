@@ -11,6 +11,8 @@ return [
             'type' => 'Document Type',
             'file' => 'File',
             'submit' => 'Upload',
+            'optional' => 'Optional',
+            'uploading' => 'Uploading...',
         ],
 
         'types' => [
@@ -28,10 +30,11 @@ return [
         'status' => [
             'uploaded' => 'Uploaded',
             'processing' => 'Processing',
-            'extracted' => 'Extracted',
-            'needs_review' => 'Needs Review',
+            'extracted' => 'Text Extracted',
+            'needs_review' => 'Awaiting Verification',
             'committed' => 'Verified',
-            'failed' => 'Rejected',
+            'failed' => 'Failed',
+            'rejected' => 'Rejected',
         ],
 
         'fallback_type' => 'Supporting Document',
@@ -65,6 +68,7 @@ return [
 
     'flash' => [
         'uploaded' => 'Document uploaded successfully.',
+        'duplicate' => 'The same document was uploaded before. You have been taken to the existing record.',
         'file_not_found' => 'File not found in storage.',
         'reprocess_only_borang' => 'Only the MAIJ Assistance Form can be reprocessed.',
         'already_committed' => 'This record has been submitted — no need to reprocess.',

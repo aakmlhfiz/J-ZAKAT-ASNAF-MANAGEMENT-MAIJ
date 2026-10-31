@@ -425,6 +425,30 @@ class AuditLogger
         ]);
     }
 
+    public static function documentAccessed($actor, $import, Request $request, string $action = 'document.viewed'): AuditLog
+    {
+        $agent = (new self)->parseAgent($request);
+        $role = $actor instanceof Admin ? 'admin' : 'portal';
+
+        return AuditLog::create([
+            'user_id' => $actor?->id,
+            'user_role' => $role,
+            'user_email' => $actor?->email,
+            'action' => $action,
+            'category' => 'document',
+            'description' => __('document_ocr.audit.'.$action, ['file' => $import->original_filename]),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'browser' => $agent['browser'],
+            'device' => $agent['device'],
+            'os' => $agent['os'],
+            'metadata' => [
+                'document_import_id' => $import->id,
+                'ic_masked' => $import->maskedIc(),
+            ],
+        ]);
+    }
+
     public static function documentUploaded(PortalUser $user, $import, Request $request): AuditLog
     {
         $agent = (new self)->parseAgent($request);

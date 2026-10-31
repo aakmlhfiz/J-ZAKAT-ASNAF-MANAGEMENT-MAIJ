@@ -14,7 +14,7 @@ class ProcessDocumentImport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $timeout = 120;
+    public int $timeout = 300;
 
     public int $tries = 3;
 
@@ -28,8 +28,12 @@ class ProcessDocumentImport implements ShouldQueue
     {
         $import = DocumentImport::find($this->documentImportId);
 
-        if (! $import || $import->status !== 'processing') {
+        if (! $import || ! in_array($import->status, ['processing', 'uploaded'], true)) {
             return;
+        }
+
+        if ($import->status === 'uploaded') {
+            $import->update(['status' => 'processing', 'progress' => 5, 'ocr_started_at' => now()]);
         }
 
         try {

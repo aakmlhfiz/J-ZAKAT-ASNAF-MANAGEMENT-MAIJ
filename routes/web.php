@@ -24,6 +24,7 @@ use App\Http\Controllers\ImportDataController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MoneyAuditController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OcrManagementController;
 use App\Http\Controllers\Portal\AiController as PortalAiController;
 use App\Http\Controllers\Portal\ApplicationController as PortalApplicationController;
 use App\Http\Controllers\Portal\AuthController as PortalAuthController;
@@ -170,6 +171,14 @@ Route::middleware(['auth:web'])->prefix('app')->group(function () {
     Route::get('/import-pdf/{id}/file', [DocumentImportController::class, 'file'])->name('import-pdf.file');
     Route::delete('/import-pdf/{id}', [DocumentImportController::class, 'destroy'])->name('import-pdf.destroy');
 
+    Route::get('/ocr', [OcrManagementController::class, 'index'])->name('ocr.index');
+    Route::get('/ocr/{id}', [OcrManagementController::class, 'show'])->name('ocr.show');
+    Route::get('/ocr/{id}/page/{page}', [OcrManagementController::class, 'page'])->name('ocr.page');
+    Route::get('/ocr/{id}/file', [OcrManagementController::class, 'file'])->name('ocr.file');
+    Route::post('/ocr/{id}/verify', [OcrManagementController::class, 'verify'])->name('ocr.verify');
+    Route::post('/ocr/{id}/reject', [OcrManagementController::class, 'reject'])->name('ocr.reject');
+    Route::post('/ocr/{id}/reprocess', [OcrManagementController::class, 'reprocess'])->name('ocr.reprocess');
+
     Route::get('/hadkifayah', [HadKifayahController::class, 'index'])->name('hadkifayah');
     Route::post('/hadkifayah/preview', [HadKifayahController::class, 'preview'])->name('hadkifayah.preview');
     Route::post('/hadkifayah/print', [HadKifayahController::class, 'print'])->name('hadkifayah.print');
@@ -248,6 +257,11 @@ Route::middleware(['auth:portal', 'portal.active'])->prefix('user')->name('user.
 
     Route::get('/documents', [PortalDocumentController::class, 'index'])->name('documents.index');
     Route::post('/documents', [PortalDocumentController::class, 'store'])->name('documents.store');
+    Route::get('/documents/{id}/review', [PortalDocumentController::class, 'review'])->name('documents.review');
+    Route::post('/documents/{id}/verify', [PortalDocumentController::class, 'verify'])->name('documents.verify');
+    Route::get('/documents/{id}/status', [PortalDocumentController::class, 'status'])->name('documents.status');
+    Route::get('/documents/{id}/page/{page}', [PortalDocumentController::class, 'page'])->name('documents.page');
+    Route::post('/documents/{id}/replace', [PortalDocumentController::class, 'replace'])->name('documents.replace');
     Route::get('/documents/{id}/download', [PortalDocumentController::class, 'download'])->name('documents.download');
     Route::post('/documents/{id}/reprocess', [PortalDocumentController::class, 'reprocess'])->name('documents.reprocess');
 
