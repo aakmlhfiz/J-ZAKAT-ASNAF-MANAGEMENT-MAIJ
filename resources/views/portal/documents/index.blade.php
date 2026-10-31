@@ -235,7 +235,7 @@
                         return;
                     }
 
-                    if (body.duplicate && body.review_url) {
+                    if ((body.duplicate || body.ready) && body.review_url) {
                         window.location.href = body.review_url;
                         return;
                     }
@@ -277,7 +277,7 @@
                         return;
                     }
 
-                    window.setTimeout(tick, 1800);
+                    window.setTimeout(tick, 1000);
                 };
 
                 window.setTimeout(tick, 1200);
@@ -300,7 +300,7 @@
                     } catch (e) {
                         return;
                     }
-                    this.timer = window.setTimeout(tick, 2500);
+                    this.timer = window.setTimeout(tick, 1500);
                 };
                 this.timer = window.setTimeout(tick, 1500);
             },

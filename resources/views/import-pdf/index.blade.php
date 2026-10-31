@@ -449,40 +449,57 @@
                 fd.append('document_type', this.documentType);
                 fd.append('_token', '{{ csrf_token() }}');
 
-                fetch('{{ route('import-pdf.upload') }}', {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-                    body: fd,
-                })
-                    .then(r => r.json().then(data => ({ ok: r.ok, data })))
-                    .then(({ ok, data }) => {
-                        if (data && data.scan_id) {
-                            this.scanId = data.scan_id;
-                            this.statusUrl = data.status_url;
-                            this.reviewUrl = data.review_url;
-                            if (data.fast_path) {
-                                this.progress = 100;
-                                this.stage = 'done';
-                                this.uploading = false;
-                                setTimeout(() => window.location.assign(data.review_url), 600);
-                                return;
-                            }
-                            this.startPolling();
-                        } else if (data && data.review_url) {
-                            this.uploading = false;
-                            window.location.assign(data.review_url);
-                        }
-                    })
-                    .catch(() => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '{{ route('import-pdf.upload') }}', true);
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                xhr.upload.onprogress = (event) => {
+                    if (!event.lengthComputable) return;
+                    this.progress = Math.min(30, Math.round((event.loaded / event.total) * 30));
+                };
+
+                xhr.onload = () => {
+                    let data = {};
+                    try { data = JSON.parse(xhr.responseText || '{}'); } catch (e) {}
+
+                    if (xhr.status < 200 || xhr.status >= 300) {
                         this.uploading = false;
                         this.failed = true;
-                        this.errorMessage = @js(__('imports.pdf.upload_failed'));
-                    });
+                        this.errorMessage = data.message || @js(__('imports.pdf.upload_failed'));
+                        return;
+                    }
+
+                    if (data.scan_id) {
+                        this.scanId = data.scan_id;
+                        this.statusUrl = data.status_url;
+                        this.reviewUrl = data.review_url;
+                        if (data.fast_path) {
+                            this.progress = 100;
+                            this.stage = 'done';
+                            this.uploading = false;
+                            setTimeout(() => window.location.assign(data.review_url), 600);
+                            return;
+                        }
+                        this.startPolling();
+                    } else if (data.review_url) {
+                        this.uploading = false;
+                        window.location.assign(data.review_url);
+                    }
+                };
+
+                xhr.onerror = () => {
+                    this.uploading = false;
+                    this.failed = true;
+                    this.errorMessage = @js(__('imports.pdf.upload_failed'));
+                };
+
+                xhr.send(fd);
             },
 
             startPolling() {
                 this.stopPolling();
-                this.pollTimer = setInterval(() => this.pollStatus(), 1500);
+                this.pollTimer = setInterval(() => this.pollStatus(), 1000);
             },
 
             pollStatus() {

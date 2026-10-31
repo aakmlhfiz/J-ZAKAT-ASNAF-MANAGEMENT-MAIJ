@@ -14,6 +14,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Fast Tesseract settings for supporting documents
+    |--------------------------------------------------------------------------
+    | One Tesseract TSV pass supplies both text and word confidence. This avoids
+    | OCR-ing the same page twice just to calculate confidence.
+    */
+    'ocr' => [
+        'dpi' => (int) env('DOCUMENT_OCR_DPI', 200),
+        'psm' => (int) env('DOCUMENT_OCR_PSM', 6),
+        'oem' => (int) env('DOCUMENT_OCR_OEM', 1),
+        'max_pages' => (int) env('DOCUMENT_OCR_MAX_PAGES', 10),
+        'max_dimension' => (int) env('DOCUMENT_OCR_MAX_DIMENSION', 2400),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Secure document preview
     |--------------------------------------------------------------------------
     | PDF pages are rendered to private cached images for the review page so

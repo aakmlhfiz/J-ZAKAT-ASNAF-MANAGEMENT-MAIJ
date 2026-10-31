@@ -21,9 +21,11 @@
         page: 1,
         maxPage: {{ max(1, $pageCount) }},
         zoom: 1,
+        imageLoaded: false,
+        imageError: false,
         pageUrl: @js($previewPageUrl),
-        nextPage() { if (this.page < this.maxPage) this.page++ },
-        prevPage() { if (this.page > 1) this.page-- },
+        nextPage() { if (this.page < this.maxPage) { this.page++; this.imageLoaded = false; this.imageError = false; } },
+        prevPage() { if (this.page > 1) { this.page--; this.imageLoaded = false; this.imageError = false; } },
         zoomIn() { this.zoom = Math.min(3, this.zoom + 0.25) },
         zoomOut() { this.zoom = Math.max(1, this.zoom - 0.25) },
         resetZoom() { this.zoom = 1 },
@@ -42,8 +44,20 @@
             </div>
 
             <div class="relative bg-muted rounded-[8px] border border-divider overflow-auto" style="max-height: 620px;">
+                <div x-show="!imageLoaded && !imageError" class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-muted/90 text-tertiary">
+                    <i class="fa-solid fa-spinner fa-spin text-[18px]"></i>
+                    <span class="text-[11px]">{{ __('document_ocr.review.loading_preview') }}</span>
+                </div>
+                <div x-show="imageError" x-cloak class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-muted/90 text-tertiary">
+                    <i class="fa-solid fa-image-slash text-[18px]"></i>
+                    <span class="text-[11px]">{{ __('document_ocr.review.preview_unavailable') }}</span>
+                </div>
                 <div class="min-h-[280px] flex items-start justify-center p-2 transition-transform duration-200" :style="`transform: scale(${zoom}); transform-origin: top center;`">
                     <img :src="pageUrl.replace('__PAGE__', page)" alt="{{ __('document_ocr.review.original_document') }}"
+                         x-on:load="imageLoaded = true; imageError = false"
+                         x-on:error="imageLoaded = false; imageError = true"
+                         x-show="imageLoaded"
+                         x-transition.opacity.duration.300ms
                          class="max-w-full h-auto rounded-[4px] bg-white">
                 </div>
             </div>

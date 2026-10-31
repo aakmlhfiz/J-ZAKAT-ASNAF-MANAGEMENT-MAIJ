@@ -5,10 +5,8 @@ namespace App\Services\Document;
 use App\Enums\DocumentType;
 use App\Models\DocumentImport;
 use App\Services\Document\Extractors\DocumentExtractor;
+use App\Services\Ocr\Contracts\ProvidesWordConfidence;
 use App\Services\Ocr\Contracts\TextExtractor;
-use App\Services\Ocr\DocumentIntelligence\TesseractWordExtractor;
-use App\Services\Ocr\Extractors\TesseractExtractor;
-use Illuminate\Support\Facades\Storage;
 
 class DocumentExtractionService
 {
@@ -28,7 +26,9 @@ class DocumentExtractionService
         /** @var DocumentExtractor $documentExtractor */
         $documentExtractor = new $class;
 
-        $wordPages = $this->confidenceWordPages($import, $pageInfo, $extractor);
+        $wordPages = $extractor instanceof ProvidesWordConfidence
+            ? $extractor->wordPages()
+            : [];
         $resolver = new DocumentConfidenceResolver($wordPages);
 
         $context = [
@@ -54,6 +54,9 @@ class DocumentExtractionService
         }
 
         $warnings = $result['warnings'] ?? [];
+        if ($extractor instanceof \App\Services\Ocr\Extractors\TesseractStructuredExtractor && $extractor->truncated()) {
+            $warnings[] = __('document_ocr.warnings.pages_truncated', ['pages' => $extractor->maxPages()]);
+        }
         $requiredMissing = [];
         foreach ($schema as $key => $definition) {
             if (($definition['required'] ?? false) && ($fields[$key]['value'] ?? null) === null) {
@@ -80,6 +83,9 @@ class DocumentExtractionService
             'has_text_layer' => (bool) ($pageInfo['has_text_layer'] ?? false),
             'confidence_available' => $resolver->available(),
             'ocr_engine' => $extractor->name(),
+            'timings' => $extractor instanceof ProvidesWordConfidence
+                ? $extractor->timings()
+                : [],
         ]);
 
         $ocrResult = [
@@ -98,47 +104,6 @@ class DocumentExtractionService
             'overall_confidence' => $overallConfidence,
             'warnings' => array_values(array_unique($warnings)),
         ];
-    }
-
-    /**
-     * Only run the extra Tesseract TSV pass when it can produce real
-     * confidence. Text-layer PDFs and non-Tesseract engines return null.
-     */
-    private function confidenceWordPages(DocumentImport $import, array $pageInfo, TextExtractor $extractor): array
-    {
-        if (! (bool) config('document_ocr.confidence_enabled', true)) {
-            return [];
-        }
-
-        if (! TesseractExtractor::isAvailable() || ! class_exists(\Imagick::class)) {
-            return [];
-        }
-
-        $mime = (string) $import->mime_type;
-        if (! str_starts_with($mime, 'image/') && $mime !== 'application/pdf') {
-            return [];
-        }
-
-        // A text-layer PDF has no raster OCR confidence to report.
-        if ($mime === 'application/pdf' && ($pageInfo['has_text_layer'] ?? false) && $extractor->name() === 'pdfparser') {
-            return [];
-        }
-
-        try {
-            $path = Storage::disk(config('ocr.disk', 'local'))->path($import->stored_path);
-            if (! file_exists($path)) {
-                return [];
-            }
-
-            return (new TesseractWordExtractor)->extractPages($path, $mime);
-        } catch (\Throwable $e) {
-            logger()->warning('Generic document confidence extraction failed', [
-                'document_import_id' => $import->id,
-                'error' => $e->getMessage(),
-            ]);
-
-            return [];
-        }
     }
 
     /**

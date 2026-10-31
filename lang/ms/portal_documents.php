@@ -68,6 +68,7 @@ return [
 
     'flash' => [
         'uploaded' => 'Dokumen berjaya dimuat naik.',
+        'processed' => 'Dokumen telah diproses. Sila semak dan sahkan maklumat.',
         'duplicate' => 'Dokumen yang sama telah dimuat naik sebelum ini. Anda dibawa ke rekod sedia ada.',
         'file_not_found' => 'Fail tidak dijumpai pada storan.',
         'reprocess_only_borang' => 'Hanya Borang Bantuan MAIJ boleh diproses semula.',

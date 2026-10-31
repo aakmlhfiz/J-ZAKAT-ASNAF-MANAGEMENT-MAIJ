@@ -15,6 +15,7 @@ use App\Services\Ocr\Extractors\OcrMyPdfExtractor;
 use App\Services\Ocr\Extractors\PdfOcrExtractor;
 use App\Services\Ocr\Extractors\PdfTextExtractor;
 use App\Services\Ocr\Extractors\TesseractExtractor;
+use App\Services\Ocr\Extractors\TesseractStructuredExtractor;
 use Illuminate\Support\Facades\Storage;
 
 class OcrService
@@ -71,7 +72,11 @@ class OcrService
             $pageInfo = $pageAnalyzer->analyze($filePath, $import->mime_type);
             $this->setProgress($import, 25);
 
-            $extractor = $this->resolveExtractor($import->mime_type, $filePath);
+            $documentType = DocumentType::fromStored($import->document_type);
+            $legacyGenericImport = in_array($import->document_type, [null, '', 'generic'], true);
+            $generic = ! $legacyGenericImport && ! $documentType->isBorang();
+
+            $extractor = $this->resolveExtractor($import->mime_type, $filePath, $pageInfo, $generic);
             $this->setProgress($import, 30);
 
             $ocrText = $extractor->extract($filePath);
@@ -207,15 +212,18 @@ class OcrService
         try {
             $import->update(['ocr_started_at' => now(), 'status' => 'processing', 'progress' => 10]);
 
-            $extractor = $this->resolveExtractor($mime, $filePath);
+            $documentType = DocumentType::fromStored($import->document_type);
+            $legacyGenericImport = in_array($import->document_type, [null, '', 'generic'], true);
+            $generic = ! $legacyGenericImport && ! $documentType->isBorang();
+            $pageAnalyzer = new PdfPageAnalyzer;
+            $pageInfo = $pageAnalyzer->analyze($filePath, $mime);
+
+            $extractor = $this->resolveExtractor($mime, $filePath, $pageInfo, $generic);
             $ocrText = $extractor->extract($filePath);
 
             if (empty(trim($ocrText))) {
                 return false;
             }
-
-            $pageAnalyzer = new PdfPageAnalyzer;
-            $pageInfo = $pageAnalyzer->analyze($filePath, $mime);
 
             $this->finalizeExtraction($import, $ocrText, $extractor, $pageInfo, $startedAt);
 
@@ -596,7 +604,7 @@ class OcrService
         return $profil;
     }
 
-    private function resolveExtractor(string $mimeType, string $filePath): TextExtractor
+    private function resolveExtractor(string $mimeType, string $filePath, ?array $pageInfo = null, bool $generic = false): TextExtractor
     {
         $isPdf = ($mimeType === 'application/pdf');
 
@@ -608,7 +616,20 @@ class OcrService
                 return new MistralOcrExtractor;
             }
 
-            logger()->warning('OCR_DRIVER=mistral set but MISTRAL_API_KEY is missing — falling back to hybrid driver.');
+            logger()->warning('OCR_DRIVER=mistral set but MISTRAL_API_KEY is missing - falling back to hybrid driver.');
+        }
+
+        // Supporting documents use a single-pass Tesseract TSV extractor so
+        // text and confidence are produced together. Digital PDFs stay on the
+        // fast text-layer path.
+        if ($generic) {
+            if ($isPdf && ($pageInfo['has_text_layer'] ?? false)) {
+                return new PdfTextExtractor;
+            }
+
+            if (TesseractExtractor::isAvailable()) {
+                return new TesseractStructuredExtractor;
+            }
         }
 
         if ($this->driver === 'pdfparser' && $isPdf) {

@@ -199,7 +199,7 @@ fast path.
 OCR jobs are dispatched to the `database` queue. A worker must be running:
 
 ```powershell
-php artisan queue:work --queue=default --tries=1 --timeout=120
+php artisan queue:work --queue=ocr,default --tries=1 --timeout=300
 ```
 
 For development, run this in a separate terminal alongside `php artisan serve`.
@@ -467,7 +467,7 @@ birth certificates and other supporting documents.
 
 ```powershell
 php artisan migrate
-php artisan queue:work --queue=default --tries=1 --timeout=300
+php artisan queue:work --queue=ocr,default --tries=1 --timeout=300
 npm run build
 ```
 
@@ -478,6 +478,11 @@ DOCUMENT_OCR_CONFIDENCE=true
 DOCUMENT_OCR_PREVIEW=true
 DOCUMENT_OCR_PREVIEW_DPI=150
 DOCUMENT_OCR_PREVIEW_MAX_PAGES=30
+DOCUMENT_OCR_DPI=200
+DOCUMENT_OCR_PSM=6
+DOCUMENT_OCR_OEM=1
+DOCUMENT_OCR_MAX_PAGES=10
+DOCUMENT_OCR_MAX_DIMENSION=2400
 ```
 
 No Google Cloud Vision or Azure credentials are required. They are not

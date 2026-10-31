@@ -125,6 +125,7 @@ return [
         'medical_no_diagnosis' => 'The system does not infer a diagnosis or medical eligibility decision.',
         'generic_document' => 'This document has no specific fields. Review the OCR text and enter important information manually.',
         'required_missing' => 'The following fields were not detected: :fields.',
+        'pages_truncated' => 'The document exceeds :pages pages. Only the first :pages pages were processed; please review the remaining pages manually.',
     ],
 
     'status' => [
@@ -187,6 +188,8 @@ return [
         'bank_transactions' => 'Detected Transactions',
         'credits_not_income' => 'Credits are not automatically treated as income.',
         'not_available' => 'Not available',
+        'loading_preview' => 'Loading preview…',
+        'preview_unavailable' => 'Preview unavailable. Open the original file.',
         'back' => 'Back',
         'masked_hint' => 'Sensitive numbers are masked in logs and general lists.',
     ],

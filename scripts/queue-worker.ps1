@@ -51,7 +51,7 @@ if (Test-Path $pidFile) {
 
 $args = @(
     'artisan', 'queue:work',
-    '--queue=default',
+    '--queue=ocr,default',
     "--tries=$Tries",
     "--timeout=$Timeout",
     '--sleep=1',

@@ -68,6 +68,7 @@ return [
 
     'flash' => [
         'uploaded' => 'Document uploaded successfully.',
+        'processed' => 'The document has been processed. Please review and verify the information.',
         'duplicate' => 'The same document was uploaded before. You have been taken to the existing record.',
         'file_not_found' => 'File not found in storage.',
         'reprocess_only_borang' => 'Only the MAIJ Assistance Form can be reprocessed.',

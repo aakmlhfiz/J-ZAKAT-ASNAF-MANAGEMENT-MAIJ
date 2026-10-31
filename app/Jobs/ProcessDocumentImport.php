@@ -16,13 +16,15 @@ class ProcessDocumentImport implements ShouldQueue
 
     public int $timeout = 300;
 
-    public int $tries = 3;
+    public int $tries = 2;
 
-    public array $backoff = [10, 60];
+    public array $backoff = [5, 30];
 
     public function __construct(
         public int $documentImportId
-    ) {}
+    ) {
+        $this->queue = 'ocr';
+    }
 
     public function handle(OcrService $ocr): void
     {

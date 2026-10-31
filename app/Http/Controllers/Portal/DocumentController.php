@@ -26,6 +26,7 @@ class DocumentController extends Controller
     public function __construct(
         protected DocumentPreviewService $preview,
         protected DocumentVerificationService $verification,
+        protected OcrService $ocr,
     ) {}
 
     public function index(): View
@@ -95,7 +96,12 @@ class DocumentController extends Controller
 
         AuditLogger::documentUploaded($user, $import, $request);
 
-        ProcessDocumentImport::dispatch($import->id);
+        // Digital PDFs are usually fast enough to finish in the upload request.
+        // Scans and images stay on the queue.
+        $fastPath = $import->isGenericDocument() && $this->ocr->processTextLayer($import);
+        if (! $fastPath) {
+            ProcessDocumentImport::dispatch($import->id);
+        }
 
         NotificationService::notifyUsers(
             [$user->id],
@@ -115,7 +121,14 @@ class DocumentController extends Controller
                 'status_url' => route('user.documents.status', $import->id),
                 'review_url' => $reviewUrl,
                 'duplicate' => false,
+                'ready' => $fastPath,
             ]);
+        }
+
+        if ($fastPath) {
+            return redirect()
+                ->route('user.documents.review', $import->id)
+                ->with('success', __('portal_documents.flash.processed'));
         }
 
         return redirect()

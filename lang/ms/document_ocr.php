@@ -125,6 +125,7 @@ return [
         'medical_no_diagnosis' => 'Sistem tidak membuat sebarang kesimpulan diagnosis atau kelayakan perubatan.',
         'generic_document' => 'Dokumen ini tidak mempunyai medan khusus. Semak teks OCR dan isi maklumat penting secara manual.',
         'required_missing' => 'Medan berikut tidak dikesan: :fields.',
+        'pages_truncated' => 'Dokumen melebihi :pages halaman. Hanya :pages halaman pertama diproses; sila semak baki dokumen secara manual.',
     ],
 
     'status' => [
@@ -187,6 +188,8 @@ return [
         'bank_transactions' => 'Transaksi Dikenal Pasti',
         'credits_not_income' => 'Kredit tidak dianggap pendapatan secara automatik.',
         'not_available' => 'Tidak tersedia',
+        'loading_preview' => 'Memuatkan pratonton…',
+        'preview_unavailable' => 'Pratonton tidak tersedia. Buka fail asal.',
         'back' => 'Kembali',
         'masked_hint' => 'Nombor sensitif dipaparkan secara bertutup dalam log dan senarai umum.',
     ],
