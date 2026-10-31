@@ -8,7 +8,7 @@ return [
     ],
     'default_name' => 'Administrator',
     'title' => 'Dashboard',
-    'subtitle' => 'Smart overview for MAIJ administrators',
+    'subtitle' => 'MAIJ administrative operations overview',
     'export' => 'Export',
     'add_applicant' => 'Add Applicant',
     'this_month' => 'this month',
@@ -25,6 +25,7 @@ return [
         'eyebrow' => 'Trend',
         'title' => 'Monthly Applications',
         'subtitle' => 'Last 12 months',
+        'new' => 'New',
     ],
 
     'distribution' => [

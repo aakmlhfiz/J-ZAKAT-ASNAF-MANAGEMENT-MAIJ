@@ -27,7 +27,7 @@
                                 {!! __('emails.additional_documents.intro', ['ic' => e($ic)]) !!}
                             </p>
 
-                            <div style="margin:24px 0;padding:20px;background-color:#FEF3C7;border-left:4px solid #F59E0B;border-radius:8px;">
+                            <div style="margin:24px 0;padding:20px;background-color:#FEF3C7;border-left:4px solid #D97706;border-radius:8px;">
                                 <p style="margin:0 0 12px 0;font-size:13px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;">{{ __('emails.additional_documents.list_title') }}</p>
                                 <ul style="margin:0;padding-left:20px;color:#1E293B;">
                                     @foreach($documents as $doc)

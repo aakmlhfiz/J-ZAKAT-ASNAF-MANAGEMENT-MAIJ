@@ -27,7 +27,7 @@
                                 {!! __('emails.salary_update.intro', ['ic' => e($ic)]) !!}
                             </p>
 
-                            <div style="margin:24px 0;padding:20px;background-color:#FEF3C7;border-left:4px solid #F59E0B;border-radius:8px;">
+                            <div style="margin:24px 0;padding:20px;background-color:#FEF3C7;border-left:4px solid #D97706;border-radius:8px;">
                                 <p style="margin:0 0 12px 0;font-size:13px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;">{{ __('emails.salary_update.why_title') }}</p>
                                 <p style="margin:0;font-size:15px;color:#1E293B;line-height:1.6;">
                                     {!! __('emails.salary_update.why_body', ['months' => $months]) !!}

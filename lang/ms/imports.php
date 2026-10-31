@@ -88,7 +88,7 @@ return [
 
     'pdf' => [
         'meta_title' => 'Import PDF / OCR',
-        'meta_subtitle' => 'Muat naik borang permohonan & AI pengekstrakan pintar',
+        'meta_subtitle' => 'Muat naik borang permohonan & pengekstrakan automatik',
         'title' => 'Import PDF / OCR',
         'subtitle' => 'Muat naik borang permohonan (PDF, JPG, PNG) & AI akan mengekstrak maklumat secara automatik',
         'eyebrow' => 'Pemprosesan Dokumen AI',
@@ -116,7 +116,7 @@ return [
         'how_steps' => [
             'Muat naik borang MAIJ (PDF, JPG, atau PNG)',
             'AI mengekstrak teks dari setiap halaman dokumen',
-            'Sistem mengesan & memetakan medan secara pintar',
+            'Sistem mengesan & memetakan medan secara automatik',
             'Semak keyakinan AI & data yang diekstrak dalam pratinjau',
             'AI mengesahkan format IC, telefon, pendapatan, dan medan lain',
             'Sahkan & simpan data ke dalam pangkalan data',

@@ -53,7 +53,7 @@ return [
     ],
 
     'footer' => [
-        'platform' => 'Smart Asnaf Eligibility Platform',
+        'platform' => 'Asnaf Eligibility Management System',
         'developed_for' => 'Built for Majlis Agama Islam Johor',
     ],
 ];

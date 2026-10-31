@@ -172,7 +172,7 @@ return [
 
     'ai' => [
         'title' => 'Household AI Analysis',
-        'description' => 'Smart assessment based on household data',
+        'description' => 'Eligibility assessment based on household data',
         'confidence' => 'Confidence:',
         'passed' => 'Passed',
         'failed' => 'Failed',

@@ -49,7 +49,7 @@
     <div class="lg:col-span-2 space-y-6">
         <x-app-card class="p-6" :hover="false" :accent="$statusTone">
             <div class="flex items-start gap-5">
-                <div class="w-16 h-16 rounded-[20px] bg-primary text-white flex items-center justify-center text-[24px] font-semibold shrink-0">
+                <div class="w-16 h-16 rounded-[12px] bg-primary text-white flex items-center justify-center text-[24px] font-semibold shrink-0">
                     {{ strtoupper(mb_substr($profil->nama, 0, 1)) }}
                 </div>
                 <div class="flex-1 min-w-0">
@@ -175,8 +175,8 @@
 {{-- Reject Modal --}}
 <div id="rejectModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-modal="true" role="dialog" aria-label="{{ __('asnaf.show.reject_modal_title') }}">
     <div class="flex min-h-full items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="document.getElementById('rejectModal').classList.add('hidden')"></div>
-        <div class="relative w-full max-w-md surface p-6 rounded-2xl shadow-xl z-10">
+        <div class="fixed inset-0 bg-black/50" onclick="document.getElementById('rejectModal').classList.add('hidden')"></div>
+        <div class="relative w-full max-w-md surface p-6 rounded-[10px] shadow-lg z-10">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-h3 text-text">{{ __('asnaf.show.reject_modal_title') }}</h3>
                 <button type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')" class="btn btn-ghost btn-icon btn-sm text-tertiary hover:text-text" aria-label="{{ __('common.actions.close') }}">

@@ -151,7 +151,7 @@
      @keydown.escape.window="close()"
      class="fixed inset-0 z-[90] flex items-center justify-center p-4"
      style="display: none;" role="dialog" aria-modal="true">
-    <div x-show="open" x-transition.opacity class="absolute inset-0 -z-10 bg-text/40 backdrop-blur-sm" @click="close()"></div>
+    <div x-show="open" x-transition.opacity class="absolute inset-0 -z-10 bg-text/40" @click="close()"></div>
     <div x-show="open"
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 scale-95"
@@ -159,7 +159,7 @@
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
-         class="bg-card rounded-[20px] p-6 md:p-7 max-w-2xl w-full shadow-xl max-h-[90vh] overflow-y-auto">
+         class="bg-card rounded-[12px] p-6 md:p-7 max-w-2xl w-full shadow-lg border border-divider max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between mb-5">
             <h2 class="text-h3 text-text font-semibold" x-text="editing ? @js(__('household.history.edit_title')) : @js(__('household.history.create_title'))"></h2>
             <button @click="close()" class="w-8 h-8 rounded-[8px] flex items-center justify-center text-text-tertiary hover:bg-muted transition-fast">

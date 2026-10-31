@@ -4,7 +4,7 @@
 --}}
 <div class="split-auth__brand">
     <a href="{{ url('/') }}" class="flex items-center gap-3 group min-w-0">
-        <div class="w-11 h-11 rounded-[14px] bg-white flex items-center justify-center shadow-lg ring-1 ring-white/20 overflow-hidden shrink-0">
+        <div class="w-11 h-11 rounded-[8px] bg-white flex items-center justify-center shadow-lg ring-1 ring-white/20 overflow-hidden shrink-0">
             <img src="{{ asset('images/MAIJ.PNG') }}" alt="MAIJ" class="w-full h-full object-contain p-1">
         </div>
         <div class="leading-none min-w-0">

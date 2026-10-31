@@ -27,7 +27,7 @@
                                 {!! __('emails.application_rejected.intro') !!}
                             </p>
 
-                            <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background-color:#FEF2F2;border-radius:12px;padding:20px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background-color:#FEF2F2;border-radius:8px;padding:20px;">
                                 <tr>
                                     <td>
                                         <table width="100%" cellpadding="0" cellspacing="0">
@@ -41,7 +41,7 @@
                                             </tr>
                                             <tr>
                                                 <td style="padding:6px 0;font-size:13px;color:#64748B;">{{ __('emails.application_rejected.label_status') }}</td>
-                                                <td style="padding:6px 0;font-size:13px;color:#EF4444;font-weight:600;text-align:right;">{{ __('emails.application_rejected.status_rejected') }}</td>
+                                                <td style="padding:6px 0;font-size:13px;color:#DC2626;font-weight:600;text-align:right;">{{ __('emails.application_rejected.status_rejected') }}</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:6px 0;font-size:13px;color:#64748B;">{{ __('emails.application_rejected.label_date') }}</td>

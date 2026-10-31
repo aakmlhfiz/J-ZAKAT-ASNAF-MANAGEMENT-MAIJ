@@ -101,7 +101,7 @@
     @endif
 
     {{-- Sticky quick-jump nav --}}
-    <div class="sticky top-0 z-30 bg-bg/95 backdrop-blur-sm pb-3 -mx-0 mb-6">
+    <div class="sticky top-0 z-30 bg-bg pb-3 -mx-0 mb-6">
         <div class="flex flex-wrap gap-1">
             @php
                 $sections = [

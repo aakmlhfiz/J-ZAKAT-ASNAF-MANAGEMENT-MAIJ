@@ -82,7 +82,7 @@
                 </div>
             </x-form-section>
 
-            <div class="flex items-center gap-3 sticky bottom-0 -mx-6 md:-mx-10 -mb-6 md:-mb-8 px-6 md:px-10 py-4 bg-bg/80 backdrop-blur border-t border-divider">
+            <div class="flex items-center gap-3 sticky bottom-0 -mx-6 md:-mx-10 -mb-6 md:-mb-8 px-6 md:px-10 py-4 bg-bg border-t border-divider">
                 <x-app-button type="submit" variant="primary" size="lg" icon="fa-check">{{ ($mode ?? null) === 'edit' ? __('asnaf.form.update') : __('asnaf.form.save') }}</x-app-button>
                 <x-app-button variant="ghost" size="lg" href="{{ ($mode ?? null) === 'edit' ? route('viewprofile', $profil->ic) : route('viewprofile.index') }}">{{ __('asnaf.form.cancel') }}</x-app-button>
             </div>

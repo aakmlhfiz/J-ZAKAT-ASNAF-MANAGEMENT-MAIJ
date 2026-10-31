@@ -2,8 +2,8 @@
 
 return [
     'meta' => [
-        'title' => 'J-ZAKAT — Platform Pintar Pengurusan Zakat',
-        'description' => 'J-ZAKAT — Platform Pintar Pengurusan Zakat Majlis Agama Islam Johor. Permohonan bantuan zakat dalam talian dengan penilaian Had Kifayah dan analisis AI.',
+        'title' => 'J-ZAKAT — Sistem Pengurusan Zakat MAIJ',
+        'description' => 'J-ZAKAT — Sistem pengurusan permohonan bantuan zakat Majlis Agama Islam Johor dengan penilaian Had Kifayah dan analisis kelayakan.',
     ],
 
     'nav' => [
@@ -22,11 +22,11 @@ return [
     ],
 
     'hero' => [
-        'badge' => 'Platform Zakat Berkuasa AI',
-        'title' => 'Platform Pintar Pengurusan Zakat',
+        'badge' => 'Sistem Rasmi MAIJ',
+        'title' => 'Pengurusan Zakat yang Telus',
         'lead_before' => 'Sistem pengurusan permohonan bantuan zakat yang cekap dan telus untuk',
         'organisation' => 'Majlis Agama Islam Johor',
-        'lead_after' => '— lengkap dengan penilaian Had Kifayah automatik, analisis kelayakan asnaf berkuasa AI, dan pemantauan status permohonan dalam satu platform bersepadu.',
+        'lead_after' => '— lengkap dengan penilaian Had Kifayah, analisis kelayakan asnaf, dan pemantauan status permohonan dalam satu platform bersepadu.',
         'apply' => 'Mohon Bantuan Zakat',
         'login' => 'Log Masuk',
         'trust' => [
@@ -44,11 +44,11 @@ return [
 
     'features' => [
         'eyebrow' => 'Perkhidmatan',
-        'title' => 'Teknologi pintar untuk pengurusan zakat yang telus',
-        'subtitle' => 'Menggabungkan penilaian automatik, kecerdasan buatan dan aliran kerja digital untuk mempercepat bantuan sampai kepada yang layak.',
+        'title' => 'Perkhidmatan pengurusan zakat',
+        'subtitle' => 'Menggabungkan penilaian kelayakan, pengiraan Had Kifayah dan aliran kerja digital untuk mempercepat bantuan kepada yang layak.',
         'ai' => [
-            'title' => 'Penilaian AI',
-            'desc' => 'Analisis kelayakan asnaf berkuasa AI dengan skor keyakinan dan justifikasi automatik.',
+            'title' => 'Penilaian Kelayakan',
+            'desc' => 'Analisis kelayakan asnaf dengan skor keyakinan dan justifikasi yang boleh disemak.',
         ],
         'kifayah' => [
             'title' => 'Kiraan Had Kifayah',
@@ -133,8 +133,8 @@ return [
     ],
 
     'footer' => [
-        'tagline' => 'Platform Pintar Pengurusan Zakat',
-        'description' => 'Sistem pengurusan kelayakan asnaf pintar untuk Majlis Agama Islam Johor — menggabungkan penilaian Had Kifayah, analisis AI dan aliran kerja digital untuk mempercepat bantuan.',
+        'tagline' => 'Sistem Pengurusan Zakat',
+        'description' => 'Sistem pengurusan kelayakan asnaf untuk Majlis Agama Islam Johor — menggabungkan penilaian Had Kifayah, analisis kelayakan dan aliran kerja digital untuk mempercepat bantuan.',
         'address' => 'Majlis Agama Islam Johor, Pusat Islam Iskandar Johor,<br>Jalan Masjid Abu Bakar, 80990 Johor Bahru.',
         'phone' => '07-228 2928',
         'quick_links' => 'Pautan Pantas',

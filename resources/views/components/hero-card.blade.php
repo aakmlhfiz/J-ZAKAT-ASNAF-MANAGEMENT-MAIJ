@@ -1,9 +1,8 @@
 @props(['eyebrow' => null, 'title' => '', 'subtitle' => null, 'icon' => null, 'accent' => 'primary'])
 <x-app-card :accent="$accent" class="relative overflow-hidden">
-    <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full opacity-50 pointer-events-none" style="background: radial-gradient(circle, rgba(0,102,204,0.10) 0%, transparent 70%);"></div>
     <div class="relative flex items-start gap-5">
         @if($icon)
-            <div class="w-14 h-14 rounded-[16px] bg-primary-soft text-primary flex items-center justify-center shrink-0 ring-1 ring-primary/10">
+            <div class="w-14 h-14 rounded-[10px] bg-primary-soft text-primary flex items-center justify-center shrink-0 ring-1 ring-primary/10">
                 <i class="fa-solid {{ $icon }} text-[20px]"></i>
             </div>
         @endif

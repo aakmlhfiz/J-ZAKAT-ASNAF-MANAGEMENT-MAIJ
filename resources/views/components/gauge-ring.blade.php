@@ -2,11 +2,11 @@
 @php
     $clamped = max(0, min(100, (float) $percent));
     $colorMap = [
-        'primary' => '#3B82F6',
-        'success' => '#22C55E',
-        'warning' => '#F59E0B',
-        'danger'  => '#EF4444',
-        'info'    => '#5AC8FA',
+        'primary' => '#15345B',
+        'success' => '#15803D',
+        'warning' => '#D97706',
+        'danger'  => '#DC2626',
+        'info'    => '#245B91',
     ];
     $strokeColor = $colorMap[$color] ?? $colorMap['primary'];
     $radius = ($size - $stroke) / 2;
@@ -17,7 +17,7 @@
 <div class="inline-flex flex-col items-center">
     <div class="relative" style="width: {{ $size }}px; height: {{ $size }}px;">
         <svg viewBox="0 0 {{ $size }} {{ $size }}" class="transform -rotate-90">
-            <circle cx="{{ $size / 2 }}" cy="{{ $size / 2 }}" r="{{ $radius }}" stroke="#F5F5F7" stroke-width="{{ $stroke }}" fill="none" />
+            <circle cx="{{ $size / 2 }}" cy="{{ $size / 2 }}" r="{{ $radius }}" stroke="#E2E8F0" stroke-width="{{ $stroke }}" fill="none" />
             <circle data-gauge cx="{{ $size / 2 }}" cy="{{ $size / 2 }}" r="{{ $radius }}" stroke="{{ $strokeColor }}" stroke-width="{{ $stroke }}" fill="none"
                 stroke-linecap="round"
                 stroke-dasharray="{{ $circ }}"

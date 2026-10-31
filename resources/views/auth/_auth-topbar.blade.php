@@ -10,7 +10,7 @@
     </a>
 
     <div class="flex items-center gap-2 sm:gap-3">
-        <x-language-switcher variant="dark" />
+        <x-language-switcher variant="light" />
 
         <a href="{{ url('/') }}" class="auth-back">
             <x-icon name="arrow-left" :size="15" />

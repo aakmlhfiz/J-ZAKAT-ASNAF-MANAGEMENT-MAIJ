@@ -12,16 +12,10 @@
         stroke-width="{{ $stroke }}" />
     <circle cx="{{ $cx }}" cy="{{ $cx }}" r="{{ $r }}"
         fill="none"
-        stroke="url(#profileGradient)"
+        stroke="#15345B"
         stroke-width="{{ $stroke }}"
         stroke-linecap="round"
         stroke-dasharray="{{ $circumference }}"
         stroke-dashoffset="{{ $offset }}"
-        class="transition-all duration-700 ease-out" />
-    <defs>
-        <linearGradient id="profileGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#2563EB" />
-            <stop offset="100%" stop-color="#4F46E5" />
-        </linearGradient>
-    </defs>
+        class="transition-all duration-500 ease-out" />
 </svg>

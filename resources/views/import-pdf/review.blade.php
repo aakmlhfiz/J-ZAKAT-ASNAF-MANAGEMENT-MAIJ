@@ -49,13 +49,13 @@
 @if($processing)
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" x-data="reviewPoller('{{ route('import-pdf.status', $import->id) }}')" x-init="startPolling()">
         <div class="lg:col-span-2 text-center py-16">
-            <div class="w-16 h-16 rounded-[20px] bg-primary-soft mx-auto flex items-center justify-center mb-5">
+            <div class="w-16 h-16 rounded-[12px] bg-primary-soft mx-auto flex items-center justify-center mb-5">
                 <i class="fa-solid fa-spinner fa-spin-pulse text-primary text-[24px]"></i>
             </div>
             <p class="text-h3 text-text">{{ __('imports.review.processing_title') }}</p>
             <p class="text-body text-secondary mt-2">{{ __('imports.review.processing_text') }}</p>
             <p class="text-small text-tertiary mt-4">{{ __('imports.review.processing_auto') }}</p>
-            <div x-show="stalled" x-cloak class="mt-6 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 max-w-md mx-auto text-small">
+            <div x-show="stalled" x-cloak class="mt-6 p-4 rounded-[8px] bg-warning-soft/40 border border-warning/20 max-w-md mx-auto text-small">
                 {{ __('imports.review.stalled_text') }} <a class="underline" href="{{ route('import-pdf.index') }}">{{ __('imports.review.upload_again_link') }}</a> {{ __('imports.review.stalled_suffix') }}
             </div>
         </div>

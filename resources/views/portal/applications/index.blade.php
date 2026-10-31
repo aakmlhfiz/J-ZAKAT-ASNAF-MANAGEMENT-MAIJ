@@ -195,7 +195,7 @@
             <a :href="item.show_url" class="block group">
                 <x-app-card class="p-5" hover>
                     <div class="flex items-start gap-4">
-                        <div :class="`w-12 h-12 rounded-[14px] bg-${item.status_color}-soft text-${item.status_color} flex items-center justify-center shrink-0`">
+                        <div :class="`w-12 h-12 rounded-[8px] bg-${item.status_color}-soft text-${item.status_color} flex items-center justify-center shrink-0`">
                             <i class="fa-solid fa-file-lines text-[18px]"></i>
                         </div>
                         <div class="min-w-0 flex-1">

@@ -7,6 +7,8 @@ import './profile.js';
 import './import-pdf.js';
 
 Chart.register(...registerables);
+Chart.defaults.font.family = "'Inter', 'Segoe UI', system-ui, sans-serif";
+Chart.defaults.color = '#64748B';
 window.Chart = Chart;
 
 document.addEventListener('alpine:init', () => {
@@ -245,7 +247,7 @@ const initTrendCharts = () => {
 
         const labels = JSON.parse(canvas.dataset.labels || '[]');
         const values = JSON.parse(canvas.dataset.values || '[]');
-        const color = canvas.dataset.color || '#0066CC';
+        const color = canvas.dataset.color || '#245B91';
         const fill = canvas.dataset.fill === '1';
         const type = canvas.dataset.type || 'line';
 
@@ -272,14 +274,14 @@ const initTrendCharts = () => {
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: '#1D1D1F', titleColor: '#fff',
-                            bodyColor: '#fff', cornerRadius: 8, padding: 10,
+                            backgroundColor: '#15345B', titleColor: '#fff',
+                            bodyColor: '#fff', cornerRadius: 6, padding: 10,
                             displayColors: false,
                         },
                     },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: '#6E6E73', font: { size: 12 } }, border: { display: false } },
-                        y: { beginAtZero: true, grid: { color: '#E5E5EA', drawBorder: false }, ticks: { color: '#6E6E73', font: { size: 12 }, precision: 0 }, border: { display: false } },
+                        x: { grid: { display: false }, ticks: { color: '#64748B', font: { size: 12 } }, border: { display: false } },
+                        y: { beginAtZero: true, grid: { color: '#E2E8F0', drawBorder: false }, ticks: { color: '#64748B', font: { size: 12 }, precision: 0 }, border: { display: false } },
                     },
                 },
             });
@@ -287,7 +289,7 @@ const initTrendCharts = () => {
         }
 
         if (type === 'doughnut') {
-            const palette = ['#0066CC', '#34C759', '#FF9F0A', '#FF3B30', '#5AC8FA', '#AF52DE'];
+            const palette = ['#15345B', '#15803D', '#D97706', '#DC2626', '#2878C8', '#64748B'];
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -305,8 +307,8 @@ const initTrendCharts = () => {
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: '#1D1D1F', titleColor: '#fff',
-                            bodyColor: '#fff', cornerRadius: 8, padding: 10,
+                            backgroundColor: '#15345B', titleColor: '#fff',
+                            bodyColor: '#fff', cornerRadius: 6, padding: 10,
                         },
                     },
                 },
@@ -333,14 +335,14 @@ const initTrendCharts = () => {
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#1D1D1F', titleColor: '#fff',
-                        bodyColor: '#fff', cornerRadius: 8, padding: 10,
+                        backgroundColor: '#15345B', titleColor: '#fff',
+                        bodyColor: '#fff', cornerRadius: 6, padding: 10,
                         displayColors: false,
                     },
                 },
                 scales: {
-                    x: { grid: { display: false }, ticks: { color: '#6E6E73', font: { size: 12 } }, border: { display: false } },
-                    y: { beginAtZero: true, grid: { color: '#E5E5EA', drawBorder: false }, ticks: { color: '#6E6E73', font: { size: 12 }, precision: 0 }, border: { display: false } },
+                    x: { grid: { display: false }, ticks: { color: '#64748B', font: { size: 12 } }, border: { display: false } },
+                    y: { beginAtZero: true, grid: { color: '#E2E8F0', drawBorder: false }, ticks: { color: '#64748B', font: { size: 12 }, precision: 0 }, border: { display: false } },
                 },
             },
         });

@@ -198,13 +198,13 @@
                              @dragleave.prevent="dragging = false"
                              @drop.prevent="handleDrop($event)"
                              @click="$refs.fileInput.click()"
-                             class="relative border-2 border-dashed rounded-[20px] p-12 text-center cursor-pointer transition-apple"
+                             class="relative border-2 border-dashed rounded-[12px] p-12 text-center cursor-pointer transition-apple"
                              :class="dragging ? 'border-primary bg-primary-soft scale-[1.01]' : 'border-divider hover:border-primary/50 hover:bg-primary-soft/30'">
 
                             <input type="file" name="file" x-ref="fileInput" accept=".pdf,.jpg,.jpeg,.png" class="hidden"
                                    @change="handleFileSelect($event)">
 
-                            <div class="w-16 h-16 rounded-[20px] bg-primary-soft mx-auto flex items-center justify-center mb-4 ring-1 ring-primary/15">
+                            <div class="w-16 h-16 rounded-[12px] bg-primary-soft mx-auto flex items-center justify-center mb-4 ring-1 ring-primary/15">
                                 <i class="fa-solid fa-cloud-arrow-up text-primary text-[26px]"></i>
                             </div>
 

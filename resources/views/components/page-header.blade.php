@@ -8,7 +8,7 @@
             </p>
         @endif
         <h1 class="text-title text-text tracking-tight">{{ $title }}</h1>
-        @if($subtitle)<p class="text-body text-secondary mt-2 max-w-2xl">{{ $subtitle }}</p>@endif
+        @if($subtitle)<p class="text-body text-secondary-strong mt-2 max-w-2xl">{{ $subtitle }}</p>@endif
     </div>
     @isset($actions)
         <div class="flex items-center gap-2 shrink-0 flex-wrap">{{ $actions }}</div>

@@ -2,8 +2,8 @@
 
 return [
     'meta' => [
-        'title' => 'J-ZAKAT — Smart Zakat Management Platform',
-        'description' => 'J-ZAKAT — Smart Zakat Management Platform for Majlis Agama Islam Johor. Online zakat assistance applications with Had Kifayah assessment and AI analysis.',
+        'title' => 'J-ZAKAT — MAIJ Zakat Management System',
+        'description' => 'J-ZAKAT — Zakat assistance application management for Majlis Agama Islam Johor with Had Kifayah assessment and eligibility analysis.',
     ],
 
     'nav' => [
@@ -22,11 +22,11 @@ return [
     ],
 
     'hero' => [
-        'badge' => 'AI-Powered Zakat Platform',
-        'title' => 'Smart Zakat Management Platform',
+        'badge' => 'Official MAIJ System',
+        'title' => 'Transparent Zakat Management',
         'lead_before' => 'An efficient and transparent zakat assistance application system for',
         'organisation' => 'Majlis Agama Islam Johor',
-        'lead_after' => '— complete with automated Had Kifayah assessment, AI-powered asnaf eligibility analysis, and application status tracking in one integrated platform.',
+        'lead_after' => '— complete with Had Kifayah assessment, asnaf eligibility analysis, and application status tracking in one integrated platform.',
         'apply' => 'Apply for Zakat Assistance',
         'login' => 'Log In',
         'trust' => [
@@ -44,11 +44,11 @@ return [
 
     'features' => [
         'eyebrow' => 'Services',
-        'title' => 'Smart technology for transparent zakat management',
-        'subtitle' => 'Combining automated assessment, artificial intelligence and digital workflows to deliver assistance faster to those who qualify.',
+        'title' => 'Zakat management services',
+        'subtitle' => 'Combining eligibility assessment, Had Kifayah calculation and digital workflows to deliver assistance faster to those who qualify.',
         'ai' => [
-            'title' => 'AI Assessment',
-            'desc' => 'AI-powered asnaf eligibility analysis with confidence scores and automated justification.',
+            'title' => 'Eligibility Assessment',
+            'desc' => 'Asnaf eligibility analysis with confidence scores and reviewable justification.',
         ],
         'kifayah' => [
             'title' => 'Had Kifayah Calculation',
@@ -133,8 +133,8 @@ return [
     ],
 
     'footer' => [
-        'tagline' => 'Smart Zakat Management Platform',
-        'description' => 'Smart asnaf eligibility management for Majlis Agama Islam Johor — combining Had Kifayah assessment, AI analysis and digital workflows to deliver assistance faster.',
+        'tagline' => 'Zakat Management System',
+        'description' => 'Asnaf eligibility management for Majlis Agama Islam Johor — combining Had Kifayah assessment, eligibility analysis and digital workflows to deliver assistance faster.',
         'address' => 'Majlis Agama Islam Johor, Pusat Islam Iskandar Johor,<br>Jalan Masjid Abu Bakar, 80990 Johor Bahru.',
         'phone' => '07-228 2928',
         'quick_links' => 'Quick Links',

@@ -172,7 +172,7 @@ return [
 
     'ai' => [
         'title' => 'Analisis AI Isi Rumah',
-        'description' => 'Penilaian pintar berdasarkan data isi rumah',
+        'description' => 'Penilaian kelayakan berdasarkan data isi rumah',
         'confidence' => 'Keyakinan:',
         'passed' => 'Lulus',
         'failed' => 'Gagal',

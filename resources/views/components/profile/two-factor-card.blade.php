@@ -27,7 +27,7 @@
         <p class="text-small text-secondary mb-4">{{ __('profile.security.two_factor.setup_desc') }}</p>
 
         <div class="flex flex-col sm:flex-row items-center gap-5 mb-4">
-            <canvas x-ref="qrCanvas" class="shrink-0 bg-white p-3 rounded-[16px] shadow-sm" width="200" height="200"></canvas>
+            <canvas x-ref="qrCanvas" class="shrink-0 bg-white p-3 rounded-[10px] shadow-sm" width="200" height="200"></canvas>
             <div class="flex-1 min-w-0 space-y-2">
                 <p class="text-eyebrow text-tertiary">{{ __('profile.security.two_factor.manual_code') }}</p>
                 <code class="block text-[13px] font-mono break-all bg-muted p-2 rounded-[8px] text-text" x-text="secret"></code>

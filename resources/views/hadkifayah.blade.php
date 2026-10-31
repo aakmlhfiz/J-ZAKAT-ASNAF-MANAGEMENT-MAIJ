@@ -266,7 +266,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label class="cursor-pointer">
                         <input type="radio" x-model="perumahan" value="sendiri" class="peer sr-only">
-                        <div class="p-4 rounded-[14px] border-2 transition-apple"
+                        <div class="p-4 rounded-[8px] border-2 transition-apple"
                              :class="perumahan === 'sendiri' ? 'border-primary bg-primary-soft shadow-sm' : 'border-divider bg-card hover:border-primary/50'">
                             <div class="flex items-center gap-3">
                                 <div class="w-11 h-11 rounded-[12px] flex items-center justify-center" :class="perumahan === 'sendiri' ? 'bg-primary text-white' : 'bg-muted text-secondary'">
@@ -281,7 +281,7 @@
                     </label>
                     <label class="cursor-pointer">
                         <input type="radio" x-model="perumahan" value="sewa" class="peer sr-only">
-                        <div class="p-4 rounded-[14px] border-2 transition-apple"
+                        <div class="p-4 rounded-[8px] border-2 transition-apple"
                              :class="perumahan === 'sewa' ? 'border-primary bg-primary-soft shadow-sm' : 'border-divider bg-card hover:border-primary/50'">
                             <div class="flex items-center gap-3">
                                 <div class="w-11 h-11 rounded-[12px] flex items-center justify-center" :class="perumahan === 'sewa' ? 'bg-primary text-white' : 'bg-muted text-secondary'">
@@ -340,7 +340,7 @@
                         <p class="text-eyebrow text-primary">{{ __('hadkifayah.assessment.eyebrow') }}</p>
                         <h2 class="text-h3 text-text mt-1">{{ __('hadkifayah.assessment.title') }}</h2>
                     </div>
-                    <div class="w-11 h-11 rounded-[14px] bg-primary-soft text-primary flex items-center justify-center">
+                    <div class="w-11 h-11 rounded-[8px] bg-primary-soft text-primary flex items-center justify-center">
                         <i class="fa-solid fa-brain text-[16px]"></i>
                     </div>
                 </div>

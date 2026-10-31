@@ -9,7 +9,7 @@
 </head>
 <body class="min-h-screen bg-bg text-text antialiased flex items-center justify-center px-6">
     <div class="text-center max-w-md">
-        <div class="w-20 h-20 rounded-[24px] bg-primary-soft mx-auto flex items-center justify-center mb-6 ring-1 ring-primary/10">
+        <div class="w-20 h-20 rounded-[12px] bg-primary-soft mx-auto flex items-center justify-center mb-6 ring-1 ring-primary/10">
             <span class="text-metric-xl text-primary tabular-nums">{{ __('errors.not_found.code') }}</span>
         </div>
         <h1 class="text-title text-text mb-3">{{ __('errors.not_found.title') }}</h1>

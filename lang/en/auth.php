@@ -32,8 +32,8 @@ return [
                 'desc' => 'Applicant data is protected and access is controlled.',
             ],
             'assessment' => [
-                'title' => 'Smart assessment',
-                'desc' => 'Had Kifayah and AI analysis in one workflow.',
+                'title' => 'Eligibility assessment',
+                'desc' => 'Had Kifayah and eligibility analysis in one workflow.',
             ],
             'audit' => [
                 'title' => 'Transparent & auditable',

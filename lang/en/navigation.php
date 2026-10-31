@@ -48,7 +48,7 @@ return [
 
     'brand' => [
         'portal' => 'Applicant Portal',
-        'admin' => 'Smart Eligibility',
+        'admin' => 'Zakat Management',
     ],
 
     'role' => [

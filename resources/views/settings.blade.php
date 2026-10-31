@@ -92,7 +92,7 @@
     </x-app-card>
 
     <x-app-card class="p-6" :hover="false">
-        <x-section-header title="Enjin AI" description="Ciri-ciri penilaian pintar" icon="fa-sparkles" />
+        <x-section-header title="Enjin AI" description="Konfigurasi penilaian kelayakan" icon="bot" />
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div class="flex items-center gap-3 soft-panel p-3"><span class="w-7 h-7 rounded-[10px] bg-success text-white flex items-center justify-center"><i class="fa-solid fa-check text-[11px]"></i></span><p class="text-body text-text">Pengesanan Pendua IC</p></div>
             <div class="flex items-center gap-3 soft-panel p-3"><span class="w-7 h-7 rounded-[10px] bg-success text-white flex items-center justify-center"><i class="fa-solid fa-check text-[11px]"></i></span><p class="text-body text-text">Analisis Had Kifayah</p></div>
@@ -109,7 +109,7 @@
             <div class="flex items-center justify-between py-1.5"><span class="text-secondary">Ikon</span><span class="font-medium">Font Awesome 6</span></div>
             <div class="flex items-center justify-between py-1.5"><span class="text-secondary">Tipografi</span><span class="font-medium">Inter / Segoe UI</span></div>
         </div>
-        <p class="text-eyebrow text-tertiary mt-4 pt-3 border-t border-divider">© {{ date('Y') }} J-ZAKAT · Smart Asnaf Eligibility</p>
+        <p class="text-eyebrow text-tertiary mt-4 pt-3 border-t border-divider">© {{ date('Y') }} J-ZAKAT · Sistem Pengurusan Kelayakan Asnaf</p>
     </x-app-card>
 </div>
 @endsection

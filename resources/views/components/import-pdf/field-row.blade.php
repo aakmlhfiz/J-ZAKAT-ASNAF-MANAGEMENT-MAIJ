@@ -19,7 +19,7 @@
     $bgClass = $needsReview ? 'bg-warning-soft' : '';
 @endphp
 
-<div x-data="{ editing: false, val: @js($value) }" class="flex items-start gap-3 py-3 {{ $needsReview ? 'px-3 rounded-[14px] bg-warning-soft/30 border border-warning/15' : '' }}">
+<div x-data="{ editing: false, val: @js($value) }" class="flex items-start gap-3 py-3 {{ $needsReview ? 'px-3 rounded-[8px] bg-warning-soft/30 border border-warning/15' : '' }}">
     <div class="flex-1 min-w-0">
         <div class="flex items-center justify-between gap-2 mb-1">
             <label class="text-small font-semibold text-text">{{ $label }}</label>

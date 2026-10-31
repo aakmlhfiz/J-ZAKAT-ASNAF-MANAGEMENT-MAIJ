@@ -27,7 +27,7 @@
                                 {!! __('emails.application_submitted.intro', ['name' => e($applicantName), 'ic' => e($applicantIc)]) !!}
                             </p>
 
-                            <div style="margin:28px 0;padding:20px;background-color:#F1F5F9;border-left:4px solid #2563EB;border-radius:8px;">
+                            <div style="margin:28px 0;padding:20px;background-color:#F1F5F9;border-left:4px solid #15345B;border-radius:8px;">
                                 <p style="margin:0;font-size:13px;color:#64748B;">{{ __('emails.application_submitted.reference_label') }}</p>
                                 <p style="margin:6px 0 0;font-size:18px;font-weight:700;color:#1E293B;font-family:'Courier New',monospace;">#{{ str_pad((string) $application->id, 5, '0', STR_PAD_LEFT) }}</p>
                             </div>

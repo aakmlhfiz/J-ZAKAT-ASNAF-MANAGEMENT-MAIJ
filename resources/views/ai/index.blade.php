@@ -6,7 +6,7 @@
 @section('content')
 <div x-data="aiChatWidget" class="max-w-3xl mx-auto">
     <div class="mb-5 flex items-center gap-3">
-        <div class="w-11 h-11 rounded-[14px] text-white flex items-center justify-center font-bold text-[16px] shrink-0" style="background: var(--gradient-royal);">UD</div>
+        <div class="w-11 h-11 rounded-[8px] text-white flex items-center justify-center font-bold text-[16px] shrink-0" style="background: #245B91;">UD</div>
         <div class="min-w-0">
             <h1 class="text-title text-text">Ustaz Danial</h1>
             <p class="text-small text-secondary">{{ __('ai.page.role') }}</p>
@@ -20,8 +20,8 @@
         <div x-ref="messages" class="ai-messages flex-1 overflow-y-auto px-5 md:px-6 py-6 space-y-4 bg-bg min-h-[420px] max-h-[60vh]">
             <template x-for="msg in messages" :key="msg.id">
                 <div :class="msg.role === 'user' ? 'flex justify-end' : 'flex items-start gap-2'">
-                    <div x-show="msg.role === 'ai'" class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-[11px] shrink-0" style="background: var(--gradient-royal);">UD</div>
-                    <div :class="msg.role === 'user' ? 'bg-primary text-white rounded-[20px] rounded-br-md max-w-[80%] px-4 py-3 shadow-sm' : 'bg-card border border-divider rounded-[20px] rounded-bl-md max-w-[88%] px-4 py-3 shadow-card'">
+                    <div x-show="msg.role === 'ai'" class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-[11px] shrink-0" style="background: #245B91;">UD</div>
+                    <div :class="msg.role === 'user' ? 'bg-primary text-white rounded-[12px] rounded-br-md max-w-[80%] px-4 py-3 shadow-sm' : 'bg-card border border-divider rounded-[12px] rounded-bl-md max-w-[88%] px-4 py-3 shadow-card'">
                         <div x-html="msg.role === 'ai' ? renderMarkdown(msg.text) : msg.text" class="text-small leading-relaxed"></div>
                         <div x-show="msg.role === 'ai' && msg.data && msg.data.type" x-html="renderData(msg.data)" class="mt-3"></div>
                     </div>
@@ -29,7 +29,7 @@
             </template>
 
             <div x-show="messages.length === 0" class="text-center py-12">
-                <div class="w-16 h-16 rounded-[20px] mx-auto flex items-center justify-center mb-4" style="background: var(--gradient-royal);">
+                <div class="w-16 h-16 rounded-[10px] mx-auto flex items-center justify-center mb-4" style="background: #245B91;">
                     <span class="text-white font-bold text-[22px]">UD</span>
                 </div>
                 <h3 class="text-h3 text-text">{{ __('ai.page.empty_title') }}</h3>
@@ -55,7 +55,7 @@
             </div>
 
             <div x-show="loading" class="flex justify-start">
-                <div class="bg-card border border-divider rounded-[20px] rounded-bl-md px-4 py-3 shadow-card">
+                <div class="bg-card border border-divider rounded-[12px] rounded-bl-md px-4 py-3 shadow-card">
                     <span class="inline-flex items-center gap-1.5 align-middle">
                         <span class="ai-typing-dot"></span>
                         <span class="ai-typing-dot"></span>

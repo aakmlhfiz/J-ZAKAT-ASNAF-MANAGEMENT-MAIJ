@@ -28,7 +28,7 @@
             </div>
 
             <div class="flex items-center gap-3 mt-6">
-                <x-app-button type="submit" variant="primary" size="md" icon="fa-wand-magic-sparkles">Jana Kod Undangan</x-app-button>
+                <x-app-button type="submit" variant="primary" size="md" icon="plus">Jana Kod Undangan</x-app-button>
                 <x-app-button variant="secondary" size="md" href="{{ route('admin.invitations.index') }}">Batal</x-app-button>
             </div>
         </form>

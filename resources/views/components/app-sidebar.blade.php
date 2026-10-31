@@ -49,7 +49,7 @@
                 ['route' => 'history', 'icon' => 'clipboard-list', 'label' => __('navigation.sidebar.items.applications')],
             ]],
             'ai' => ['label' => __('navigation.sidebar.groups.ai'), 'items' => [
-                ['route' => 'ai.page', 'icon' => 'sparkles', 'label' => __('navigation.sidebar.items.ai_assistant')],
+                ['route' => 'ai.page', 'icon' => 'bot', 'label' => __('navigation.sidebar.items.ai_assistant')],
                 ['route' => 'hadkifayah', 'icon' => 'calculator', 'label' => __('navigation.sidebar.items.had_kifayah')],
                 ['route' => 'ai-assessment', 'icon' => 'brain', 'label' => __('navigation.sidebar.items.ai_assessment')],
             ]],
@@ -86,9 +86,9 @@
      x-transition:leave="transition-opacity duration-200"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
-     class="md:hidden fixed inset-0 bg-navy/70 backdrop-blur-sm z-40"></div>
+     class="md:hidden fixed inset-0 bg-navy/60 z-40"></div>
 
-<aside x-data="appSidebar"
+<aside
     :class="{
         'translate-x-0': mobileOpen,
         '-translate-x-full': !mobileOpen,
@@ -96,16 +96,12 @@
         'md:w-[76px]': collapsed && !mobileOpen,
         'md:w-[260px]': !collapsed || mobileOpen,
     }"
-    @toggle-sidebar.window="toggle()"
-    class="w-[288px] fixed md:sticky inset-y-0 left-0 z-50 md:z-20 border-r border-white/10 md:rounded-r-[22px] h-screen shrink-0 flex flex-col transition-transform duration-300 ease-out text-white overflow-y-auto md:overflow-hidden"
-    style="background: linear-gradient(180deg, #0B1220 0%, #0E1830 55%, #111E3A 100%);">
-
-    {{-- Islamic pattern overlay --}}
-    <div class="pattern-mask islamic-pattern opacity-[0.05]"></div>
+    class="w-[288px] fixed md:sticky inset-y-0 left-0 z-50 md:z-20 border-r border-[#245B91]/40 h-screen shrink-0 flex flex-col transition-transform duration-300 ease-out text-white overflow-y-auto md:overflow-hidden"
+    style="background: #15345B;">
 
     <div class="relative z-10 flex flex-col h-full">
-        <a href="{{ route($homeRoute) }}" class="h-16 flex items-center px-4 border-b border-white/10 shrink-0 hover:bg-white/5 transition-fast">
-            <div class="w-10 h-10 rounded-[13px] bg-white flex items-center justify-center shrink-0 shadow-lg overflow-hidden ring-1 ring-white/20">
+        <a href="{{ route($homeRoute) }}" class="h-16 flex items-center px-4 border-b border-white/10 shrink-0 hover:bg-white/[0.06] transition-fast">
+            <div class="w-10 h-10 rounded-[8px] bg-white flex items-center justify-center shrink-0 shadow-sm overflow-hidden ring-1 ring-white/15">
                 <img src="{{ asset('images/MAIJ.PNG') }}" alt="MAIJ" class="w-full h-full object-contain p-1">
             </div>
             <div x-show="!collapsed" x-cloak class="ml-3 overflow-hidden">
@@ -116,20 +112,20 @@
 
         @if($user)
         <div class="px-3 py-3 border-b border-white/10 shrink-0">
-            <button class="w-full flex items-center gap-3 p-2 rounded-[13px] hover:bg-white/10 transition-fast group border border-transparent hover:border-white/10"
+            <button class="w-full flex items-center gap-3 p-2 rounded-[8px] hover:bg-white/[0.06] transition-fast group border border-transparent hover:border-white/10"
                 :title="collapsed ? '{{ $user->name }}' : null">
-                <div class="w-10 h-10 rounded-full shrink-0 overflow-hidden ring-2 ring-cyan/40">
+                <div class="w-10 h-10 rounded-full shrink-0 overflow-hidden ring-2 ring-white/20">
                     @if($photo)
                         <img src="{{ $photo }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
                     @else
-                        <div class="w-full h-full text-white font-semibold text-[14px] flex items-center justify-center" style="background: var(--gradient-royal);">
+                        <div class="w-full h-full text-white font-semibold text-[14px] flex items-center justify-center" style="background: #245B91;">
                             {{ $initials }}
                         </div>
                     @endif
                 </div>
                 <div x-show="!collapsed" x-cloak class="overflow-hidden min-w-0 text-left flex-1">
                     <p class="text-white font-semibold text-[13.5px] truncate leading-tight">{{ $user->name }}</p>
-                    <p class="text-cyan/80 text-[11.5px] truncate leading-tight mt-0.5">{{ $roleLabel }}</p>
+                    <p class="text-white/65 text-[11.5px] truncate leading-tight mt-0.5">{{ $roleLabel }}</p>
                 </div>
                 <x-icon x-show="!collapsed" x-cloak name="chevron-down" :size="14" class="text-white/40 shrink-0" />
             </button>
@@ -142,12 +138,12 @@
                 <a href="{{ route($item['route']) }}"
                    @if($active) aria-current="page" @endif
                    :title="collapsed ? '{{ $item['label'] }}' : null"
-                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-[12px] text-[14px] font-medium transition-apple group
-                    {{ $active ? 'bg-white/12 text-white shadow-inner' : 'text-white/70 hover:bg-white/8 hover:text-white' }}">
+                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-[14px] font-medium transition-fast group
+                    {{ $active ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/[0.06] hover:text-white' }}">
                     @if($active)
-                        <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-cyan"></span>
+                        <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full bg-[#2878C8]"></span>
                     @endif
-                    <x-icon :name="$item['icon']" :size="18" class="shrink-0 transition-fast {{ $active ? 'text-cyan' : 'text-white/50 group-hover:text-cyan' }}" />
+                    <x-icon :name="$item['icon']" :size="18" class="shrink-0 transition-fast {{ $active ? 'text-white' : 'text-white/55 group-hover:text-white' }}" />
                     <span x-show="!collapsed" x-cloak class="truncate">{{ $item['label'] }}</span>
                 </a>
             @endforeach
@@ -155,7 +151,7 @@
             @foreach($groups as $groupKey => $group)
                 <button @click="toggleGroup('{{ $groupKey }}')"
                     x-show="!collapsed" x-cloak
-                    class="w-full flex items-center justify-between px-3 mt-4 mb-1 first:mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/40 hover:text-white/70 transition-fast"
+                    class="w-full flex items-center justify-between px-3 py-1.5 mt-3 mb-1 first:mt-1 text-[10px] font-semibold uppercase tracking-[0.10em] text-white/65 hover:text-white/85 transition-fast"
                     :aria-expanded="openGroups.includes('{{ $groupKey }}')">
                     <span>{{ $group['label'] }}</span>
                     <x-icon name="chevron-down" :size="13" class="transition-transform duration-200" x-bind:class="openGroups.includes('{{ $groupKey }}') ? '' : '-rotate-90'" />
@@ -166,12 +162,12 @@
                         <a href="{{ route($item['route']) }}"
                            @if($active) aria-current="page" @endif
                            :title="collapsed ? '{{ $item['label'] }}' : null"
-                           class="relative flex items-center gap-3 px-3 py-2 rounded-[11px] text-[13px] font-medium transition-apple group
-                            {{ $active ? 'bg-white/12 text-white' : 'text-white/70 hover:bg-white/8 hover:text-white' }}">
+                           class="relative flex items-center gap-3 px-3 py-2 rounded-[8px] text-[13px] font-medium transition-fast group
+                            {{ $active ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/[0.06] hover:text-white' }}">
                             @if($active)
-                                <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 rounded-r-full bg-cyan"></span>
+                                <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-r-full bg-[#2878C8]"></span>
                             @endif
-                            <x-icon :name="$item['icon']" :size="17" class="shrink-0 transition-fast {{ $active ? 'text-cyan' : 'text-white/45 group-hover:text-cyan' }}" />
+                            <x-icon :name="$item['icon']" :size="17" class="shrink-0 transition-fast {{ $active ? 'text-white' : 'text-white/50 group-hover:text-white' }}" />
                             <span x-show="!collapsed" x-cloak class="truncate">{{ $item['label'] }}</span>
                         </a>
                     @endforeach
@@ -181,7 +177,7 @@
 
         <div class="p-3 border-t border-white/10 shrink-0">
             <button @click="toggle()"
-                class="w-full flex items-center gap-3 px-3 py-2 rounded-[12px] text-white/60 hover:bg-white/10 hover:text-white text-[13px] font-medium transition-apple"
+                class="w-full flex items-center gap-3 px-3 py-2 rounded-[8px] text-white/60 hover:bg-white/[0.06] hover:text-white text-[13px] font-medium transition-fast"
                 :aria-label="collapsed ? '{{ __('navigation.sidebar.open') }}' : '{{ __('navigation.sidebar.close') }}'">
                 <x-icon :name="'chevrons-left'" :size="17" class="shrink-0" x-bind:class="collapsed ? 'rotate-180' : ''" />
                 <span x-show="!collapsed" x-cloak>{{ __('navigation.sidebar.close') }}</span>

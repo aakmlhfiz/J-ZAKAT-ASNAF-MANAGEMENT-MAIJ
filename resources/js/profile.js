@@ -339,11 +339,12 @@ document.addEventListener('alpine:init', () => {
         selected: 'system',
 
         init() {
-            this.selected = document.querySelector('meta[name="user-dark-mode"]')?.content || 'system';
+            this.selected = document.querySelector('meta[name="user-dark-mode"]')?.content === 'dark' ? 'dark' : 'light';
         },
 
         async setTheme(mode) {
             this.selected = mode;
+            document.documentElement.classList.toggle('dark', mode === 'dark');
             const token = document.querySelector('meta[name="csrf-token"]')?.content;
             try {
                 await fetch('/app/profile/settings', {

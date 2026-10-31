@@ -32,7 +32,7 @@
                                 {!! __('emails.application_approved.intro') !!}
                             </p>
 
-                            <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background-color:#F0FDF4;border-radius:12px;padding:20px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background-color:#F0FDF4;border-radius:8px;padding:20px;">
                                 <tr>
                                     <td>
                                         <table width="100%" cellpadding="0" cellspacing="0">
@@ -61,7 +61,7 @@
                                 {{ __('emails.application_approved.body') }}
                             </p>
 
-                            <div style="margin:28px 0 0;padding:16px;background-color:#FFFBEB;border-left:3px solid #F59E0B;border-radius:8px;">
+                            <div style="margin:28px 0 0;padding:16px;background-color:#FFFBEB;border-left:3px solid #D97706;border-radius:8px;">
                                 <p style="margin:0;font-size:13px;color:#92400E;line-height:1.5;">
                                     <strong>&#9432; {{ __('emails.application_approved.checklist_title') }}</strong><br>
                                     &middot; {{ __('emails.application_approved.checklist_ic') }}<br>

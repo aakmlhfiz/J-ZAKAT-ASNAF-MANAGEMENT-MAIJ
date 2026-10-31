@@ -45,7 +45,7 @@
             <div x-data="ocrScanner()" class="space-y-5" @dragover.prevent="dragging = true" @dragleave.prevent="dragging = false" @drop.prevent="handleDrop($event)">
                 <form id="upload-form" enctype="multipart/form-data" @submit.prevent="submitUpload()">
 
-                    <div x-show="healthWarning" x-cloak class="mb-5 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 text-small text-text">
+                    <div x-show="healthWarning" x-cloak class="mb-5 p-4 rounded-[8px] bg-warning-soft/40 border border-warning/20 text-small text-text">
                         <i class="fa-solid fa-triangle-exclamation text-warning mr-2"></i>
                         <span x-text="healthWarning"></span>
                     </div>
@@ -58,7 +58,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="document_type" value="borang_bantuan_maij" class="peer sr-only" checked x-model="documentType">
-                                <div class="border-2 border-divider rounded-[14px] p-4 peer-checked:border-primary peer-checked:bg-primary-soft/40 transition-apple hover:border-primary/50">
+                                <div class="border-2 border-divider rounded-[8px] p-4 peer-checked:border-primary peer-checked:bg-primary-soft/40 transition-apple hover:border-primary/50">
                                     <div class="flex items-start gap-3">
                                         <div class="w-9 h-9 rounded-[10px] bg-primary-soft flex items-center justify-center shrink-0">
                                             <i class="fa-solid fa-file-contract text-primary text-[14px]"></i>
@@ -72,7 +72,7 @@
                             </label>
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="document_type" value="generic" class="peer sr-only" x-model="documentType">
-                                <div class="border-2 border-divider rounded-[14px] p-4 peer-checked:border-primary peer-checked:bg-primary-soft/40 transition-apple hover:border-primary/50">
+                                <div class="border-2 border-divider rounded-[8px] p-4 peer-checked:border-primary peer-checked:bg-primary-soft/40 transition-apple hover:border-primary/50">
                                     <div class="flex items-start gap-3">
                                         <div class="w-9 h-9 rounded-[10px] bg-muted flex items-center justify-center shrink-0">
                                             <i class="fa-solid fa-file-lines text-secondary text-[14px]"></i>
@@ -91,13 +91,13 @@
                     </div>
 
                     <div                          @click="$refs.fileInput.click()"
-                         class="relative border-2 border-dashed rounded-[20px] p-12 text-center cursor-pointer transition-apple"
+                         class="relative border-2 border-dashed rounded-[12px] p-12 text-center cursor-pointer transition-apple"
                          :class="dragging ? 'border-primary bg-primary-soft scale-[1.01]' : 'border-divider hover:border-primary/50 hover:bg-primary-soft/30'">
 
                         <input type="file" name="file" x-ref="fileInput" accept=".pdf,.jpg,.jpeg,.png" class="hidden"
                                @change="handleFileSelect($event)">
 
-                        <div class="w-16 h-16 rounded-[20px] bg-primary-soft mx-auto flex items-center justify-center mb-4 ring-1 ring-primary/15">
+                        <div class="w-16 h-16 rounded-[12px] bg-primary-soft mx-auto flex items-center justify-center mb-4 ring-1 ring-primary/15">
                             <i class="fa-solid fa-cloud-arrow-up text-primary text-[26px]"></i>
                         </div>
 
@@ -153,18 +153,18 @@
                         <x-app-button variant="outline" size="lg" icon="fa-clock-rotate-left" x-bind:disabled="uploading" href="{{ route('import-pdf.history') }}">{{ __('imports.pdf.view_history') }}</x-app-button>
                     </div>
 
-                    <div x-show="uploading" x-cloak class="mt-5 p-4 rounded-[14px] bg-primary-soft/40 border border-primary/15 text-small text-text">
+                    <div x-show="uploading" x-cloak class="mt-5 p-4 rounded-[8px] bg-primary-soft/40 border border-primary/15 text-small text-text">
                         <i class="fa-solid fa-circle-info text-primary mr-2"></i>
                         <span x-text="processingHint"></span>
                     </div>
 
-                    <div x-show="stalled" x-cloak class="mt-5 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 text-small text-text">
+                    <div x-show="stalled" x-cloak class="mt-5 p-4 rounded-[8px] bg-warning-soft/40 border border-warning/20 text-small text-text">
                         <i class="fa-solid fa-triangle-exclamation text-warning mr-2"></i>
                         {{ __('imports.pdf.stalled_message') }}
                         <button type="button" class="ml-2 btn btn-warning btn-xs" @click="startPolling()">{{ __('imports.pdf.retry') }}</button>
                     </div>
 
-                    <div x-show="failed" x-cloak class="mt-5 p-4 rounded-[14px] bg-danger-soft/40 border border-danger/20 text-small text-text">
+                    <div x-show="failed" x-cloak class="mt-5 p-4 rounded-[8px] bg-danger-soft/40 border border-danger/20 text-small text-text">
                         <i class="fa-solid fa-circle-xmark text-danger mr-2"></i>
                         <span x-text="errorMessage || @js(__('imports.pdf.processing_failed_retry'))"></span>
                     </div>

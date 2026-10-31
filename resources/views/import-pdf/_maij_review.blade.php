@@ -50,7 +50,7 @@
             <x-section-header
                 :title="__('imports.maij.detected_title')"
                 :description="__('imports.maij.detected_description', ['type' => $ocr['document']['document_type'] ?? __('imports.maij.default_document_type'), 'pages' => $ocr['document']['pages'] ?? '—'])"
-                icon="fa-wand-magic-sparkles" />
+                icon="scan-line" />
             <div class="flex items-center gap-2">
                 @if(($ocr['source'] ?? '') === 'vision')
                     <x-status-badge status="primary" size="sm" :dot="false">
@@ -137,7 +137,7 @@
             @foreach($sectionCards as $card)
                 @php $group = $ocr[$card['key']] ?? []; @endphp
                 @if(is_array($group) && count(array_filter($group, fn($f) => is_array($f) && ($f['value'] ?? null) !== null)))
-                    <div class="p-4 rounded-[14px] bg-muted/40 border border-divider/60">
+                    <div class="p-4 rounded-[8px] bg-muted/40 border border-divider/60">
                         <h4 class="text-body font-semibold text-text mb-2 flex items-center gap-2">
                             <i class="fa-solid {{ $card['icon'] }} text-primary text-[14px]"></i> {{ $card['title'] }}
                         </h4>
@@ -239,7 +239,7 @@
             $faTone = match($fa['overall'] ?? '') { 'pass' => 'success', 'warn' => 'warning', 'fail' => 'danger', default => 'muted' };
         @endphp
         @if(!empty($fa))
-            <div class="mb-5 p-4 rounded-[14px] border border-divider/60 @if(($fa['overall'] ?? '') === 'fail') bg-danger-soft/40 @elseif(($fa['overall'] ?? '') === 'warn') bg-warning-soft/40 @else bg-muted/40 @endif">
+            <div class="mb-5 p-4 rounded-[8px] border border-divider/60 @if(($fa['overall'] ?? '') === 'fail') bg-danger-soft/40 @elseif(($fa['overall'] ?? '') === 'warn') bg-warning-soft/40 @else bg-muted/40 @endif">
                 <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
                     <h4 class="text-body font-semibold text-text flex items-center gap-2">
                         <i class="fa-solid fa-magnifying-glass-dollar text-primary text-[14px]"></i> {{ __('imports.maij.audit_title') }}
@@ -269,7 +269,7 @@
 
         {{-- Declaration & verification --}}
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div class="p-4 rounded-[14px] bg-muted/40 border border-divider/60">
+            <div class="p-4 rounded-[8px] bg-muted/40 border border-divider/60">
                 <h4 class="text-body font-semibold text-text mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-file-signature text-primary text-[14px]"></i> {{ __('imports.maij.declaration_title') }}
                 </h4>
@@ -291,7 +291,7 @@
                     </div>
                 </dl>
             </div>
-            <div class="p-4 rounded-[14px] bg-muted/40 border border-divider/60">
+            <div class="p-4 rounded-[8px] bg-muted/40 border border-divider/60">
                 <h4 class="text-body font-semibold text-text mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-user-check text-primary text-[14px]"></i> {{ __('imports.maij.verification_title') }}
                 </h4>

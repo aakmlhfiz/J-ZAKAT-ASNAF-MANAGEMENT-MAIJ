@@ -316,7 +316,7 @@
             <form method="POST" action="{{ route('locale.update') }}">
                 @csrf
                 <input type="hidden" name="locale" value="{{ $code }}">
-                <button type="submit" class="theme-card surface-flat p-4 rounded-[14px] flex items-center gap-3 w-full {{ ($user->language ?? 'ms') === $code ? 'selected' : '' }}">
+                <button type="submit" class="theme-card surface-flat p-4 rounded-[8px] flex items-center gap-3 w-full {{ ($user->language ?? 'ms') === $code ? 'selected' : '' }}">
                     <span class="text-[28px]">{{ $language['flag'] }}</span>
                     <div>
                         <p class="text-body text-text font-semibold text-left">{{ $language['label'] }}</p>
@@ -346,7 +346,7 @@
                     </div>
                     <p class="text-small text-secondary mt-3">{{ $completionPercent >= 80 ? __('profile.completion.almost') : __('profile.completion.incomplete') }}</p>
                     <div class="mt-4 h-1.5 rounded-pill bg-muted overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-primary to-[#4F46E5] rounded-pill transition-all duration-700" style="width: {{ $completionPercent }}%"></div>
+                        <div class="h-full bg-primary rounded-[6px] transition-all duration-500" style="width: {{ $completionPercent }}%"></div>
                     </div>
                     @if($completionPercent < 100)
                         <a href="#maklumat" @click.prevent="$dispatch('profile-tab', 'maklumat')"

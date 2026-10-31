@@ -9,16 +9,16 @@
     $tag = $href ? 'a' : 'div';
     $classes = 'surface surface-hover p-5 block group relative overflow-hidden';
     $accentMap = [
-        'primary' => 'var(--gradient-royal)',
-        'success' => 'var(--gradient-emerald)',
-        'warning' => 'linear-gradient(135deg,#F59E0B,#FBBF24)',
-        'danger'  => 'linear-gradient(135deg,#EF4444,#F87171)',
-        'info'    => 'linear-gradient(135deg,#0EA5E9,#38BDF8)',
+        'primary' => '#15345B',
+        'success' => '#15803D',
+        'warning' => '#D97706',
+        'danger'  => '#DC2626',
+        'info'    => '#245B91',
     ];
     $accentBg = $accentMap[$accent] ?? $accentMap['primary'];
 @endphp
 <{{ $tag }} @if($href) href="{{ $href }}" @endif {{ $attributes->merge(['class' => $classes]) }}>
-    <div class="absolute top-0 left-0 right-0 h-1 opacity-90" style="background: {{ $accentBg }};"></div>
+    <div class="absolute top-0 left-0 right-0 h-0.5" style="background: {{ $accentBg }};"></div>
     <div class="flex items-start justify-between gap-4">
         <div class="min-w-0 flex-1">
             <p class="text-eyebrow text-tertiary">{{ $label }}</p>
@@ -30,7 +30,7 @@
             @if($trend || $trendLabel)
                 <div class="mt-2.5 flex items-center gap-1.5 text-small">
                     @if($trend)
-                        <span class="inline-flex items-center gap-1 font-semibold px-2 py-0.5 rounded-pill {{ $trendUp ? 'text-success bg-success-soft' : 'text-danger bg-danger-soft' }}">
+                        <span class="inline-flex items-center gap-1 font-semibold px-2 py-0.5 rounded-[6px] {{ $trendUp ? 'text-success bg-success-soft' : 'text-danger bg-danger-soft' }}">
                             <x-icon :name="$trendUp ? 'trending-up' : 'trending-down'" :size="12" />
                             {{ $trend }}
                         </span>
@@ -40,14 +40,14 @@
             @endif
         </div>
         @if($icon)
-            <div class="icon-chip w-12 h-12 {{ $iconBg }} {{ $iconColor }} flex items-center justify-center shrink-0 transition-fast group-hover:scale-105">
+            <div class="icon-chip w-10 h-10 {{ $iconBg }} {{ $iconColor }} flex items-center justify-center shrink-0">
                 <x-icon :name="$icon" :size="21" />
             </div>
         @endif
     </div>
     @if($sparkline && is_array($sparkline) && count($sparkline) > 1)
         <div class="mt-4 -mb-1">
-            <x-sparkline :data="$sparkline" :color="match($accent) { 'success' => '#22C55E', 'warning' => '#F59E0B', 'danger' => '#EF4444', 'info' => '#38BDF8', default => '#3B82F6' }" :height="36" />
+            <x-sparkline :data="$sparkline" :color="match($accent) { 'success' => '#15803D', 'warning' => '#D97706', 'danger' => '#DC2626', 'info' => '#245B91', default => '#15345B' }" :height="32" />
         </div>
     @endif
 </{{ $tag }}>

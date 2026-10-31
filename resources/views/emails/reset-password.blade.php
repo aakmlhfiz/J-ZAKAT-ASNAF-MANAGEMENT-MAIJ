@@ -30,7 +30,7 @@
                             <table width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0;">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{ $resetUrl }}" style="display:inline-block;background-color:#2563EB;color:#FFFFFF;font-size:15px;font-weight:600;padding:14px 36px;border-radius:12px;text-decoration:none;box-shadow:0 4px 12px rgba(37,99,235,0.25);">
+                                        <a href="{{ $resetUrl }}" style="display:inline-block;background-color:#15345B;color:#FFFFFF;font-size:15px;font-weight:600;padding:14px 36px;border-radius:8px;text-decoration:none;">
                                             {{ __('emails.reset_password.button') }}
                                         </a>
                                     </td>

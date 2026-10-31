@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#F5F5F7">
+    <meta name="theme-color" content="#F5F7FA">
     <meta name="description" content="J-ZAKAT — {{ __('navigation.brand.portal') }} · Majlis Agama Islam Johor">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-role" content="user">
     <meta name="user-id" content="{{ auth('portal')->id() ?? '' }}">
     <meta name="user-guard" content="portal">
-    <meta name="user-dark-mode" content="system">
+    <meta name="user-dark-mode" content="{{ auth('portal')->user()?->dark_mode === 'dark' ? 'dark' : 'light' }}">
     <title>@yield('title', __('navigation.brand.portal')) — J-ZAKAT</title>
     <style>[x-cloak] { display: none !important; }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         (function() {
-            // Portal is dark-first, matching the admin experience.
-            document.documentElement.classList.add('dark');
+            // Light-first institutional theme. Dark mode is an explicit
+            // opt-in from the portal profile settings.
+            var userMode = document.querySelector('meta[name="user-dark-mode"]')?.content || 'light';
+            if (userMode === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
         })();
     </script>
 </head>
 <body class="h-full bg-bg text-text antialiased min-h-screen">
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen" x-data="appSidebar" @toggle-sidebar.window="toggle()">
         <x-app-sidebar />
         <div class="flex-1 min-w-0 flex flex-col">
             <x-app-topbar :title="$title ?? ''" :subtitle="$subtitle ?? null">
@@ -46,9 +50,9 @@
                 @endif
                 @yield('content')
             </main>
-            <footer class="px-6 md:px-10 py-5 text-center text-small text-tertiary border-t border-divider bg-card/40">
+            <footer class="px-6 md:px-10 py-5 text-center text-small text-secondary border-t border-divider bg-card/40">
                 <p>&copy; {{ date('Y') }} <span class="font-semibold text-text">J-ZAKAT</span> · {{ __('common.footer.platform') }}</p>
-                <p class="text-[11px] mt-1 opacity-80">{{ __('common.footer.developed_for') }}</p>
+                <p class="text-[11px] mt-1 text-secondary">{{ __('common.footer.developed_for') }}</p>
             </footer>
         </div>
     </div>

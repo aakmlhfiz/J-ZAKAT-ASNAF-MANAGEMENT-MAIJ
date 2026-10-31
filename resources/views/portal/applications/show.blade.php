@@ -96,7 +96,7 @@
 
     @php $documentsRequested = \App\Models\ProfilAsnaf::where('ic', $application->ic_no)->whereNotNull('documents_requested_at')->exists(); @endphp
     @if(!empty($documentsRequested) && in_array($application->status, ['submitted', 'under_review']))
-        <div class="mb-5 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 flex items-start gap-3">
+        <div class="mb-5 p-4 rounded-[8px] bg-warning-soft/40 border border-warning/20 flex items-start gap-3">
             <i class="fa-solid fa-triangle-exclamation text-warning mt-0.5"></i>
             <div class="flex-1">
                 <p class="text-body font-semibold text-text">{{ __('applications.show.documents_requested_title') }}</p>

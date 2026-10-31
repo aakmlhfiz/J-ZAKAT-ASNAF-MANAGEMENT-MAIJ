@@ -51,7 +51,7 @@
     <div class="header">
         <div>
             <h1>{{ __('hadkifayah.print.heading') }}</h1>
-            <p class="meta">J-ZAKAT — Smart Asnaf Eligibility System</p>
+            <p class="meta">J-ZAKAT — Sistem Pengurusan Kelayakan Asnaf</p>
         </div>
         <div class="meta">
             <p>{{ __('hadkifayah.print.date') }}: {{ now()->locale(app()->getLocale())->translatedFormat('d F Y, H:i') }}</p>
@@ -141,7 +141,7 @@
     </table>
 
     <div class="footer">
-        &copy; {{ date('Y') }} J-ZAKAT — Smart Asnaf Eligibility System
+        &copy; {{ date('Y') }} J-ZAKAT — Sistem Pengurusan Kelayakan Asnaf
     </div>
 </body>
 </html>

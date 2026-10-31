@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0B1220">
-    <meta name="description" content="J-ZAKAT — Smart Asnaf Eligibility System">
+    <meta name="theme-color" content="#F5F7FA">
+    <meta name="description" content="J-ZAKAT — Sistem Pengurusan Kelayakan Asnaf">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'J-ZAKAT') — Smart Asnaf Eligibility</title>
+    <title>@yield('title', 'J-ZAKAT') — Sistem Pengurusan Kelayakan Asnaf</title>
     <style>[x-cloak] { display: none !important; }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

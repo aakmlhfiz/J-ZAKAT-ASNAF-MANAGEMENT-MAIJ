@@ -14,7 +14,7 @@
     </div>
 
     <x-app-card class="p-6 mb-5" :hover="false">
-        <div class="flex items-start gap-3 mb-5 p-4 rounded-[14px] bg-primary-soft/40 border border-primary/10">
+        <div class="flex items-start gap-3 mb-5 p-4 rounded-[8px] bg-primary-soft/40 border border-primary/10">
             <i class="fa-solid fa-circle-info text-primary text-[14px] mt-0.5"></i>
             <div class="text-small text-text leading-relaxed">
                 <p class="font-semibold mb-1">{{ __('ocr.scan.how_title') }}</p>
@@ -33,13 +33,13 @@
                  @dragleave.prevent="dragging = false"
                  @drop.prevent="handleDrop($event)"
                  @click="$refs.fileInput.click()"
-                 class="relative border-2 border-dashed rounded-[18px] p-10 text-center cursor-pointer transition-apple"
+                 class="relative border-2 border-dashed rounded-[10px] p-10 text-center cursor-pointer transition-apple"
                  :class="dragging ? 'border-primary bg-primary-soft scale-[1.01]' : 'border-divider hover:border-primary/50 hover:bg-primary-soft/30'">
 
                 <input type="file" name="file" x-ref="fileInput" accept=".pdf,.jpg,.jpeg,.png" class="hidden"
                        @change="handleFileSelect($event)" required>
 
-                <div class="w-14 h-14 rounded-[16px] bg-primary-soft mx-auto flex items-center justify-center mb-4 ring-1 ring-primary/15">
+                <div class="w-14 h-14 rounded-[10px] bg-primary-soft mx-auto flex items-center justify-center mb-4 ring-1 ring-primary/15">
                     <i class="fa-solid fa-file-contract text-primary text-[24px]"></i>
                 </div>
 
@@ -64,7 +64,7 @@
                 <button type="submit" class="btn btn-primary" :disabled="!fileName || uploading" @click="startUpload()">
                     <template x-if="!uploading">
                         <span class="inline-flex items-center gap-2">
-                            <i class="fa-solid fa-magic-wand-sparkles text-[14px]"></i>
+                            <i class="fa-solid fa-scan-line text-[14px]"></i>
                             <span>{{ __('ocr.scan.extract_button') }}</span>
                         </span>
                     </template>
@@ -81,11 +81,11 @@
                 </a>
             </div>
 
-            <div x-show="uploading" x-cloak class="mt-4 p-4 rounded-[14px] bg-primary-soft/40 border border-primary/15 text-small text-text">
+            <div x-show="uploading" x-cloak class="mt-4 p-4 rounded-[8px] bg-primary-soft/40 border border-primary/15 text-small text-text">
                 <i class="fa-solid fa-circle-info text-primary mr-2"></i>
                 {{ __('ocr.scan.processing_hint') }}
             </div>
-            <div x-show="uploadTimeout" x-cloak class="mt-4 p-4 rounded-[14px] bg-warning-soft/40 border border-warning/20 text-small text-text">
+            <div x-show="uploadTimeout" x-cloak class="mt-4 p-4 rounded-[8px] bg-warning-soft/40 border border-warning/20 text-small text-text">
                 <i class="fa-solid fa-triangle-exclamation text-warning mr-2"></i>
                 {{ __('ocr.scan.timeout_warning') }}
             </div>

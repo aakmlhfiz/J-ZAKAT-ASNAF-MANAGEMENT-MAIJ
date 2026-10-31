@@ -27,21 +27,21 @@
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger">
     <x-stat-card :label="__('dashboard.stats.total')" :value="number_format($stats['total'] ?? 0)"
-        :trend="$stats['total_trend'] ?? '+8.2%'" :trend-up="!str_starts_with($stats['total_trend'] ?? '+', '-')" :trend-label="__('dashboard.this_month')"
+        :trend="$stats['total_trend']" :trend-up="!str_starts_with($stats['total_trend'] ?? '', '-')" :trend-label="$stats['total_trend'] ? __('dashboard.this_month') : null"
         icon="users" icon-bg="bg-primary-soft" icon-color="text-primary" :href="route('history')" accent="primary"
-        :sparkline="$stats['total_sparkline'] ?? [12,15,13,18,16,20,22,24,23,28,30,32]" />
+        :sparkline="$stats['total_sparkline']" />
     <x-stat-card :label="__('dashboard.stats.eligible')" :value="number_format($stats['layak'] ?? 0)"
-        :trend="$stats['layak_trend'] ?? '+12.4%'" :trend-up="!str_starts_with($stats['layak_trend'] ?? '+', '-')" :trend-label="__('dashboard.this_month')"
+        :trend="$stats['layak_trend']" :trend-up="!str_starts_with($stats['layak_trend'] ?? '', '-')" :trend-label="$stats['layak_trend'] ? __('dashboard.this_month') : null"
         icon="circle-check" icon-bg="bg-success-soft" icon-color="text-success" :href="route('history', ['status' => 'Layak'])" accent="success"
-        :sparkline="$stats['layak_sparkline'] ?? [5,7,8,10,9,12,15,14,18,20,22,24]" />
+        :sparkline="$stats['layak_sparkline']" />
     <x-stat-card :label="__('dashboard.stats.not_eligible')" :value="number_format($stats['tidak_layak'] ?? 0)"
-        :trend="$stats['tidak_layak_trend'] ?? '-3.1%'" :trend-up="!str_starts_with($stats['tidak_layak_trend'] ?? '-', '-')" :trend-label="__('dashboard.this_month')"
+        :trend="$stats['tidak_layak_trend']" :trend-up="!str_starts_with($stats['tidak_layak_trend'] ?? '', '-')" :trend-label="$stats['tidak_layak_trend'] ? __('dashboard.this_month') : null"
         icon="circle-x" icon-bg="bg-danger-soft" icon-color="text-danger" :href="route('history', ['status' => 'Tidak Layak'])" accent="danger"
-        :sparkline="$stats['tidak_layak_sparkline'] ?? [10,12,11,9,8,10,8,7,9,6,7,6]" />
+        :sparkline="$stats['tidak_layak_sparkline']" />
     <x-stat-card :label="__('dashboard.stats.under_review')" :value="number_format($stats['dalam_semakan'] ?? 0)"
-        :trend="$stats['dalam_semakan_trend'] ?? '+2'" :trend-up="!str_starts_with($stats['dalam_semakan_trend'] ?? '+', '-')" :trend-label="__('dashboard.this_week')"
+        :trend="$stats['dalam_semakan_trend']" :trend-up="!str_starts_with($stats['dalam_semakan_trend'] ?? '', '-')" :trend-label="$stats['dalam_semakan_trend'] ? __('dashboard.this_month') : null"
         icon="clock" icon-bg="bg-warning-soft" icon-color="text-warning" :href="route('history', ['status' => 'Dalam Semakan'])" accent="warning"
-        :sparkline="$stats['dalam_semakan_sparkline'] ?? [3,4,3,5,4,6,5,7,6,8,9,8]" />
+        :sparkline="$stats['dalam_semakan_sparkline']" />
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5">
@@ -53,13 +53,15 @@
                 <p class="text-small text-secondary mt-1">{{ __('dashboard.trend.subtitle') }}</p>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 text-small font-semibold {{ str_starts_with($stats['total_trend'] ?? '+', '-') ? 'text-danger' : 'text-success' }}">
-                    <x-icon :name="str_starts_with($stats['total_trend'] ?? '+', '-') ? 'trending-down' : 'trending-up'" :size="14" /> {{ $stats['total_trend'] ?? '+12.4%' }}
-                </span>
+                @if($stats['total_trend'])
+                    <span class="inline-flex items-center gap-1.5 text-small font-semibold {{ str_starts_with($stats['total_trend'], '-') ? 'text-danger' : 'text-success' }}">
+                        <x-icon :name="str_starts_with($stats['total_trend'], '-') ? 'trending-down' : 'trending-up'" :size="14" /> {{ $stats['total_trend'] }}
+                    </span>
+                @endif
                 <x-app-button variant="ghost" size="sm" icon="download">{{ __('dashboard.export') }}</x-app-button>
             </div>
         </div>
-        <x-trend-chart :data="$values ?? []" :labels="$labels ?? []" color="#3B82F6" height="280" />
+        <x-trend-chart :data="$values ?? []" :labels="$labels ?? []" color="#245B91" height="280" />
     </x-app-card>
 
     <x-app-card class="p-6" :hover="false">
@@ -72,7 +74,7 @@
         </div>
         <x-trend-chart :data="[$stats['layak'] ?? 0, $stats['tidak_layak'] ?? 0, $stats['dalam_semakan'] ?? 0]"
             :labels="[__('common.status.layak'), __('common.status.tidak_layak'), __('common.status.dalam_semakan')]"
-            color="#3B82F6" height="180" type="doughnut" fill="false" />
+            color="#245B91" height="180" type="doughnut" fill="false" />
         <ul class="mt-4 space-y-2.5">
             @foreach([[__('common.status.layak'), $stats['layak'] ?? 0, 'bg-success'], [__('common.status.tidak_layak'), $stats['tidak_layak'] ?? 0, 'bg-danger'], [__('common.status.dalam_semakan'), $stats['dalam_semakan'] ?? 0, 'bg-warning']] as [$lbl, $val, $dot])
                 <li class="flex items-center justify-between text-small">
@@ -169,13 +171,13 @@
             $quickActions = [
                 ['route' => 'profilasnaf', 'icon' => 'user-plus', 'label' => __('dashboard.quick.register'), 'desc' => __('dashboard.quick.register_desc'), 'bg' => 'bg-primary-soft', 'color' => 'text-primary'],
                 ['route' => 'hadkifayah', 'icon' => 'calculator', 'label' => __('dashboard.quick.calculate'), 'desc' => __('dashboard.quick.calculate_desc'), 'bg' => 'bg-success-soft', 'color' => 'text-success'],
-                ['route' => 'ai.page', 'icon' => 'sparkles', 'label' => __('dashboard.quick.ai'), 'desc' => __('dashboard.quick.ai_desc'), 'bg' => 'bg-warning-soft', 'color' => 'text-warning'],
+                ['route' => 'ai.page', 'icon' => 'bot', 'label' => __('dashboard.quick.ai'), 'desc' => __('dashboard.quick.ai_desc'), 'bg' => 'bg-warning-soft', 'color' => 'text-warning'],
                 ['route' => 'importcsv', 'icon' => 'file-import', 'label' => __('dashboard.quick.import'), 'desc' => __('dashboard.quick.import_desc'), 'bg' => 'bg-info-soft', 'color' => 'text-info'],
             ];
         @endphp
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             @foreach($quickActions as $a)
-                <a href="{{ route($a['route']) }}" class="group flex flex-col items-start gap-3 p-4 rounded-[14px] bg-card border border-divider hover:border-primary/50 hover:shadow-card transition-apple">
+                <a href="{{ route($a['route']) }}" class="group flex flex-col items-start gap-3 p-4 rounded-[8px] bg-card border border-divider hover:border-primary/50 hover:shadow-card transition-apple">
                     <div class="w-10 h-10 rounded-[12px] {{ $a['bg'] }} {{ $a['color'] }} flex items-center justify-center group-hover:scale-110 transition-fast">
                         <x-icon :name="$a['icon']" :size="19" />
                     </div>

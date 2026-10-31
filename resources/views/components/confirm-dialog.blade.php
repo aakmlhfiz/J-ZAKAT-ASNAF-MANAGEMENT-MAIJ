@@ -18,7 +18,7 @@
      role="dialog"
      aria-modal="true">
 
-    <div x-show="open" x-transition.opacity class="absolute inset-0 -z-10 bg-text/40 backdrop-blur-sm"></div>
+    <div x-show="open" x-transition.opacity class="absolute inset-0 -z-10 bg-[#0F172A]/40"></div>
 
     <div x-show="open"
          x-transition:enter="transition ease-out duration-200"
@@ -27,9 +27,9 @@
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
-         class="bg-card rounded-[20px] p-7 max-w-md w-full shadow-xl">
+         class="bg-card rounded-[12px] p-6 max-w-md w-full shadow-lg border border-divider">
         <div class="flex items-start gap-4">
-            <div class="w-12 h-12 rounded-[14px] flex items-center justify-center shrink-0"
+            <div class="w-10 h-10 rounded-[8px] flex items-center justify-center shrink-0"
                  :class="variant === 'destructive' ? 'bg-danger-soft text-danger' : (variant === 'warning' ? 'bg-warning-soft text-warning' : 'bg-primary-soft text-primary')">
                 <i class="fa-solid text-[18px]" :class="variant === 'destructive' ? 'fa-triangle-exclamation' : 'fa-circle-info'"></i>
             </div>

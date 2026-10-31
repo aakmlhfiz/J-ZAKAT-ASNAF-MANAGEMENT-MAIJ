@@ -88,7 +88,7 @@ return [
 
     'pdf' => [
         'meta_title' => 'Import PDF / OCR',
-        'meta_subtitle' => 'Upload application forms & smart AI extraction',
+        'meta_subtitle' => 'Upload application forms & automatic extraction',
         'title' => 'Import PDF / OCR',
         'subtitle' => 'Upload the application form (PDF, JPG, PNG) & AI will extract the information automatically',
         'eyebrow' => 'AI Document Processing',
@@ -116,7 +116,7 @@ return [
         'how_steps' => [
             'Upload the MAIJ form (PDF, JPG, or PNG)',
             'AI extracts text from every page of the document',
-            'The system detects & maps fields intelligently',
+            'The system detects & maps fields automatically',
             'Review the AI confidence & extracted data in the preview',
             'AI validates the IC, phone, income, and other fields',
             'Confirm & save the data into the database',

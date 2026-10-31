@@ -11,7 +11,7 @@
 @section('content')
 <div x-data='portalAiChat(@json($aiStrings))' class="max-w-3xl mx-auto">
     <div class="mb-5 flex items-center gap-3">
-        <div class="w-11 h-11 rounded-[14px] bg-primary text-white flex items-center justify-center font-bold text-[16px] shrink-0" style="background: var(--gradient-royal);">AI</div>
+        <div class="w-11 h-11 rounded-[8px] bg-primary text-white flex items-center justify-center font-bold text-[16px] shrink-0" style="background: var(--gradient-royal);">AI</div>
         <div>
             <h1 class="text-title text-text">{{ __('ai.portal.title') }}</h1>
             <p class="text-small text-secondary">{{ __('ai.portal.subtitle') }}</p>
@@ -23,7 +23,7 @@
             <template x-for="msg in messages" :key="msg.id">
                 <div :class="msg.role === 'user' ? 'flex justify-end' : 'flex items-start gap-2'">
                     <div x-show="msg.role === 'ai'" class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-[11px] shrink-0" style="background: var(--gradient-royal);">AI</div>
-                    <div :class="msg.role === 'user' ? 'bg-primary text-white rounded-[20px] rounded-br-md max-w-[80%] px-4 py-3 shadow-sm' : 'bg-card border border-divider rounded-[20px] rounded-bl-md max-w-[88%] px-4 py-3 shadow-card'">
+                    <div :class="msg.role === 'user' ? 'bg-primary text-white rounded-[12px] rounded-br-md max-w-[80%] px-4 py-3 shadow-sm' : 'bg-card border border-divider rounded-[12px] rounded-bl-md max-w-[88%] px-4 py-3 shadow-card'">
                         <div x-html="msg.role === 'ai' ? renderMarkdown(msg.text) : msg.text" class="text-small leading-relaxed"></div>
                         <div x-show="msg.role === 'ai' && msg.data && msg.data.type === 'suggestions'" x-html="renderSuggestions(msg.data.suggestions)" class="mt-3"></div>
                     </div>
@@ -31,7 +31,7 @@
             </template>
 
             <div x-show="messages.length === 0" class="text-center py-12">
-                <div class="w-16 h-16 rounded-[20px] mx-auto flex items-center justify-center mb-4" style="background: var(--gradient-royal);">
+                <div class="w-16 h-16 rounded-[12px] mx-auto flex items-center justify-center mb-4" style="background: var(--gradient-royal);">
                     <span class="text-white font-bold text-[22px]">AI</span>
                 </div>
                 <h3 class="text-h3 text-text">{{ __('ai.portal.empty_title') }}</h3>
@@ -57,7 +57,7 @@
             </div>
 
             <div x-show="loading" class="flex justify-start">
-                <div class="bg-card border border-divider rounded-[20px] rounded-bl-md px-4 py-3 shadow-card">
+                <div class="bg-card border border-divider rounded-[12px] rounded-bl-md px-4 py-3 shadow-card">
                     <span class="inline-flex items-center gap-1.5 align-middle">
                         <span class="ai-typing-dot"></span>
                         <span class="ai-typing-dot"></span>

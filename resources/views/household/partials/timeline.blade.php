@@ -18,7 +18,7 @@
     <x-empty-state icon="fa-timeline" :title="__('household.timeline.empty_title')" :description="__('household.timeline.empty_description')" />
 @else
     <div class="relative">
-        <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/40 to-transparent"></div>
+        <div class="absolute left-6 top-0 bottom-0 w-px bg-divider"></div>
         <div class="space-y-0">
             @foreach($timelineItems as $year => $items)
                 <div class="relative pl-16 pb-8 group">

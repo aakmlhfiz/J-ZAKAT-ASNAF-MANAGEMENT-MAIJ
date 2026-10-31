@@ -106,7 +106,7 @@
                 <div class="h-full bg-primary transition-all duration-300" :style="`width: ${progress}%`"></div>
             </div>
 
-            <div x-show="elapsed >= 20" x-cloak class="mt-8 p-5 rounded-[16px] bg-warning-soft/40 border border-warning/20 max-w-md mx-auto">
+            <div x-show="elapsed >= 20" x-cloak class="mt-8 p-5 rounded-[10px] bg-warning-soft/40 border border-warning/20 max-w-md mx-auto">
                 <p class="text-body font-semibold text-text">{{ __('ocr.preview.slow_title') }}</p>
                 <p class="text-small text-secondary mt-1">{{ __('ocr.preview.slow_text') }}
                     <code class="font-mono">php artisan queue:work</code></p>
@@ -122,7 +122,7 @@
     @elseif($committed)
         <x-app-card class="p-6 mb-5" :hover="false">
             <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-[14px] bg-success-soft flex items-center justify-center shrink-0">
+                <div class="w-12 h-12 rounded-[8px] bg-success-soft flex items-center justify-center shrink-0">
                     <i class="fa-solid fa-check-circle text-success text-[20px]"></i>
                 </div>
                 <div class="flex-1">

@@ -27,7 +27,7 @@
                                 {!! __('emails.portal_user_welcome.intro') !!}
                             </p>
 
-                            <div style="margin:24px 0;padding:20px;background-color:#F1F5F9;border-left:4px solid #2563EB;border-radius:8px;">
+                            <div style="margin:24px 0;padding:20px;background-color:#F1F5F9;border-left:4px solid #15345B;border-radius:8px;">
                                 <p style="margin:0 0 8px 0;font-size:13px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;">{{ __('emails.portal_user_welcome.details_title') }}</p>
                                 <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                                     <tr>
@@ -57,7 +57,7 @@
                             <table width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0;">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{ $loginUrl }}" style="display:inline-block;background-color:#2563EB;color:#FFFFFF;font-size:15px;font-weight:600;padding:14px 36px;border-radius:12px;text-decoration:none;box-shadow:0 4px 12px rgba(37,99,235,0.25);">
+                                        <a href="{{ $loginUrl }}" style="display:inline-block;background-color:#15345B;color:#FFFFFF;font-size:15px;font-weight:600;padding:14px 36px;border-radius:8px;text-decoration:none;">
                                             {{ __('emails.portal_user_welcome.button') }}
                                         </a>
                                     </td>

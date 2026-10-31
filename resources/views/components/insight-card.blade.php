@@ -9,7 +9,7 @@
     ];
     $t = $toneMap[$tone] ?? $toneMap['primary'];
 @endphp
-<div class="flex items-start gap-4 p-4 rounded-[14px] {{ $t['bg'] }} ring-1 {{ $t['ring'] }} transition-apple hover:translate-x-0.5">
+<div class="flex items-start gap-4 p-4 rounded-[8px] {{ $t['bg'] }} ring-1 {{ $t['ring'] }} transition-apple hover:translate-x-0.5">
     @if($icon)
         <div class="w-10 h-10 rounded-[10px] bg-card {{ $t['text'] }} flex items-center justify-center shrink-0 shadow-xs">
             <i class="fa-solid {{ $icon }} text-[14px]"></i>

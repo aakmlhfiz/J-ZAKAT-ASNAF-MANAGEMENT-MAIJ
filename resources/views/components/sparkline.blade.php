@@ -1,4 +1,4 @@
-@props(['data' => [], 'color' => '#3B82F6', 'height' => 36, 'fill' => true, 'id' => null])
+@props(['data' => [], 'color' => '#245B91', 'height' => 36, 'fill' => true, 'id' => null])
 @php $sparkId = $id ?? 'spark-' . uniqid(); @endphp
 <div style="height: {{ $height }}px;" class="relative">
     <canvas id="{{ $sparkId }}" data-spark='@json($data)' data-spark-color="{{ $color }}" data-spark-fill="{{ $fill ? '1' : '0' }}"></canvas>
@@ -12,7 +12,7 @@
             if (canvas.dataset.init === '1' || !window.Chart) return;
             canvas.dataset.init = '1';
             const data = JSON.parse(canvas.dataset.spark || '[]');
-            const color = canvas.dataset.sparkColor || '#3B82F6';
+            const color = canvas.dataset.sparkColor || '#245B91';
             const fill = canvas.dataset.sparkFill === '1';
             const ctx = canvas.getContext('2d');
             const h = canvas.clientHeight || 36;

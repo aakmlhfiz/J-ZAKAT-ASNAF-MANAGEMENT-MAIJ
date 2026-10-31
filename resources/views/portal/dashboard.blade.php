@@ -27,38 +27,31 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6 stagger">
     <x-app-card class="p-5" hover>
         <div class="flex items-center justify-between mb-3">
-            <div class="w-12 h-12 rounded-[14px] bg-primary-soft text-primary flex items-center justify-center shrink-0">
+            <div class="w-12 h-12 rounded-[8px] bg-primary-soft text-primary flex items-center justify-center shrink-0">
                 <i class="fa-solid fa-file-lines text-[20px]"></i>
             </div>
-            @if($stats['total'] > 0)
-            <span class="inline-flex items-center gap-0.5 text-[11px] font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
-                <i class="fa-solid fa-arrow-trend-up text-[9px]"></i>
-                +{{ $stats['total'] * 10 }}%
-            </span>
-            @endif
+
         </div>
         <h3 class="text-small text-secondary">{{ __('applications.portal.stats.total') }}</h3>
         <p class="text-metric-lg text-text mt-1 tabular-nums leading-tight">{{ $stats['total'] }}</p>
         <p class="text-caption text-tertiary mt-1">{{ __('applications.portal.stats.total_caption') }}</p>
-        <div class="mt-3 h-8"><canvas class="sparkline" data-values="{{ json_encode($trendData) }}"></canvas></div>
     </x-app-card>
 
     <x-app-card class="p-5" hover>
         <div class="flex items-center justify-between mb-3">
-            <div class="w-12 h-12 rounded-[14px] bg-warning-soft text-warning flex items-center justify-center shrink-0">
+            <div class="w-12 h-12 rounded-[8px] bg-warning-soft text-warning flex items-center justify-center shrink-0">
                 <i class="fa-solid fa-pen-to-square text-[20px]"></i>
             </div>
-            <span class="text-[11px] font-semibold text-warning bg-warning-soft px-2 py-0.5 rounded-full">{{ $stats['draft'] }}</span>
+            <span class="text-[11px] font-semibold text-warning bg-warning-soft px-2 py-0.5 rounded-[6px]">{{ $stats['draft'] }}</span>
         </div>
         <h3 class="text-small text-secondary">{{ __('applications.portal.stats.draft') }}</h3>
         <p class="text-metric-lg text-text mt-1 tabular-nums leading-tight">{{ $stats['draft'] }}</p>
         <p class="text-caption text-tertiary mt-1">{{ __('applications.portal.stats.draft_caption') }}</p>
-        <div class="mt-3 h-8"><canvas class="sparkline" data-values="[0,0,0,0,0,0,0,0,0,0,0,0]"></canvas></div>
     </x-app-card>
 
     <x-app-card class="p-5" hover>
         <div class="flex items-center justify-between mb-3">
-            <div class="w-12 h-12 rounded-[14px] bg-success-soft text-success flex items-center justify-center shrink-0">
+            <div class="w-12 h-12 rounded-[8px] bg-success-soft text-success flex items-center justify-center shrink-0">
                 <i class="fa-solid fa-paper-plane text-[20px]"></i>
             </div>
             <span class="text-[11px] font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">{{ $stats['submitted'] }}</span>
@@ -66,12 +59,11 @@
         <h3 class="text-small text-secondary">{{ __('applications.portal.stats.submitted') }}</h3>
         <p class="text-metric-lg text-text mt-1 tabular-nums leading-tight">{{ $stats['submitted'] }}</p>
         <p class="text-caption text-tertiary mt-1">{{ __('applications.portal.stats.submitted_caption') }}</p>
-        <div class="mt-3 h-8"><canvas class="sparkline" data-values="[0,0,0,0,0,0,0,0,0,0,0,0]"></canvas></div>
     </x-app-card>
 
     <x-app-card class="p-5" hover>
         <div class="flex items-center justify-between mb-3">
-            <div class="w-12 h-12 rounded-[14px] bg-info-soft text-info flex items-center justify-center shrink-0">
+            <div class="w-12 h-12 rounded-[8px] bg-info-soft text-info flex items-center justify-center shrink-0">
                 <i class="fa-solid fa-magnifying-glass-chart text-[20px]"></i>
             </div>
             <span class="text-[11px] font-semibold text-info bg-info-soft px-2 py-0.5 rounded-full">{{ $stats['under_review'] }}</span>
@@ -79,12 +71,11 @@
         <h3 class="text-small text-secondary">{{ __('applications.portal.stats.under_review') }}</h3>
         <p class="text-metric-lg text-text mt-1 tabular-nums leading-tight">{{ $stats['under_review'] }}</p>
         <p class="text-caption text-tertiary mt-1">{{ __('applications.portal.stats.under_review_caption') }}</p>
-        <div class="mt-3 h-8"><canvas class="sparkline" data-values="[0,0,0,0,0,0,0,0,0,0,0,0]"></canvas></div>
     </x-app-card>
 
     <x-app-card class="p-5" hover>
         <div class="flex items-center justify-between mb-3">
-            <div class="w-12 h-12 rounded-[14px] bg-success-soft text-success flex items-center justify-center shrink-0">
+            <div class="w-12 h-12 rounded-[8px] bg-success-soft text-success flex items-center justify-center shrink-0">
                 <i class="fa-solid fa-circle-check text-[20px]"></i>
             </div>
             <span class="text-[11px] font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">{{ $stats['approved'] }}</span>
@@ -92,12 +83,11 @@
         <h3 class="text-small text-secondary">{{ __('applications.portal.stats.approved') }}</h3>
         <p class="text-metric-lg text-text mt-1 tabular-nums leading-tight">{{ $stats['approved'] }}</p>
         <p class="text-caption text-tertiary mt-1">{{ __('applications.portal.stats.approved_caption') }}</p>
-        <div class="mt-3 h-8"><canvas class="sparkline" data-values="[0,0,0,0,0,0,0,0,0,0,0,0]"></canvas></div>
     </x-app-card>
 
     <x-app-card class="p-5" hover>
         <div class="flex items-center justify-between mb-3">
-            <div class="w-12 h-12 rounded-[14px] bg-danger-soft text-danger flex items-center justify-center shrink-0">
+            <div class="w-12 h-12 rounded-[8px] bg-danger-soft text-danger flex items-center justify-center shrink-0">
                 <i class="fa-solid fa-circle-xmark text-[20px]"></i>
             </div>
             <span class="text-[11px] font-semibold text-danger bg-danger-soft px-2 py-0.5 rounded-full">{{ $stats['rejected'] }}</span>
@@ -105,7 +95,6 @@
         <h3 class="text-small text-secondary">{{ __('applications.portal.stats.rejected') }}</h3>
         <p class="text-metric-lg text-text mt-1 tabular-nums leading-tight">{{ $stats['rejected'] }}</p>
         <p class="text-caption text-tertiary mt-1">{{ __('applications.portal.stats.rejected_caption') }}</p>
-        <div class="mt-3 h-8"><canvas class="sparkline" data-values="[0,0,0,0,0,0,0,0,0,0,0,0]"></canvas></div>
     </x-app-card>
 </div>
 
@@ -345,12 +334,12 @@
                     datasets: [{
                         label: @json(__('applications.portal.chart_applications')),
                         data: trendData,
-                        borderColor: '#3B82F6',
-                        backgroundColor: 'rgba(59,130,246,0.08)',
+                        borderColor: '#245B91',
+                        backgroundColor: 'rgba(36,91,145,0.08)',
                         fill: true,
                         tension: 0.4,
                         pointRadius: 3,
-                        pointBackgroundColor: '#3B82F6',
+                        pointBackgroundColor: '#245B91',
                         borderWidth: 2,
                     }]
                 },
@@ -359,7 +348,7 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, ticks: { font: { size: 11 }, color: '#94A3B8' }, grid: { color: '#F1F5F9' } },
+                        y: { beginAtZero: true, ticks: { font: { size: 11 }, color: '#94A3B8' }, grid: { color: 'rgba(148, 163, 184, 0.20)' } },
                         x: { ticks: { font: { size: 11 }, color: '#94A3B8' }, grid: { display: false } }
                     }
                 }
@@ -374,7 +363,7 @@
                     labels: Object.keys(statusData),
                     datasets: [{
                         data: Object.values(statusData),
-                        backgroundColor: ['#F59E0B', '#3B82F6', '#38BDF8', '#22C55E', '#EF4444'],
+                        backgroundColor: ['#D97706', '#245B91', '#2878C8', '#15803D', '#DC2626'],
                         borderColor: '#FFFFFF',
                         borderWidth: 2,
                     }]
@@ -401,7 +390,7 @@
                     labels: values.map((_, i) => i),
                     datasets: [{
                         data: values,
-                        borderColor: '#3B82F6',
+                        borderColor: '#245B91',
                         backgroundColor: 'transparent',
                         borderWidth: 1.5,
                         tension: 0.4,

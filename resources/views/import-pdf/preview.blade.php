@@ -109,14 +109,14 @@
         <div class="lg:col-span-2">
             <x-import-pdf.extraction-progress :progress="50" status="processing" />
             <div class="mt-6 text-center py-12">
-                <div class="w-16 h-16 rounded-[20px] bg-primary-soft mx-auto flex items-center justify-center mb-5">
+                <div class="w-16 h-16 rounded-[12px] bg-primary-soft mx-auto flex items-center justify-center mb-5">
                     <i class="fa-solid fa-spinner fa-spin-pulse text-primary text-[24px]"></i>
                 </div>
                 <p class="text-h3 text-text">{{ __('imports.preview.processing_title') }}</p>
                 <p class="text-body text-secondary mt-2">{{ __('imports.preview.processing_text') }}</p>
                 <p class="text-small text-tertiary mt-4">{{ __('imports.preview.processing_auto') }} <span class="font-mono" x-text="elapsed"></span>s</p>
 
-                <div x-show="elapsed >= 15" x-cloak class="mt-8 p-5 rounded-[16px] bg-warning-soft/40 border border-warning/20 max-w-md mx-auto">
+                <div x-show="elapsed >= 15" x-cloak class="mt-8 p-5 rounded-[10px] bg-warning-soft/40 border border-warning/20 max-w-md mx-auto">
                     <p class="text-body font-semibold text-text">{{ __('imports.preview.slow_title') }}</p>
                     <p class="text-small text-secondary mt-1">{{ __('imports.preview.slow_text') }}
                         <code class="font-mono">php artisan queue:work</code></p>
@@ -349,7 +349,7 @@
                         </div>
                     @endif
 
-                    <div class="flex items-center gap-3 mt-6 pt-4 border-t border-divider sticky bottom-0 -mx-6 -mb-6 px-6 py-4 bg-card/60 backdrop-blur">
+                    <div class="flex items-center gap-3 mt-6 pt-4 border-t border-divider sticky bottom-0 -mx-6 -mb-6 px-6 py-4 bg-card">
                         <x-app-button type="submit" variant="primary" size="lg" icon="fa-check-circle">{{ __('imports.preview.save') }}</x-app-button>
                         @if($dw && $dw['has_warnings'])
                             <x-app-button type="submit" variant="warning" size="lg" icon="fa-triangle-exclamation" name="force_import" value="1">{{ __('imports.preview.force_save') }}</x-app-button>

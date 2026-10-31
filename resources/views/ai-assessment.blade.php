@@ -10,12 +10,12 @@
 
 <x-page-header :title="__('ai.assessment.title')" :subtitle="__('ai.assessment.subtitle')" :eyebrow="__('ai.assessment.eyebrow')" icon="fa-brain">
     <x-slot:actions>
-        <x-app-button variant="outline" size="md" icon="fa-sparkles" href="{{ route('ai.page') }}">{{ __('ai.assessment.open') }}</x-app-button>
+        <x-app-button variant="outline" size="md" icon="clipboard-check" href="{{ route('ai.page') }}">{{ __('ai.assessment.open') }}</x-app-button>
     </x-slot:actions>
 </x-page-header>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 stagger">
-    <x-stat-card :label="__('ai.assessment.total')" :value="number_format($items->count())" icon="fa-sparkles" icon-bg="bg-primary-soft" icon-color="text-primary" accent="primary" />
+    <x-stat-card :label="__('ai.assessment.total')" :value="number_format($items->count())" icon="clipboard-check" icon-bg="bg-primary-soft" icon-color="text-primary" accent="primary" />
     <x-stat-card :label="__('common.status.layak')" :value="number_format($totals['layak'] ?? 0)" icon="fa-circle-check" icon-bg="bg-success-soft" icon-color="text-success" accent="success" />
     <x-stat-card :label="__('common.status.tidak_layak')" :value="number_format($totals['tidak_layak'] ?? 0)" icon="fa-circle-xmark" icon-bg="bg-danger-soft" icon-color="text-danger" accent="danger" />
     <x-stat-card :label="__('ai.assessment.avg_confidence')" :value="$avgConfidence . '%'" icon="fa-bullseye" icon-bg="bg-warning-soft" icon-color="text-warning" accent="warning" />
@@ -41,7 +41,7 @@
             @endphp
             <x-app-card padding="p-5" hover>
                 <div class="flex items-start gap-3 mb-4">
-                    <div class="w-11 h-11 rounded-[14px] bg-primary text-white flex items-center justify-center text-[16px] font-semibold shrink-0">
+                    <div class="w-11 h-11 rounded-[8px] bg-primary text-white flex items-center justify-center text-[16px] font-semibold shrink-0">
                         {{ strtoupper(mb_substr($p->nama, 0, 1)) }}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -88,7 +88,7 @@
             <div class="col-span-full">
                 <x-empty-state icon="fa-brain" :title="__('ai.assessment.empty_title')" :description="__('ai.assessment.empty_desc')">
                     <x-slot:action>
-                        <x-app-button variant="primary" size="md" icon="fa-sparkles" href="{{ route('viewprofile.index') }}">{{ __('ai.assessment.select_applicant') }}</x-app-button>
+                        <x-app-button variant="primary" size="md" icon="user-plus" href="{{ route('viewprofile.index') }}">{{ __('ai.assessment.select_applicant') }}</x-app-button>
                     </x-slot:action>
                 </x-empty-state>
             </div>

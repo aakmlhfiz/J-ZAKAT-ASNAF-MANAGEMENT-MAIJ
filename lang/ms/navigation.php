@@ -48,7 +48,7 @@ return [
 
     'brand' => [
         'portal' => 'Portal Pemohon',
-        'admin' => 'Smart Eligibility',
+        'admin' => 'Pengurusan Zakat',
     ],
 
     'role' => [

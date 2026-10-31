@@ -16,7 +16,7 @@
     @endif
     <div class="flex items-start gap-3.5 mt-3">
         @if($icon)
-            <div class="w-12 h-12 rounded-[14px] {{ $s['bg'] ?? 'bg-muted' }} {{ $s['text'] ?? 'text-text' }} flex items-center justify-center shrink-0 ring-1 {{ $s['ring'] ?? 'ring-divider' }}">
+            <div class="w-12 h-12 rounded-[8px] {{ $s['bg'] ?? 'bg-muted' }} {{ $s['text'] ?? 'text-text' }} flex items-center justify-center shrink-0 ring-1 {{ $s['ring'] ?? 'ring-divider' }}">
                 <i class="fa-solid {{ $icon }} text-[18px]"></i>
             </div>
         @endif

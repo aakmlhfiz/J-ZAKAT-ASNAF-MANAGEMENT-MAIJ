@@ -27,7 +27,7 @@
                 <p class="text-small text-secondary mt-1">{{ __('reports.trend.subtitle') }}</p>
             </div>
         </div>
-        <x-trend-chart :data="$trendValues" :labels="$trendLabels" color="#3B82F6" height="280" />
+        <x-trend-chart :data="$trendValues" :labels="$trendLabels" color="#245B91" height="280" />
     </x-app-card>
 
     <x-app-card class="p-6" :hover="false">

@@ -19,7 +19,7 @@
     <button @click="open = !open"
             :aria-expanded="open"
             aria-haspopup="menu"
-            class="flex items-center gap-2 pl-1 pr-2 py-1 rounded-pill hover:bg-muted transition-fast border border-transparent hover:border-divider">
+            class="flex items-center gap-2 pl-1 pr-2 py-1 rounded-[8px] hover:bg-muted transition-fast border border-transparent hover:border-divider">
         <span class="w-8 h-8 rounded-full text-white flex items-center justify-center text-[12px] font-semibold ring-2 ring-card overflow-hidden shrink-0" style="background: var(--gradient-royal);">
             @if($photo)
                 <img src="{{ $photo }}" alt="{{ $name }}" class="w-full h-full object-cover">
@@ -39,7 +39,7 @@
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
          class="absolute right-0 top-full mt-2 w-72 surface-elevated z-50 overflow-hidden">
-        <div class="px-4 py-4 border-b border-divider" style="background: linear-gradient(135deg, var(--color-primary-soft), transparent);">
+        <div class="px-4 py-4 border-b border-divider" style="background: var(--color-primary-soft);">
             <div class="flex items-center gap-3">
                 <span class="w-11 h-11 rounded-full text-white flex items-center justify-center text-[14px] font-semibold ring-2 ring-card overflow-hidden shrink-0" style="background: var(--gradient-royal);">
                     @if($photo)
@@ -53,27 +53,27 @@
                     <p class="text-small text-secondary truncate">{{ $email }}</p>
                 </div>
             </div>
-            <span class="mt-2.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-pill text-[11px] font-semibold bg-success-soft text-success">
+            <span class="mt-2.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[6px] text-[11px] font-semibold bg-success-soft text-success">
                 <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
                 {{ $statusLabel }}
             </span>
         </div>
         <div class="p-2">
-            <a href="{{ $profileRoute }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-text hover:bg-muted transition-fast">
+            <a href="{{ $profileRoute }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-body text-text hover:bg-muted transition-fast">
                 <x-icon name="user" :size="17" class="text-tertiary" />
                 <span>{{ __('navigation.user_menu.profile') }}</span>
             </a>
             @if($isPortal)
-                <a href="{{ route('user.hadkifayah') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-text hover:bg-muted transition-fast">
+                <a href="{{ route('user.hadkifayah') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-body text-text hover:bg-muted transition-fast">
                     <x-icon name="calculator" :size="17" class="text-tertiary" />
                     <span>{{ __('navigation.user_menu.had_kifayah') }}</span>
                 </a>
             @else
-                <a href="{{ route('settings') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-text hover:bg-muted transition-fast">
+                <a href="{{ route('settings') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-body text-text hover:bg-muted transition-fast">
                     <x-icon name="settings" :size="17" class="text-tertiary" />
                     <span>{{ __('navigation.user_menu.settings') }}</span>
                 </a>
-                <a href="{{ route('hadkifayah.settings') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-text hover:bg-muted transition-fast">
+                <a href="{{ route('hadkifayah.settings') }}" role="menuitem" class="flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-body text-text hover:bg-muted transition-fast">
                     <x-icon name="sliders" :size="17" class="text-tertiary" />
                     <span>{{ __('navigation.user_menu.had_kifayah') }}</span>
                 </a>
@@ -86,7 +86,7 @@
         <div class="p-2 border-t border-divider">
             <button @click="$dispatch('open-confirm', { title: '{{ __('navigation.user_menu.logout_title') }}', message: '{{ __('navigation.user_menu.logout_message') }}', confirmText: '{{ __('navigation.user_menu.logout') }}', variant: 'destructive', action: 'logout' }); open = false;"
                     role="menuitem"
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-[11px] text-body text-danger hover:bg-danger-soft transition-fast">
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-body text-danger hover:bg-danger-soft transition-fast">
                 <x-icon name="log-out" :size="17" />
                 <span>{{ __('navigation.user_menu.logout') }}</span>
             </button>

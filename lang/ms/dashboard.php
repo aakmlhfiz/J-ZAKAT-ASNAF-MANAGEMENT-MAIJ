@@ -8,7 +8,7 @@ return [
     ],
     'default_name' => 'Pentadbir',
     'title' => 'Dashboard',
-    'subtitle' => 'Ringkasan pintar untuk pentadbir MAIJ',
+    'subtitle' => 'Ringkasan operasi pentadbiran MAIJ',
     'export' => 'Eksport',
     'add_applicant' => 'Tambah Pemohon',
     'this_month' => 'bulan ini',
@@ -25,6 +25,7 @@ return [
         'eyebrow' => 'Trend',
         'title' => 'Permohonan Bulanan',
         'subtitle' => '12 bulan terakhir',
+        'new' => 'Baru',
     ],
 
     'distribution' => [

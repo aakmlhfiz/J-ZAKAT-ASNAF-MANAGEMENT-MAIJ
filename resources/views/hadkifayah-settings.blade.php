@@ -31,7 +31,7 @@
                 @if ($rows->isNotEmpty())
                     <x-app-card :hover="false">
                         <header class="flex items-center gap-3 mb-5">
-                            <div class="w-11 h-11 rounded-[14px] bg-primary-soft text-primary flex items-center justify-center ring-1 ring-primary/10">
+                            <div class="w-11 h-11 rounded-[8px] bg-primary-soft text-primary flex items-center justify-center ring-1 ring-primary/10">
                                 <i class="fa-solid fa-sliders text-[15px]"></i>
                             </div>
                             <div>
@@ -82,7 +82,7 @@
                 @endif
             @endforeach
 
-            <div class="sticky bottom-0 -mx-6 md:-mx-10 -mb-6 md:-mb-8 px-6 md:px-10 py-4 bg-bg/80 backdrop-blur border-t border-divider flex items-center gap-3 flex-wrap">
+            <div class="sticky bottom-0 -mx-6 md:-mx-10 -mb-6 md:-mb-8 px-6 md:px-10 py-4 bg-bg border-t border-divider flex items-center gap-3 flex-wrap">
                 <x-app-button type="submit" variant="primary" size="lg" icon="fa-floppy-disk">{{ __('hadkifayah.settings.save') }}</x-app-button>
                 <x-app-button variant="outline" size="lg" icon="fa-calculator" href="{{ route('hadkifayah') }}">{{ __('hadkifayah.settings.calculator') }}</x-app-button>
                 <span class="ml-auto text-small text-tertiary">{{ __('hadkifayah.settings.note') }}</span>

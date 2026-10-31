@@ -28,7 +28,7 @@
                             </p>
 
                             @if(!empty($plainPassword))
-                            <div style="margin:24px 0;padding:20px;background-color:#F1F5F9;border-left:4px solid #2563EB;border-radius:8px;">
+                            <div style="margin:24px 0;padding:20px;background-color:#F1F5F9;border-left:4px solid #15345B;border-radius:8px;">
                                 <p style="margin:0;font-size:13px;color:#64748B;">{{ __('emails.welcome_admin.password_label') }}</p>
                                 <p style="margin:6px 0 0;font-size:18px;font-weight:700;color:#1E293B;font-family:'Courier New',monospace;letter-spacing:1px;">{{ $plainPassword }}</p>
                                 <p style="margin:10px 0 0;font-size:12px;color:#94A3B8;">{{ __('emails.welcome_admin.password_hint') }}</p>
@@ -38,7 +38,7 @@
                             <table width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0;">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{ $loginUrl }}" style="display:inline-block;background-color:#2563EB;color:#FFFFFF;font-size:15px;font-weight:600;padding:14px 36px;border-radius:12px;text-decoration:none;box-shadow:0 4px 12px rgba(37,99,235,0.25);">
+                                        <a href="{{ $loginUrl }}" style="display:inline-block;background-color:#15345B;color:#FFFFFF;font-size:15px;font-weight:600;padding:14px 36px;border-radius:8px;text-decoration:none;">
                                             {{ __('emails.welcome_admin.button') }}
                                         </a>
                                     </td>

@@ -8,7 +8,7 @@
     <button @click="open = !open"
             :aria-expanded="open"
             aria-label="{{ __('navigation.notifications.aria') }}"
-            class="relative w-10 h-10 rounded-[12px] hover:bg-muted transition-fast flex items-center justify-center text-secondary hover:text-text">
+            class="relative w-9 h-9 rounded-[8px] hover:bg-muted transition-fast flex items-center justify-center text-secondary hover:text-text">
         <x-icon name="bell" :size="19" />
         <span
             x-show="unreadCount > 0"

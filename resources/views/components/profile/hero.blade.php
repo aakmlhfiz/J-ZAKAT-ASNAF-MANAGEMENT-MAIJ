@@ -5,9 +5,7 @@
 @endphp
 <div
     x-data="avatarUploader('{{ route('profile.update') }}')"
-    class="profile-hero rounded-[24px] px-6 md:px-12 pt-10 pb-24 mb-6 text-white relative overflow-hidden">
-
-    <x-profile.islamic-pattern />
+    class="profile-hero rounded-[10px] px-6 md:px-10 pt-8 pb-20 mb-6 text-white relative overflow-hidden">
 
     <div class="flex flex-col lg:flex-row items-center lg:items-end gap-6 text-center lg:text-left relative z-[2]">
         <div class="avatar-editor-ring relative shrink-0">
@@ -36,22 +34,22 @@
             <p class="text-white/70 text-[15px] mt-1.5">{{ $email }}</p>
 
             <div class="flex items-center justify-center lg:justify-start gap-2.5 mt-3 flex-wrap">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill text-[12px] font-semibold bg-white/20 text-white">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-[11.5px] font-semibold bg-white/15 text-white">
                     <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
                     {{ $status }}
                 </span>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill text-[12px] font-semibold bg-white/15 text-white/90">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-[11.5px] font-semibold bg-white/10 text-white/85">
                     <i class="fa-solid fa-shield-halved text-[11px]"></i>
                     {{ $role }}
                 </span>
                 @if($department)
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill text-[12px] font-semibold bg-white/15 text-white/90">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-[11.5px] font-semibold bg-white/10 text-white/85">
                         <i class="fa-solid fa-building text-[11px]"></i>
                         {{ $department }}
                     </span>
                 @endif
                 @if($accountId)
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill text-[12px] font-semibold bg-white/10 text-white/70">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-[11.5px] font-semibold bg-white/5 text-white/70">
                         <i class="fa-solid fa-hashtag text-[11px]"></i>
                         #{{ $accountId }}
                     </span>
@@ -61,17 +59,17 @@
 
         <div class="flex items-center gap-2 shrink-0 flex-wrap justify-center lg:justify-end">
             <a href="#maklumat" @click.prevent="$dispatch('profile-tab', 'maklumat')"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-white text-primary text-[14px] font-semibold hover:bg-white/95 transition-fast shadow-md">
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] bg-white text-[#15345B] text-[13.5px] font-semibold hover:bg-[#F1F5F9] transition-fast">
                 <i class="fa-solid fa-pen-to-square text-[13px]"></i>
                 {{ __('profile.hero.edit_profile') }}
             </a>
             <button @click="$refs.photoInput.click()"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-white/15 text-white text-[14px] font-semibold hover:bg-white/25 transition-fast">
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] bg-white/10 text-white text-[13.5px] font-semibold hover:bg-white/15 transition-fast">
                 <i class="fa-solid fa-image text-[13px]"></i>
                 {{ __('profile.hero.change_photo') }}
             </button>
             <a href="#keselamatan" @click.prevent="$dispatch('profile-tab', 'keselamatan')"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-white/15 text-white text-[14px] font-semibold hover:bg-white/25 transition-fast">
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] bg-white/10 text-white text-[13.5px] font-semibold hover:bg-white/15 transition-fast">
                 <i class="fa-solid fa-key text-[13px]"></i>
                 {{ __('profile.hero.change_password_short') }}
             </a>

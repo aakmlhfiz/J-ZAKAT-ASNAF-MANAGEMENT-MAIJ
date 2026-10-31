@@ -32,8 +32,8 @@ return [
                 'desc' => 'Data pemohon dilindungi dan akses dikawal.',
             ],
             'assessment' => [
-                'title' => 'Penilaian pintar',
-                'desc' => 'Had Kifayah dan analisis AI dalam satu aliran kerja.',
+                'title' => 'Penilaian kelayakan',
+                'desc' => 'Had Kifayah dan analisis kelayakan dalam satu aliran kerja.',
             ],
             'audit' => [
                 'title' => 'Telus & boleh diaudit',

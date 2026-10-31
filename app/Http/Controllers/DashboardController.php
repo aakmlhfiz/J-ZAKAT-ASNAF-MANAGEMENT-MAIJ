@@ -37,7 +37,7 @@ class DashboardController extends Controller
         $values = [];
         for ($i = 11; $i >= 0; $i--) {
             $key = now()->subMonths($i)->format('Y-m');
-            $labels[] = now()->subMonths($i)->format('M');
+            $labels[] = now()->subMonths($i)->locale(app()->getLocale())->translatedFormat('M');
             $values[] = (int) ($sparklines['total_map'][$key] ?? 0);
         }
 
@@ -108,7 +108,7 @@ class DashboardController extends Controller
     private function formatTrend(int $current, int $previous): ?string
     {
         if ($previous === 0) {
-            return $current > 0 ? 'Baru' : null;
+            return $current > 0 ? __('dashboard.trend.new') : null;
         }
 
         $change = (($current - $previous) / $previous) * 100;

@@ -53,7 +53,7 @@ return [
     ],
 
     'footer' => [
-        'platform' => 'Platform Pintar Kelayakan Asnaf',
+        'platform' => 'Sistem Pengurusan Kelayakan Asnaf',
         'developed_for' => 'Dibangunkan untuk Majlis Agama Islam Johor',
     ],
 ];

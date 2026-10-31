@@ -27,7 +27,7 @@
                                 {!! __('emails.application_received.intro', ['name' => e($application->full_name)]) !!}
                             </p>
 
-                            <div style="margin:28px 0;padding:20px;background-color:#F1F5F9;border-left:4px solid #22C55E;border-radius:8px;">
+                            <div style="margin:28px 0;padding:20px;background-color:#F1F5F9;border-left:4px solid #15803D;border-radius:8px;">
                                 <p style="margin:0;font-size:13px;color:#64748B;">{{ __('emails.application_received.reference_label') }}</p>
                                 <p style="margin:6px 0 0;font-size:18px;font-weight:700;color:#1E293B;font-family:'Courier New',monospace;">#{{ str_pad((string) $application->id, 5, '0', STR_PAD_LEFT) }}</p>
                             </div>
@@ -37,7 +37,7 @@
                             </p>
 
                             <div style="margin:32px 0 0;text-align:center;">
-                                <a href="{{ $portalUrl }}" style="display:inline-block;padding:14px 36px;background-color:#2563EB;color:#FFFFFF;font-size:14px;font-weight:600;text-decoration:none;border-radius:12px;">{{ __('emails.application_received.button') }}</a>
+                                <a href="{{ $portalUrl }}" style="display:inline-block;padding:14px 36px;background-color:#15345B;color:#FFFFFF;font-size:14px;font-weight:600;text-decoration:none;border-radius:8px;">{{ __('emails.application_received.button') }}</a>
                             </div>
 
                             <div style="margin:32px 0 0;padding-top:24px;border-top:1px solid #E2E8F0;text-align:center;">
